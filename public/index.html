@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAT Math Problem Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="header">
+    <div class="header-content">
+        <h1>SAT Math Problem Bank</h1>
+        <p class="subtitle">Comprehensive collection of official SAT math questions organized by topic</p>
+        <a href="..admin/index.html" class="admin-link">Admin Panel →</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="controls">
+        <div class="filters">
+            <label class="filter-label">Filter by Topic</label>
+            <div class="filter-buttons" id="topicFilters">
+                <button class="filter-btn active" data-topic="all">All Topics</button>
+                <button class="filter-btn active" data-topic="algebra">Algebra</button>
+                <button class="filter-btn active" data-topic="functions">Advanced Math</button>
+                <button class="filter-btn active" data-topic="statistics">Problem-Solving and Data Analysis</button>
+                <button class="filter-btn active" data-topic="geometry">Geometry</button>
+                <button class="filter-btn active" data-topic="trigonometry">Trigonometry</button>
+
+            </div>
+
+            <label class="filter-label" style="margin-top: 1.5rem;">Filter by Difficulty</label>
+            <div class="filter-buttons" id="difficultyFilters">
+                <button class="filter-btn active" data-difficulty="easy">Easy</button>
+                <button class="filter-btn active" data-difficulty="medium">Medium</button>
+                <button class="filter-btn active" data-difficulty="hard">Hard</button>
+            </div>
+
+        </div>
+
+        <div class="search-box">
+            <label class="filter-label">Search Problems</label>
+            <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search by year, question number, or keywords..."
+            />
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalProblems">0</div>
+            <div class="stat-label">Total Problems</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="visibleProblems">0</div>
+            <div class="stat-label">Showing</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="topicCount">0</div>
+            <div class="stat-label">Topics</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="yearRange">N/A</div>
+            <div class="stat-label">Year Range</div>
+        </div>
+    </div>
+
+    <div class="problems-container" id="problemsContainer">
+        <div class="loading">Loading problems...</div>
+    </div>
+</div>
+
+<script src="apps.js"></script>
+</body>
+</html>

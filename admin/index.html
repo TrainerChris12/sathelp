@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - SAT Math Bank</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+<div class="header">
+  <div class="header-content">
+    <h1>Admin Panel</h1>
+    <p class="subtitle">Add and manage SAT math problems</p>
+    <a href="../public/index.html" class="back-link">← Back to Problem Bank</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="admin-grid">
+    <div class="form-section">
+      <h2>Add New Problem</h2>
+      <form id="problemForm">
+        <div class="form-group">
+          <label for="problemId">Problem ID*</label>
+          <input type="text" id="problemId" placeholder="e.g., SAT-2024-M-15" required>
+          <small>Format: SAT-YEAR-M-NUMBER or PRACTICE-TOPIC-NUMBER</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="year">Year</label>
+            <input type="number" id="year" placeholder="2024" min="2000" max="2030">
+          </div>
+
+          <div class="form-group">
+            <label for="questionNumber">Question #</label>
+            <input type="number" id="questionNumber" placeholder="15" min="1">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="topic">Topic*</label>
+            <select id="topic" required>
+              <option value="">Select topic...</option>
+              <option value="algebra">Algebra</option>
+              <option value="geometry">Geometry</option>
+              <option value="trigonometry">Trigonometry</option>
+              <option value="statistics">Statistics & Probability</option>
+              <option value="functions">Functions</option>
+              <option value="problem-solving">Problem Solving</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="difficulty">Difficulty*</label>
+            <select id="difficulty" required>
+              <option value="">Select difficulty...</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Question Type*</label>
+          <select id="type" required>
+            <option value="official">Official SAT Question</option>
+            <option value="practice">Practice Problem</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="basedOnGroup" style="display: none;">
+          <label for="basedOn">Based On (Optional)</label>
+          <input type="text" id="basedOn" placeholder="e.g., SAT-2024-M-15">
+          <small>Reference the problem ID this practice problem is based on</small>
+        </div>
+
+        <div class="form-group">
+          <label for="question">Question*</label>
+          <textarea id="question" rows="4" placeholder="Enter the question text..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Answer Choices*</label>
+          <input type="text" id="choiceA" placeholder="A) First choice" required>
+          <input type="text" id="choiceB" placeholder="B) Second choice" required>
+          <input type="text" id="choiceC" placeholder="C) Third choice" required>
+          <input type="text" id="choiceD" placeholder="D) Fourth choice" required>
+        </div>
+
+        <div class="form-group">
+          <label for="answer">Correct Answer*</label>
+          <select id="answer" required>
+            <option value="">Select correct answer...</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Add Problem</button>
+          <button type="button" class="btn btn-secondary" id="resetBtn">Clear Form</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="preview-section">
+      <h2>Preview</h2>
+      <div id="previewCard" class="preview-empty">
+        Fill out the form to see a preview
+      </div>
+
+      <div class="export-section">
+        <h3>Export Current Database</h3>
+        <p>Download all problems as a JSON file. You can edit this file and re-import it later.</p>
+        <button class="btn btn-primary" id="exportBtn">Download JSON</button>
+      </div>
+
+      <div class="import-section">
+        <h3>Import Problems</h3>
+        <p>Upload a JSON file to add multiple problems at once.</p>
+        <input type="file" id="importFile" accept=".json" style="display: none;">
+        <button class="btn btn-secondary" id="importBtn">Choose JSON File</button>
+        <div id="importStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recent-problems">
+    <h2>Recently Added Problems</h2>
+    <div id="recentList"></div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
