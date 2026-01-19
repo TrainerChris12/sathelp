@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<!-- User Auth Bar -->
+<div class="auth-bar">
+    <div class="auth-bar-content">
+        <div class="app-title">
+            <h2>SAT Math Practice</h2>
+        </div>
+        <div class="user-section" id="userSection">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+</div>
 <div class="header">
     <div class="header-content">
         <h1>SAT Math Problem Bank</h1>
@@ -15,7 +26,31 @@
         <a href="..admin/index.html" class="admin-link">Admin Panel →</a>
     </div>
 </div>
-
+<!-- Stats Banner -->
+<div class="stats-banner">
+    <div class="stat-item">
+        <span class="stat-value" id="statAttempts">0/0</span>
+        <span class="stat-label">Correct / Total</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="statAccuracy">0%</span>
+        <span class="stat-label">Accuracy</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="statStreak">0</span>
+        <span class="stat-label">Current Streak</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-value" id="statTime">0</span>
+        <span class="stat-label">Minutes Practiced</span>
+    </div>
+    <div class="stat-item">
+        <button id="resetProgress" class="reset-btn" title="Reset all progress">
+            <span class="reset-icon">↻</span>
+            Reset
+        </button>
+    </div>
+</div>
 <div class="container">
     <div class="controls">
         <div class="filters">
@@ -74,6 +109,15 @@
     </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<!-- Your scripts -->
+<script src="firebase-config.js"></script>
+<script src="storage-manager.js"></script>
+<script src="problem-generator.js"></script>
 <script src="apps.js"></script>
 </body>
 </html>

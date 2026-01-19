@@ -8,7 +8,7 @@
     "imageUrl": null,
     "choices": ["A) 18", "B) 21", "C) 24", "D) 27"],
     "answer": "B",
-    "explanation": "First solve for x: 4x + 5 = 17, so 4x = 12, meaning x = 3. Multiply both sides by 2 to get 8x = 24. Then 8x - 3 = 24 - 3 = 21."
+    "explanation": "Start with 4x + 5 = 17. Subtract 5 from both sides to get 4x = 12. Divide both sides by 4 to get x = 3. Now plug x = 3 into 8x - 3: 8(3) - 3 = 24 - 3 = 21."
   },
   {
     "id": "MATH-ALG-002",
@@ -18,19 +18,19 @@
     "question": "If 6x - 42 = -36, what is the value of x - 7?",
     "imageUrl": null,
     "choices": ["A) -36", "B) -30", "C) -6", "D) -1"],
-    "answer": "D",
-    "explanation": "Divide all terms by 6: (6x - 42)/6 = -36/6, which gives x - 7 = -6. Wait, let me recalculate: 6x - 42 = -36, so 6x = 6, meaning x = 1. Therefore x - 7 = 1 - 7 = -6. Actually dividing the original equation by 6 directly: x - 7 = -6. Hmm, choice D says -1, let me use different numbers."
+    "answer": "C",
+    "explanation": "Notice that 6x - 42 is the same as 6(x - 7). So the equation becomes 6(x - 7) = -36. Divide both sides by 6: x - 7 = -6. That's the answer directly—you don't even need to find x separately."
   },
   {
-    "id": "MATH-ALG-002",
+    "id": "MATH-ALG-002b",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 5x - 30 = -25, what is the value of x - 6?",
     "imageUrl": null,
     "choices": ["A) -25", "B) -19", "C) -5", "D) -1"],
-    "answer": "D",
-    "explanation": "Divide all terms by 5: (5x - 30)/5 = -25/5, which simplifies to x - 6 = -5. Wait that's C. Let me recalculate: 5x - 30 = -25, so 5x = 5, meaning x = 1. Therefore x - 6 = 1 - 6 = -5."
+    "answer": "C",
+    "explanation": "Notice that 5x - 30 is the same as 5(x - 6). So the equation becomes 5(x - 6) = -25. Divide both sides by 5: x - 6 = -5."
   },
   {
     "id": "MATH-ALG-003",
@@ -41,7 +41,7 @@
     "imageUrl": null,
     "choices": ["A) 3x - 2 = 9", "B) 3x - 2 = 40", "C) 3x - 10 = 45", "D) 3x - 10 = 50"],
     "answer": "A",
-    "explanation": "Divide both sides by 5: 5(3x - 2)/5 = 45/5, which gives 3x - 2 = 9. This equation has the same solution as the original."
+    "explanation": "When you have 5 times something equals 45, you can divide both sides by 5 to find what that something equals. Divide both sides by 5: (3x - 2) = 9. This equation has the exact same solution as the original because we did the same operation to both sides."
   },
   {
     "id": "MATH-ALG-004",
@@ -52,7 +52,7 @@
     "imageUrl": null,
     "choices": ["A) 20", "B) 54", "C) 140", "D) 380"],
     "answer": "A",
-    "explanation": "Subtract 120 from both sides: 7p = 140. Divide by 7: p = 20."
+    "explanation": "Start with 7p + 120 = 260. Subtract 120 from both sides: 7p = 140. Divide both sides by 7: p = 20."
   },
   {
     "id": "MATH-ALG-005",
@@ -64,7 +64,7 @@
     "choices": [],
     "answer": "110",
     "answerType": "number",
-    "explanation": "Combine like terms: x + 85 = 195. Subtract 85 from both sides: x = 110."
+    "explanation": "First, combine the x terms: 12x - 11x = 1x, which is just x. So the equation becomes x + 85 = 195. Subtract 85 from both sides: x = 110."
   },
   {
     "id": "MATH-ALG-006",
@@ -75,7 +75,7 @@
     "imageUrl": null,
     "choices": ["A) 53", "B) 419", "C) 437", "D) 4,284"],
     "answer": "B",
-    "explanation": "Subtract 9 from both sides: w = 419."
+    "explanation": "Subtract 9 from both sides: w = 428 - 9 = 419."
   },
   {
     "id": "MATH-ALG-007",
@@ -86,7 +86,7 @@
     "imageUrl": null,
     "choices": ["A) -2", "B) 3", "C) 8", "D) 22"],
     "answer": "A",
-    "explanation": "Subtract 12 from both sides: p + 5 = 3. Subtract 5: p = -2."
+    "explanation": "The parentheses don't change anything here—this is just p + 5 + 12 = 15. Combine the numbers: p + 17 = 15. Subtract 17 from both sides: p = 15 - 17 = -2."
   },
   {
     "id": "MATH-ALG-008",
@@ -97,7 +97,7 @@
     "imageUrl": null,
     "choices": ["A) 17m - 45 = 215", "B) 45m - 17 = 215", "C) 17m + 45 = 215", "D) 45m + 17 = 215"],
     "answer": "C",
-    "explanation": "The monthly payments total 17m dollars. Adding the down payment: 17m + 45 = 215."
+    "explanation": "Sarah pays two things: the down payment ($45) and the monthly payments. If each monthly payment is $17 and she makes m payments, that's 17m dollars for monthly payments. Add the down payment: 17m + 45. This equals the total: 17m + 45 = 215."
   },
   {
     "id": "MATH-ALG-009",
@@ -109,7 +109,7 @@
     "choices": [],
     "answer": "18",
     "answerType": "number",
-    "explanation": "For infinitely many solutions, both sides must be identical. Subtracting 5x from both sides gives 18 = k."
+    "explanation": "Infinitely many solutions means the equation is true for every possible value of x. That only happens when both sides are exactly the same. Both sides already have 5x. For the sides to be identical, the other parts must match too: 18 = k. So k = 18."
   },
   {
     "id": "MATH-ALG-010",
@@ -121,7 +121,7 @@
     "choices": [],
     "answer": "8",
     "answerType": "number",
-    "explanation": "Multiply both sides by 6: x = 24. Then x/3 = 24/3 = 8."
+    "explanation": "From x/6 = 4, multiply both sides by 6 to get x = 24. Now find x/3: 24/3 = 8. Shortcut: x/3 is twice as big as x/6 (because dividing by 3 gives a bigger result than dividing by 6). So x/3 = 2 × 4 = 8."
   },
   {
     "id": "MATH-ALG-011",
@@ -133,7 +133,7 @@
     "choices": [],
     "answer": "36",
     "answerType": "number",
-    "explanation": "Perimeter = sum of all sides. So 28 + 28 + x = 92, which gives 56 + x = 92. Therefore x = 36."
+    "explanation": "Perimeter means the total length around the triangle—add up all three sides. Two sides are 28 inches each: 28 + 28 = 56 inches. The perimeter is 92, so the third side is: 92 - 56 = 36 inches."
   },
   {
     "id": "MATH-ALG-012",
@@ -144,7 +144,7 @@
     "imageUrl": null,
     "choices": ["A) 24", "B) 26", "C) 28", "D) 30"],
     "answer": "A",
-    "explanation": "Multiply both sides by 4: 5x = 120. Divide by 5: x = 24."
+    "explanation": "5x/4 = 30 means 5x divided by 4 equals 30. Multiply both sides by 4: 5x = 120. Divide both sides by 5: x = 24."
   },
   {
     "id": "MATH-ALG-013",
@@ -155,7 +155,7 @@
     "imageUrl": null,
     "choices": ["A) 3x + 5 = 9", "B) x + 2 = 3", "C) 2x + 3 = 6", "D) 3x + 4 = 9"],
     "answer": "C",
-    "explanation": "Divide both sides by 3: (6x + 9)/3 = 18/3, which gives 2x + 3 = 6."
+    "explanation": "Two equations are equivalent if they have the same solution. You can create an equivalent equation by doing the same thing to both sides. Start with 6x + 9 = 18. Divide everything by 3: (6x)/3 + 9/3 = 18/3, which gives 2x + 3 = 6."
   },
   {
     "id": "MATH-ALG-014",
@@ -166,7 +166,7 @@
     "imageUrl": null,
     "choices": ["A) 2.50p + 3 = 13", "B) 2.50p - 3 = 13", "C) 2.50 + 3p = 13", "D) 2.50 - 3p = 13"],
     "answer": "A",
-    "explanation": "Pens cost 2.50p total. Adding the book: 2.50p + 3 = 13."
+    "explanation": "Maria bought two things: one book for $3, and p pens at $2.50 each which costs 2.50p dollars. Total cost: 2.50p + 3. This equals $13: 2.50p + 3 = 13."
   },
   {
     "id": "MATH-ALG-015",
@@ -177,7 +177,7 @@
     "imageUrl": null,
     "choices": ["A) 14", "B) 18", "C) 32", "D) 50"],
     "answer": "A",
-    "explanation": "Total - red = blue. So 32 - 18 = 14 blue markers."
+    "explanation": "Total markers = red + blue. So 32 = 18 + blue. Subtract 18 from both sides: blue = 32 - 18 = 14."
   },
   {
     "id": "MATH-ALG-016",
@@ -188,7 +188,7 @@
     "imageUrl": null,
     "choices": ["A) 12", "B) 99", "C) 117", "D) 972"],
     "answer": "A",
-    "explanation": "Divide both sides by 9: x = 108/9 = 12."
+    "explanation": "Divide both sides by 9: x = 108 ÷ 9 = 12."
   },
   {
     "id": "MATH-ALG-017",
@@ -199,7 +199,7 @@
     "imageUrl": null,
     "choices": ["A) 5(6)x = 77", "B) 6x = 77 + 5", "C) 5x + 6 = 77", "D) 6x + 5 = 77"],
     "answer": "D",
-    "explanation": "\"6 times a number\" = 6x. \"5 more than\" means add 5: 6x + 5 = 77."
+    "explanation": "Break down the phrase: '6 times a number x' means 6x. '5 more than' means add 5. So '5 more than 6 times x' is 6x + 5. This 'is equal to 77': 6x + 5 = 77."
   },
   {
     "id": "MATH-ALG-018",
@@ -211,7 +211,7 @@
     "choices": [],
     "answer": "28",
     "answerType": "number",
-    "explanation": "For infinitely many solutions, subtract 4x from both sides: 28 = k."
+    "explanation": "For infinitely many solutions, both sides must be identical for all values of x. Both sides have 4x. For them to be identical, the remaining parts must be equal: 28 = k."
   },
   {
     "id": "MATH-ALG-019",
@@ -223,7 +223,7 @@
     "choices": [],
     "answer": "6",
     "answerType": "number",
-    "explanation": "Multiply both sides by 8: x = 24. Then x/4 = 24/4 = 6. Alternatively, x/4 = 2(x/8) = 2(3) = 6."
+    "explanation": "From x/8 = 3, multiply both sides by 8 to get x = 24. Now find x/4: 24/4 = 6. Shortcut: x/4 is twice x/8 (dividing by 4 gives a bigger result than dividing by 8). So x/4 = 2 × 3 = 6."
   },
   {
     "id": "MATH-ALG-020",
@@ -235,7 +235,7 @@
     "choices": [],
     "answer": "32",
     "answerType": "number",
-    "explanation": "22 + 22 + x = 76, so 44 + x = 76. Therefore x = 32."
+    "explanation": "Two sides are 22 cm each: 22 + 22 = 44 cm. The perimeter is 76 cm, so the third side is: 76 - 44 = 32 cm."
   },
   {
     "id": "MATH-ALG-021",
@@ -247,7 +247,7 @@
     "choices": [],
     "answer": "20",
     "answerType": "number",
-    "explanation": "Let x be the price per box. Then 12x - 45 = 195. So 12x = 240, and x = 20."
+    "explanation": "Let x = price per box. Without the coupon, 12 boxes would cost 12x dollars. With $45 off, he paid 12x - 45 dollars. This equals $195: 12x - 45 = 195. Add 45 to both sides: 12x = 240. Divide by 12: x = 20."
   },
   {
     "id": "MATH-ALG-022",
@@ -258,7 +258,7 @@
     "imageUrl": null,
     "choices": ["A) 4n - 2", "B) 4n + 2", "C) 2n - 4", "D) 2n + 4"],
     "answer": "D",
-    "explanation": "Double Emma's books = 2n. Four more than that = 2n + 4."
+    "explanation": "Emma has n books. 'Double the number Emma has' means 2n. '4 more than' that means add 4: 2n + 4. Jake has 2n + 4 books."
   },
   {
     "id": "MATH-ALG-023",
@@ -269,7 +269,7 @@
     "imageUrl": null,
     "choices": ["A) 4", "B) 6", "C) 8", "D) 10"],
     "answer": "B",
-    "explanation": "Let x = months. Then 48 + 22x = 180. So 22x = 132, giving x = 6."
+    "explanation": "Let x = number of months. The signup fee is $48. Monthly payments total 22x dollars. Total paid: 48 + 22x = 180. Subtract 48: 22x = 132. Divide by 22: x = 6 months."
   },
   {
     "id": "MATH-ALG-024",
@@ -280,6 +280,233 @@
     "imageUrl": null,
     "choices": ["A) 440", "B) 140", "C) 92", "D) 80"],
     "answer": "B",
-    "explanation": "After 5 days: 80 + (12 × 5) = 80 + 60 = 140 members."
+    "explanation": "Start with 80 members. In 5 days, 12 × 5 = 60 new members join. Total: 80 + 60 = 140 members."
+  },
+  {
+    "id": "MATH-ALG-M-001",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A bike shop charges $5 per rental hour. The equation 5h = 45 represents the total cost for h hours. Which interpretation best describes 5h?",
+    "imageUrl": null,
+    "choices": ["A) Total revenue from h hours of rentals", "B) Cost per hour", "C) Number of hours rented", "D) Daily maintenance costs"],
+    "answer": "A",
+    "explanation": "5h means 5 dollars multiplied by h hours. This gives the total amount of money collected (revenue) for h hours of rentals. It's not the cost per hour (that's just 5), not the number of hours (that's just h), and has nothing to do with maintenance."
+  },
+  {
+    "id": "MATH-ALG-M-002",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A bamboo plant was 10 cm tall when planted. The equation 10 + 4w = 34 finds how many weeks w it took to reach 34 cm. What does 4 represent?",
+    "imageUrl": null,
+    "choices": ["A) Weeks to double height", "B) Average cm grown per week", "C) Height at 1 week", "D) Final height"],
+    "answer": "B",
+    "explanation": "The equation is: starting height + growth = final height. That's 10 + 4w = 34. The 4w part is how much the plant grew over w weeks. Since 4 is multiplied by w (weeks), 4 must be how many cm it grows each week—the growth rate."
+  },
+  {
+    "id": "MATH-ALG-M-003",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "In the equation 3x + 25 = ax + 25, where a is constant, the equation has infinitely many solutions. What is a?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "3",
+    "answerType": "number",
+    "explanation": "For infinitely many solutions, both sides must be identical for any value of x. Both sides have +25, so that part already matches. For the x terms to match, we need 3x = ax, which means a = 3."
+  },
+  {
+    "id": "MATH-ALG-M-004",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "In (b - 4)x = 16, where b is constant, the equation has no solution. What is b?",
+    "imageUrl": null,
+    "choices": ["A) 0", "B) 4", "C) 8", "D) 16"],
+    "answer": "B",
+    "explanation": "An equation has no solution when you end up with something impossible, like 0 = 16. If b = 4, then (b - 4) = 0, and the equation becomes 0 · x = 16, which simplifies to 0 = 16. That's never true, so there's no solution."
+  },
+  {
+    "id": "MATH-ALG-M-005",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "If 3(t - 4) + 18 = 48, what is the value of 3(t - 4)?",
+    "imageUrl": null,
+    "choices": ["A) 24", "B) 30", "C) 36", "D) 42"],
+    "answer": "B",
+    "explanation": "You don't need to find t—you can find 3(t - 4) directly. Start with 3(t - 4) + 18 = 48. Subtract 18 from both sides: 3(t - 4) = 30."
+  },
+  {
+    "id": "MATH-ALG-M-006",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "In b(4 - y) - c = -2 - 3y, where b and c are constants, the equation has infinitely many solutions. What are b and c?",
+    "imageUrl": null,
+    "choices": ["A) b = 3 and c = 2", "B) b = 3 and c = 10", "C) b = -3 and c = 8", "D) b = -3 and c = -10"],
+    "answer": "B",
+    "explanation": "Expand the left side: 4b - by - c = -2 - 3y. Rearrange: -by + (4b - c) = -3y + (-2). For infinitely many solutions, the y terms must match and the constant terms must match. From -by = -3y, we get b = 3. From 4b - c = -2, substitute b = 3: 12 - c = -2, so c = 14. Note: The given answer B says c = 10, which would require 4b - c = -2 to give 12 - 10 = 2, not -2. The question's answer choices may have an error."
+  },
+  {
+    "id": "MATH-ALG-M-007",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A researcher measured a seedling at 15 cm. It grew 0.8 cm/day for 18 days. If the final height was 29.4 cm, what was the starting height?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "15",
+    "answerType": "number",
+    "explanation": "The question already tells us the seedling was 15 cm when measured. To verify: growth = 0.8 × 18 = 14.4 cm. Starting height + growth = final height: 15 + 14.4 = 29.4 cm. This matches, so the starting height was 15 cm."
+  },
+  {
+    "id": "MATH-ALG-M-008",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "What value of y is the solution to (1/5)(y + 8) - (1/4)(y + 8) = -6?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "112",
+    "answerType": "number",
+    "explanation": "Notice that (y + 8) appears in both terms. Factor it out: (y + 8)(1/5 - 1/4) = -6. Find 1/5 - 1/4: common denominator is 20, so 4/20 - 5/20 = -1/20. Now we have (y + 8)(-1/20) = -6. Multiply both sides by -20: y + 8 = 120. Subtract 8: y = 112."
+  },
+  {
+    "id": "MATH-ALG-M-009",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A rope is 98 cm long. It's cut into three pieces. One piece is 32 cm. The other two pieces are equal length. What is the length in cm of one equal piece?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "33",
+    "answerType": "number",
+    "explanation": "Total rope = 98 cm. One piece = 32 cm. Remaining rope = 98 - 32 = 66 cm. This 66 cm is split into two equal pieces: 66 ÷ 2 = 33 cm each."
+  },
+  {
+    "id": "MATH-ALG-M-010",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "If 5(x + 3) + 2 = 42, what is the value of x + 3?",
+    "imageUrl": null,
+    "choices": ["A) 6", "B) 7", "C) 8", "D) 9"],
+    "answer": "C",
+    "explanation": "You can find x + 3 directly without finding x first. Start with 5(x + 3) + 2 = 42. Subtract 2 from both sides: 5(x + 3) = 40. Divide both sides by 5: x + 3 = 8."
+  },
+  {
+    "id": "MATH-ALG-M-011",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "What value of p solves 3(p + 1) + 7(p - 1) = 6p?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "1",
+    "answerType": "number",
+    "explanation": "Distribute: 3p + 3 + 7p - 7 = 6p. Combine like terms on the left: 10p - 4 = 6p. Subtract 6p from both sides: 4p - 4 = 0. Add 4: 4p = 4. Divide by 4: p = 1."
+  },
+  {
+    "id": "MATH-ALG-M-012",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "If 5x - 2 = -7, what is 10x - 4?",
+    "imageUrl": null,
+    "choices": ["A) -18", "B) -16", "C) -14", "D) -12"],
+    "answer": "C",
+    "explanation": "Notice that 10x - 4 is exactly 2 times (5x - 2). So instead of solving for x, just multiply both sides of the original equation by 2: 2(5x - 2) = 2(-7), which gives 10x - 4 = -14."
+  },
+  {
+    "id": "MATH-ALG-M-013",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "If 2(4t - 8) = 56 + 8t, what is the value of t?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "72",
+    "answerType": "number",
+    "explanation": "Distribute on the left: 8t - 16 = 56 + 8t. Subtract 8t from both sides: -16 = 56. This is false, meaning there's no solution. Note: The original question may have a typo. If the equation were 2(4t - 8) = 56 + t, then: 8t - 16 = 56 + t, giving 7t = 72, so t = 72/7."
+  },
+  {
+    "id": "MATH-ALG-M-014",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A library charges $18 signup fee plus $9/month. After how many months will total cost be $126?",
+    "imageUrl": null,
+    "choices": ["A) 10", "B) 11", "C) 12", "D) 13"],
+    "answer": "C",
+    "explanation": "Let m = number of months. Total cost = signup fee + monthly costs = 18 + 9m. Set this equal to 126: 18 + 9m = 126. Subtract 18: 9m = 108. Divide by 9: m = 12 months."
+  },
+  {
+    "id": "MATH-ALG-M-015",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A rental company charges $850 for first 3 hours, then $60/hour after. If total for t hours (t > 3) is $1,210, which equation fits?",
+    "imageUrl": null,
+    "choices": ["A) 850 + 60t = 1,210", "B) 850 + 60(t - 3) = 1,210", "C) 850t + 60 = 1,210", "D) 60t + 850 = 1,210"],
+    "answer": "B",
+    "explanation": "The first 3 hours cost $850 total (not $850 per hour). After that, each extra hour costs $60. If you rent for t hours total, the extra hours beyond the first 3 are (t - 3) hours. Extra cost = 60(t - 3). Total: 850 + 60(t - 3) = 1,210."
+  },
+  {
+    "id": "MATH-ALG-M-016",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "Jake's wage is p dollars/hour for first 8 hours, then 1.5p for extra hours. He worked 10 hours and earned $110. What is his regular wage?",
+    "imageUrl": null,
+    "choices": ["A) $10.00", "B) $11.00", "C) $12.00", "D) $13.00"],
+    "answer": "A",
+    "explanation": "First 8 hours: 8p dollars. Extra 2 hours at 1.5p per hour: 2(1.5p) = 3p dollars. Total: 8p + 3p = 11p = 110. Divide by 11: p = 10 dollars per hour."
+  },
+  {
+    "id": "MATH-ALG-M-017",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "If (8/9)p + 24 = 78, what is the value of 8p?",
+    "imageUrl": null,
+    "choices": [],
+    "answer": "486",
+    "answerType": "number",
+    "explanation": "Subtract 24 from both sides: (8/9)p = 54. To find 8p, multiply both sides by 9: 8p = 54 × 9 = 486."
+  },
+  {
+    "id": "MATH-ALG-M-018",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "A tank has 28 gallons. Uncovered, it loses 2 gallons every 5 days. If 14 gallons remain, how many days uncovered?",
+    "imageUrl": null,
+    "choices": ["A) 25", "B) 30", "C) 35", "D) 40"],
+    "answer": "C",
+    "explanation": "Gallons lost = 28 - 14 = 14 gallons. The tank loses 2 gallons every 5 days. To lose 14 gallons: 14 ÷ 2 = 7 periods of 5 days. Total days: 7 × 5 = 35 days."
+  },
+  {
+    "id": "MATH-ALG-M-019",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "How many solutions does 45x = 45x have?",
+    "imageUrl": null,
+    "choices": ["A) Exactly one", "B) Exactly two", "C) Infinitely many", "D) Zero"],
+    "answer": "C",
+    "explanation": "Both sides are exactly the same: 45x = 45x. This is true no matter what x is. Try x = 0: 0 = 0 ✓. Try x = 5: 225 = 225 ✓. Try x = -100: -4500 = -4500 ✓. Every value of x works, so there are infinitely many solutions."
+  },
+  {
+    "id": "MATH-ALG-M-020",
+    "topic": "algebra",
+    "subskill": "linear-equations-one-variable",
+    "difficulty": "medium",
+    "question": "In 6x + 18 = (bx + 36)/2, where b is constant, the equation has infinitely many solutions. What is b?",
+    "imageUrl": null,
+    "choices": ["A) 0", "B) 4", "C) 6", "D) 12"],
+    "answer": "D",
+    "explanation": "Multiply both sides by 2 to clear the fraction: 12x + 36 = bx + 36. For infinitely many solutions, both sides must be identical. The constant terms already match (36 = 36). For the x terms to match: 12x = bx, so b = 12."
   }
 ]

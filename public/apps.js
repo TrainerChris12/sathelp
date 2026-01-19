@@ -2,18 +2,32 @@ let problems = [];
 let activeTopics = new Set(['all', 'algebra', 'geometry', 'trigonometry', 'statistics', 'functions', 'problem-solving']);
 let activeDifficulties = new Set(['easy', 'medium', 'hard']);
 let searchQuery = '';
+const problemTimers = {}; // ADD THIS - Track time spent
 
-// Load problems from JSON file
+// Shuffle array function
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+// Load problems from JSON
 async function loadProblems() {
     try {
         const response = await fetch('../data/problems.json');
         problems = await response.json();
         renderProblems();
-        updateStats();
+        updateStatsDisplay();
     } catch (error) {
         console.error('Error loading problems:', error);
-        document.getElementById('problemsContainer').innerHTML =
-            '<div class="no-results">Error loading problems. Please refresh the page.</div>';
+        document.getElementById('problemsList').innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--error);">
+                <p>Error loading problems. Make sure you're running a local server.</p>
+                <p style="margin-top: 1rem; font-family: monospace;">python3 -m http.server 8000</p>
+            </div>
+        `;
     }
 }
 
@@ -46,26 +60,19 @@ function filterProblems() {
 
 function organizeByTopic(problemsList) {
     const organized = {};
-    problemsList.forEach(p => {
+
+    // Shuffle the problems first
+    const shuffledProblems = shuffleArray(problemsList);
+
+    shuffledProblems.forEach(p => {
         if (!organized[p.topic]) {
             organized[p.topic] = [];
         }
         organized[p.topic].push(p);
     });
 
-    // Sort problems within each topic by year and question number
-    Object.keys(organized).forEach(topic => {
-        organized[topic].sort((a, b) => {
-            // Official problems first
-            if (a.type !== b.type) {
-                return a.type === 'official' ? -1 : 1;
-            }
-            // Then by year (newest first)
-            if (a.year !== b.year) return (b.year || 0) - (a.year || 0);
-            // Then by question number
-            return (b.questionNumber || 0) - (a.questionNumber || 0);
-        });
-    });
+    // No sorting - keep them random!
+    // The shuffled order is already applied
 
     return organized;
 }
@@ -103,13 +110,10 @@ function renderProblems() {
                 <div class="problems-grid">
                     ${topicProblems.map(problem => {
             const isPractice = problem.type === 'practice';
-            const sourceText = isPractice ? 'Practice Problem' : 'Practice Problem';
-
             return `
                             <div class="problem-card ${isPractice ? 'practice-problem' : ''}" data-id="${problem.id}">
                                 <div class="problem-header">
                                     <div class="problem-meta">
-                                        <span class="badge ${isPractice ? 'badge-practice' : 'badge-source'}">${sourceText}</span>
                                         <span class="badge badge-difficulty badge-${problem.difficulty}">${problem.difficulty}</span>
                                     </div>
                                     <div class="problem-id">${problem.id}</div>
@@ -130,11 +134,21 @@ function renderProblems() {
                                         <div class="answer-feedback"></div>
                                     </div>
                                 ` : ''}
-                                <div class="problem-footer">
-                                    <button class="action-btn secondary show-answer">Show Answer</button>
-                                    <button class="action-btn">Practice Similar</button>
+                                ${problem.explanation ? `
+                                <div class="explanation-section" style="display: none;">
+                                    <div class="explanation-header">
+                                        <span class="explanation-icon">💡</span>
+                                        <strong>Explanation:</strong>
+                                    </div>
+                                    <div class="explanation-content">${problem.explanation}</div>
                                 </div>
+                            ` : ''}
+                            <div class="problem-footer">
+                                <button class="action-btn secondary show-answer">Show Answer</button>
+                                ${problem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
+                                <button class="action-btn">Practice Similar</button>
                             </div>
+                                                        </div>
                         `;
         }).join('')}
                 </div>
@@ -144,14 +158,8 @@ function renderProblems() {
 
     container.innerHTML = html;
     document.getElementById('visibleProblems').textContent = filteredProblems.length;
-    updateStats();
 }
 
-function updateStats() {
-    document.getElementById('totalProblems').textContent = problems.length;
-    document.getElementById('topicCount').textContent = getUniqueTopics().length;
-    document.getElementById('yearRange').textContent = getYearRange();
-}
 
 // Topic filter buttons
 document.getElementById('topicFilters').addEventListener('click', (e) => {
@@ -175,7 +183,6 @@ document.getElementById('topicFilters').addEventListener('click', (e) => {
             } else {
                 activeTopics.add(topic);
                 e.target.classList.add('active');
-                // Check if all topics are selected
                 const allTopicsSelected = ['algebra', 'geometry', 'trigonometry', 'statistics', 'functions', 'problem-solving']
                     .every(t => activeTopics.has(t));
                 if (allTopicsSelected) {
@@ -206,14 +213,12 @@ document.getElementById('difficultyFilters').addEventListener('click', (e) => {
     }
 });
 
-
 // Search input
 document.getElementById('searchInput').addEventListener('input', (e) => {
     searchQuery = e.target.value;
     renderProblems();
 });
 
-// Show/hide answer
 // Show/hide answer
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('show-answer')) {
@@ -222,12 +227,10 @@ document.addEventListener('click', (e) => {
         const problem = problems.find(p => p.id === problemId);
 
         if (e.target.textContent === 'Show Answer') {
-            // Clear all user selections first
             card.querySelectorAll('.choice').forEach(c => {
                 c.classList.remove('selected', 'incorrect');
             });
 
-            // Show correct answer
             const choices = card.querySelectorAll('.choice');
             choices.forEach(choice => {
                 if (choice.textContent.startsWith(problem.answer + ')')) {
@@ -239,7 +242,6 @@ document.addEventListener('click', (e) => {
             e.target.classList.remove('secondary');
             e.target.classList.add('answered');
         } else {
-            // Hide answer
             const choices = card.querySelectorAll('.choice');
             choices.forEach(choice => {
                 choice.classList.remove('correct');
@@ -252,18 +254,40 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Click to select answer
+// Show/hide explanation
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('show-explanation')) {
+        const card = e.target.closest('.problem-card');
+        const explanationSection = card.querySelector('.explanation-section');
 
+        if (e.target.textContent === 'Show Explanation') {
+            explanationSection.style.display = 'block';
+            e.target.textContent = 'Hide Explanation';
+            e.target.classList.add('answered');
+        } else {
+            explanationSection.style.display = 'none';
+            e.target.textContent = 'Show Explanation';
+            e.target.classList.remove('answered');
+        }
+    }
+});
+
+// Click to select answer
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('choice')) {
         const card = e.target.closest('.problem-card');
         const problemId = card.dataset.id;
         const problem = problems.find(p => p.id === problemId);
 
+        // Start timer on first click
+        if (!problemTimers[problemId]) {
+            problemTimers[problemId] = Date.now();
+        }
+
         // Check if correct answer already found
         const alreadyCorrect = card.querySelector('.choice.correct:not([data-from-show-answer])');
         if (alreadyCorrect) {
-            return; // Lock the problem, no more clicks allowed
+            return;
         }
 
         // If clicking the same choice, deselect it
@@ -282,22 +306,208 @@ document.addEventListener('click', (e) => {
 
         // Check if correct
         const selectedLetter = e.target.textContent.trim().charAt(0);
+        const isCorrect = selectedLetter === problem.answer;
 
-        if (selectedLetter === problem.answer) {
+        // Calculate time spent
+        const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
+
+        if (isCorrect) {
             e.target.classList.add('correct');
             e.target.classList.remove('selected');
 
-            // Change "Show Answer" to "Hide Answer"
+            storage.saveAttempt(problemId, true, timeSpent);
+            updateStatsDisplay();
+
             const showAnswerBtn = card.querySelector('.show-answer');
             showAnswerBtn.textContent = 'Hide Answer';
             showAnswerBtn.classList.remove('secondary');
             showAnswerBtn.classList.add('answered');
 
-            // LOCKED - no more clicks allowed
+            console.log(`✓ Correct! Problem ${problemId} saved. Time: ${timeSpent}s`);
+            delete problemTimers[problemId];
         } else {
             e.target.classList.add('incorrect');
+
+            storage.saveAttempt(problemId, false, timeSpent);
+            updateStatsDisplay();
+
+            console.log(`✗ Incorrect. Problem ${problemId} attempt saved. Time: ${timeSpent}s`);
         }
     }
 });
+
+// Check answer for input fields
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('check-answer-btn')) {
+        const inputGroup = e.target.closest('.answer-input-group');
+        const input = inputGroup.querySelector('.answer-input');
+        const feedback = inputGroup.querySelector('.answer-feedback');
+        const correctAnswer = input.dataset.correct;
+        const userAnswer = input.value.trim();
+
+        if (!userAnswer) {
+            feedback.textContent = 'Please enter an answer';
+            feedback.className = 'answer-feedback';
+            return;
+        }
+
+        const card = e.target.closest('.problem-card');
+        const problemId = card.dataset.id;
+
+        // Start timer on first interaction
+        if (!problemTimers[problemId]) {
+            problemTimers[problemId] = Date.now();
+        }
+
+        const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
+
+        if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
+            feedback.textContent = '✓ Correct!';
+            feedback.className = 'answer-feedback correct';
+            input.disabled = true;
+            e.target.disabled = true;
+
+            storage.saveAttempt(problemId, true, timeSpent);
+            updateStatsDisplay();
+
+            console.log(`✓ Correct! Problem ${problemId} saved. Time: ${timeSpent}s`);
+            delete problemTimers[problemId];
+        } else {
+            feedback.textContent = `✗ Incorrect. The answer is ${correctAnswer}`;
+            feedback.className = 'answer-feedback incorrect';
+
+            storage.saveAttempt(problemId, false, timeSpent);
+            updateStatsDisplay();
+
+            console.log(`✗ Incorrect. Problem ${problemId} attempt saved. Time: ${timeSpent}s`);
+        }
+    }
+});
+
+// Update stats display
+function updateStatsDisplay() {
+    if (!document.getElementById('statAttempts')) {
+        console.warn('Stats elements not yet loaded');
+        return;
+    }
+
+    const stats = storage.getStats();
+
+    document.getElementById('statAttempts').textContent = `${stats.correctAnswers}/${stats.uniqueProblems}`;
+    document.getElementById('statAccuracy').textContent = stats.accuracy + '%';
+    document.getElementById('statStreak').textContent = stats.currentStreak;
+    document.getElementById('statTime').textContent = stats.totalTimeMinutes;
+
+    console.log('Stats updated:', stats);
+}
+
 // Initialize
 loadProblems();
+
+// Practice Similar button
+document.addEventListener('click', (e) => {
+    if (e.target.textContent === 'Practice Similar') {
+        const card = e.target.closest('.problem-card');
+        const problemId = card.dataset.id;
+        const originalProblem = problems.find(p => p.id === problemId);
+
+        if (!originalProblem) {
+            console.error('Original problem not found');
+            return;
+        }
+
+        const newProblem = problemGenerator.generate(originalProblem);
+
+        if (!newProblem) {
+            alert('Problem generation not yet available for this topic. Coming soon!');
+            return;
+        }
+
+        console.log('Generated problem:', newProblem);
+
+        problems.push(newProblem);
+
+        const newCardHTML = `
+            <div class="problem-card generated-problem" data-id="${newProblem.id}">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="badge badge-generated">Generated</span>
+                        <span class="badge badge-difficulty badge-${newProblem.difficulty}">${newProblem.difficulty}</span>
+                    </div>
+                    <div class="problem-id">${newProblem.id}</div>
+                </div>
+                <div class="problem-content">${newProblem.question}</div>
+                <div class="problem-choices">
+                    ${newProblem.choices.map(choice => `
+                        <div class="choice">${choice}</div>
+                    `).join('')}
+                </div>
+                <div class="problem-footer">
+                    <button class="action-btn secondary show-answer">Show Answer</button>
+                    <button class="action-btn">Practice Similar</button>
+                    <button class="action-btn remove-generated">Remove</button>
+                </div>
+            </div>
+        `;
+
+        card.insertAdjacentHTML('afterend', newCardHTML);
+
+        const newCard = card.nextElementSibling;
+        newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+
+// Remove generated problem button
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-generated')) {
+        const card = e.target.closest('.problem-card');
+        const problemId = card.dataset.id;
+
+        const index = problems.findIndex(p => p.id === problemId);
+        if (index > -1) {
+            problems.splice(index, 1);
+        }
+
+        card.remove();
+    }
+});
+
+// Reset progress button
+document.addEventListener('click', (e) => {
+    if (e.target.id === 'resetProgress' || e.target.closest('#resetProgress')) {
+        if (confirm('⚠️ Are you sure you want to reset ALL your progress?\n\nThis will delete:\n• All problem attempts\n• Your accuracy stats\n• Your streak\n• Time practiced\n\nThis cannot be undone!')) {
+            localStorage.clear();
+            console.log('Progress reset by user');
+            location.reload();
+        }
+    }
+});
+
+// Update user UI based on auth state
+async function updateUserUI() {
+    const userSection = document.getElementById('userSection');
+
+    if (storage.isLoggedIn && storage.user) {
+        const user = storage.user;
+        userSection.innerHTML = `
+            <div class="user-info">
+                ${user.photoURL ? `<img src="${user.photoURL}" alt="Profile" class="user-avatar">` : ''}
+                <div>
+                    <div class="user-email">${user.email}</div>
+                    <div class="sync-status">☁️ Synced</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="storage.logout()">Logout</button>
+        `;
+    } else {
+        userSection.innerHTML = `
+            <button class="auth-btn" onclick="window.location.href='auth.html'">Login / Sign Up</button>
+        `;
+    }
+}
+
+// Wait for storage to initialize, then update UI
+storage.init().then(() => {
+    updateUserUI();
+    updateStatsDisplay();
+});

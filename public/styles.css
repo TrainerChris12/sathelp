@@ -1,18 +1,103 @@
 :root {
-    --primary: #0a0e27;
-    --secondary: #1e3a8a;
-    --accent: #f59e0b;
-    --accent-dark: #d97706;
-    --bg: #fdfbf7;
-    --card: #ffffff;
-    --text: #1f2937;
-    --text-light: #6b7280;
-    --border: #e5e7eb;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --error: #ef4444;
+    /* College Board Blue Theme */
+    --primary: #0b4167;        /* College Board Blue */
+    --primary-dark: #003d66;   /* Darker blue */
+    --secondary: #01538d;      /* Lighter blue */
+    --accent: #1a339f;         /* Bright blue accent */
+    --bg: #f5f7fa;             /* Light blue-gray background */
+    --surface: #ffffff;        /* White cards */
+    --text: #1a202c;           /* Dark text */
+    --text-light: #4a5568;     /* Gray text */
+    --border: #cbd5e0;         /* Light border */
+    --success: #059669;        /* Keep green for correct */
+    --error: #dc2626;          /* Keep red for incorrect */
+    --warning: #f59e0b;        /* Keep orange for warnings */
 }
 
+/* Auth Bar */
+.auth-bar {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-bar-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.user-email {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.sync-status {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.auth-btn {
+    padding: 0.6rem 1.2rem;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.auth-btn:hover {
+    background: white;
+    color: var(--primary);
+}
+
+.logout-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
 * {
     margin: 0;
     padding: 0;
@@ -548,4 +633,165 @@ h1 {
     background: rgba(16, 185, 129, 0.15);
     border-color: var(--success);
     font-weight: 600;
+}
+
+/* Stats Banner */
+.stats-banner {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgb(234, 240, 243) 0%, rgb(98, 165, 197) 100%);
+    backdrop-filter: blur(10px);
+    border-radius: 1px;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #000000 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .stats-banner {
+        flex-wrap: wrap;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+}
+
+/* Generated Problem Styling */
+.problem-card.generated-problem {
+    border: 2px dashed var(--accent);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(251, 191, 36, 0.03) 100%);
+}
+
+.badge-generated {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+}
+
+.remove-generated {
+    background: var(--error);
+    color: white;
+}
+
+.remove-generated:hover {
+    background: #dc2626;
+}
+
+/* Explanation Section */
+.explanation-section {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(0, 160, 223, 0.05) 0%, rgba(0, 102, 179, 0.05) 100%);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.explanation-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.explanation-icon {
+    font-size: 1.2rem;
+}
+
+.explanation-content {
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.explanation-content strong {
+    color: var(--primary);
+}
+
+.explanation-content code {
+    background: rgba(0, 82, 140, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+}
+
+/* Reset Button */
+.reset-btn {
+    padding: 0.6rem 1.2rem;
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--error);
+    border: 2px solid var(--error);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin: auto; /* Centers horizontally within flex container */
+}
+
+.reset-btn:hover {
+    background: var(--error);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.reset-icon {
+    font-size: 1.2rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.reset-btn:hover .reset-icon {
+    transform: rotate(180deg);
 }
