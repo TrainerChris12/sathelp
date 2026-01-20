@@ -152,13 +152,23 @@ class StorageManager {
             }
         }
 
+        // ✅ 1) Update stats first
         this.calculateStats(progress);
+
+        // ✅ 2) Prune generated attempts so storage never grows forever
+        // (only deletes old GEN-* problems, keeps official SAT problems forever)
+        if (typeof this.pruneGeneratedProgress === "function") {
+            this.pruneGeneratedProgress(progress, 500);
+        }
+
+        // ✅ 3) Save AFTER pruning
         this.cachedProgress = progress;
         this.saveToLocalStorage(progress);
         await this.saveToCloud();
 
         return progress.problems[problemId].correct; // ✅ always valid now
     }
+
 
 
     calculateStats(progress) {
@@ -231,7 +241,26 @@ class StorageManager {
             console.error('Logout error:', error);
         }
     }
+    pruneGeneratedProgress(progress, maxGenerated = 500) {
+        if (!progress || !progress.problems) return;
+
+        const all = Object.values(progress.problems);
+
+        const generatedOnly = all
+            .filter(p => p && typeof p.id === "string" && p.id.startsWith("GEN-"))
+            .sort((a, b) => (a.lastAttempted || 0) - (b.lastAttempted || 0)); // oldest first
+
+        if (generatedOnly.length <= maxGenerated) return;
+
+        const toDelete = generatedOnly.length - maxGenerated;
+
+        for (let i = 0; i < toDelete; i++) {
+            delete progress.problems[generatedOnly[i].id];
+        }
+    }
 }
+
+
 
 const storage = new StorageManager();
 window.storage = storage;

@@ -7,6 +7,10 @@ let activeProgress = 'all';
 let searchQuery = '';
 const problemTimers = {};
 
+// ✅ UI cap for generated problems (keeps the page fast)
+const MAX_GENERATED_UI = 150;
+let generatedUIQueue = []; // newest first
+
 // Display name mappings
 const topicDisplayNames = {
     'algebra': 'Algebra',
@@ -547,38 +551,87 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveFilterTags();
 });
 
-// Show/hide answer
+// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER)
 document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('show-answer')) {
-        const card = e.target.closest('.problem-card');
-        const problemId = card.dataset.id;
-        const problem = problems.find(p => p.id === problemId);
+    if (!e.target.classList.contains('show-answer')) return;
 
-        if (e.target.textContent === 'Show Answer') {
+    const card = e.target.closest('.problem-card');
+    if (!card) return;
+
+    const problemId = card.dataset.id;
+    const problem = problems.find(p => p.id === problemId);
+    if (!problem) return;
+
+    const isShowing = e.target.textContent === 'Hide Answer';
+
+    // ✅ MULTIPLE CHOICE
+    if (problem.choices && problem.choices.length > 0) {
+        const choices = card.querySelectorAll('.choice');
+
+        if (!isShowing) {
+            // SHOW
             card.querySelectorAll('.choice').forEach(c => {
                 c.classList.remove('selected', 'incorrect');
             });
 
-            const choices = card.querySelectorAll('.choice');
             choices.forEach(choice => {
                 if (choice.textContent.startsWith(problem.answer + ')')) {
                     choice.classList.add('correct');
                     choice.dataset.fromShowAnswer = 'true';
                 }
             });
+
             e.target.textContent = 'Hide Answer';
             e.target.classList.remove('secondary');
             e.target.classList.add('answered');
+
         } else {
-            const choices = card.querySelectorAll('.choice');
+            // HIDE
             choices.forEach(choice => {
-                choice.classList.remove('correct');
-                delete choice.dataset.fromShowAnswer;
+                if (choice.dataset.fromShowAnswer) {
+                    choice.classList.remove('correct');
+                    delete choice.dataset.fromShowAnswer;
+                }
             });
+
             e.target.textContent = 'Show Answer';
             e.target.classList.add('secondary');
             e.target.classList.remove('answered');
         }
+
+        return;
+    }
+
+    // ✅ SHORT ANSWER (number input)
+    const inputGroup = card.querySelector('.answer-input-group');
+    if (!inputGroup) return;
+
+    const input = inputGroup.querySelector('.answer-input');
+    const feedback = inputGroup.querySelector('.answer-feedback');
+
+    const correctAnswer = input?.dataset.correct ?? problem.answer;
+
+    if (!isShowing) {
+        // SHOW
+        feedback.textContent = `Answer: ${correctAnswer}`;
+        feedback.className = 'answer-feedback correct';
+        feedback.dataset.fromShowAnswer = "true";
+
+        e.target.textContent = 'Hide Answer';
+        e.target.classList.remove('secondary');
+        e.target.classList.add('answered');
+
+    } else {
+        // HIDE
+        if (feedback.dataset.fromShowAnswer === "true") {
+            feedback.textContent = '';
+            feedback.className = 'answer-feedback';
+            delete feedback.dataset.fromShowAnswer;
+        }
+
+        e.target.textContent = 'Show Answer';
+        e.target.classList.add('secondary');
+        e.target.classList.remove('answered');
     }
 });
 
@@ -600,7 +653,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Click to select answer
+// Click to select answer (MC)
 document.addEventListener('click', async (e) => {
     if (e.target.classList.contains('choice')) {
         const card = e.target.closest('.problem-card');
@@ -683,7 +736,7 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-// Check answer for input fields
+// Check answer for input fields (number)
 document.addEventListener('click', async (e) => {
     if (e.target.classList.contains('check-answer-btn')) {
         const inputGroup = e.target.closest('.answer-input-group');
@@ -721,10 +774,17 @@ document.addEventListener('click', async (e) => {
             if (oldBadge) oldBadge.remove();
             metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>');
 
+            const showAnswerBtn = card.querySelector('.show-answer');
+            if (showAnswerBtn) {
+                showAnswerBtn.textContent = 'Hide Answer';
+                showAnswerBtn.classList.remove('secondary');
+                showAnswerBtn.classList.add('answered');
+            }
+
             console.log(`✅ Correct answer for ${problemId}`);
             delete problemTimers[problemId];
         } else {
-            feedback.textContent = `✗ Incorrect. The answer is ${correctAnswer}`;
+            feedback.textContent = `✗ Incorrect. Try again!`;
             feedback.className = 'answer-feedback incorrect';
 
             await storage.recordAttempt(problemId, false, timeSpent);
@@ -759,7 +819,24 @@ document.addEventListener('click', (e) => {
             return;
         }
 
+        // ✅ Add generated problem to list
         problems.push(newProblem);
+
+        // ✅ Track generated problems for UI cap
+        generatedUIQueue.unshift(newProblem.id);
+
+        // ✅ If over cap, remove the oldest generated card + remove from problems array
+        if (generatedUIQueue.length > MAX_GENERATED_UI) {
+            const oldestId = generatedUIQueue.pop();
+
+            // remove from problems array
+            const idx = problems.findIndex(p => p.id === oldestId);
+            if (idx > -1) problems.splice(idx, 1);
+
+            // remove from DOM
+            const oldCard = document.querySelector(`.problem-card[data-id="${oldestId}"]`);
+            if (oldCard) oldCard.remove();
+        }
 
         const newCardHTML = `
             <div class="problem-card generated-problem" data-id="${newProblem.id}">
@@ -803,6 +880,9 @@ document.addEventListener('click', (e) => {
     if (e.target.classList.contains('remove-generated')) {
         const card = e.target.closest('.problem-card');
         const problemId = card.dataset.id;
+
+        // ✅ remove from queue (important)
+        generatedUIQueue = generatedUIQueue.filter(id => id !== problemId);
 
         const index = problems.findIndex(p => p.id === problemId);
         if (index > -1) {

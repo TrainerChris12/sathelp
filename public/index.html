@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <!-- User Auth Bar -->
 <div class="auth-bar">
     <div class="auth-bar-content">
@@ -19,13 +20,15 @@
         </div>
     </div>
 </div>
+
 <div class="header">
     <div class="header-content">
         <h1>SAT Math Problem Bank</h1>
         <p class="subtitle">Comprehensive collection of official SAT math questions organized by topic</p>
-        <a href="..admin/index.html" class="admin-link">Admin Panel →</a>
+        <a href="../admin/index.html" class="admin-link">Admin Panel →</a>
     </div>
 </div>
+
 <!-- Stats Banner -->
 <div class="stats-banner">
     <div class="stat-item">
@@ -51,19 +54,23 @@
         </button>
     </div>
 </div>
+
 <div class="container">
     <div class="controls">
+
         <!-- Filters Container -->
         <div class="filters-container">
+
             <!-- Active Filters Display -->
             <div class="active-filters-section">
                 <button class="active-filters-header" id="activeFiltersToggle">
-        <span class="accordion-title">
-            <span class="accordion-icon">▼</span>
-            Active Filters
-        </span>
+                    <span class="accordion-title">
+                        <span class="accordion-icon">▼</span>
+                        Active Filters
+                    </span>
                     <span class="clear-all-btn" id="clearAllFilters">Clear All</span>
                 </button>
+
                 <div class="active-filters-content active" id="activeFiltersContent">
                     <div class="active-filters-tags" id="activeFiltersTags">
                         <!-- Tags will be dynamically inserted here -->
@@ -78,12 +85,13 @@
                 <!-- Algebra Accordion -->
                 <div class="accordion-item">
                     <button class="accordion-header" data-topic="algebra">
-                <span class="accordion-title">
-                    <span class="accordion-icon">▼</span>
-                    Algebra
-                </span>
+                        <span class="accordion-title">
+                            <span class="accordion-icon">▼</span>
+                            Algebra
+                        </span>
                         <span class="selected-count" data-topic-count="algebra">0 selected</span>
                     </button>
+
                     <div class="accordion-content">
                         <div class="subskill-checkboxes">
                             <label class="subskill-checkbox">
@@ -113,12 +121,13 @@
                 <!-- Advanced Math Accordion -->
                 <div class="accordion-item">
                     <button class="accordion-header" data-topic="advanced-math">
-                <span class="accordion-title">
-                    <span class="accordion-icon">▼</span>
-                    Advanced Math
-                </span>
+                        <span class="accordion-title">
+                            <span class="accordion-icon">▼</span>
+                            Advanced Math
+                        </span>
                         <span class="selected-count" data-topic-count="advanced-math">0 selected</span>
                     </button>
+
                     <div class="accordion-content">
                         <div class="subskill-checkboxes">
                             <label class="subskill-checkbox">
@@ -140,12 +149,13 @@
                 <!-- Problem Solving & Data Accordion -->
                 <div class="accordion-item">
                     <button class="accordion-header" data-topic="problem-solving">
-                <span class="accordion-title">
-                    <span class="accordion-icon">▼</span>
-                    Problem Solving & Data Analysis
-                </span>
+                        <span class="accordion-title">
+                            <span class="accordion-icon">▼</span>
+                            Problem Solving & Data Analysis
+                        </span>
                         <span class="selected-count" data-topic-count="problem-solving">0 selected</span>
                     </button>
+
                     <div class="accordion-content">
                         <div class="subskill-checkboxes">
                             <label class="subskill-checkbox">
@@ -183,12 +193,13 @@
                 <!-- Geometry & Trig Accordion -->
                 <div class="accordion-item">
                     <button class="accordion-header" data-topic="geometry">
-                <span class="accordion-title">
-                    <span class="accordion-icon">▼</span>
-                    Geometry & Trigonometry
-                </span>
+                        <span class="accordion-title">
+                            <span class="accordion-icon">▼</span>
+                            Geometry & Trigonometry
+                        </span>
                         <span class="selected-count" data-topic-count="geometry">0 selected</span>
                     </button>
+
                     <div class="accordion-content">
                         <div class="subskill-checkboxes">
                             <label class="subskill-checkbox">
@@ -232,21 +243,12 @@
                 </div>
             </div>
 
-            <!-- Search -->
+            <!-- Search (ONLY ONE SEARCH INPUT NOW ✅) -->
             <div class="filter-section">
                 <h3>Search</h3>
                 <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
             </div>
-        </div>
 
-        <div class="search-box">
-            <label class="filter-label">Search Problems</label>
-            <input
-                    type="text"
-                    id="searchInput"
-                    class="search-input"
-                    placeholder="Search by year, question number, or keywords..."
-            />
         </div>
     </div>
 
@@ -262,10 +264,6 @@
         <div class="stat-card">
             <div class="stat-number" id="topicCount">0</div>
             <div class="stat-label">Topics</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="yearRange">N/A</div>
-            <div class="stat-label">Year Range</div>
         </div>
     </div>
 
@@ -284,5 +282,6 @@
 <script src="storage-manager.js"></script>
 <script src="problem-generator.js"></script>
 <script src="apps.js"></script>
+
 </body>
 </html>
