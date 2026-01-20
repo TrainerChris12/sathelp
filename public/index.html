@@ -53,25 +53,190 @@
 </div>
 <div class="container">
     <div class="controls">
-        <div class="filters">
-            <label class="filter-label">Filter by Topic</label>
-            <div class="filter-buttons" id="topicFilters">
-                <button class="filter-btn active" data-topic="all">All Topics</button>
-                <button class="filter-btn active" data-topic="algebra">Algebra</button>
-                <button class="filter-btn active" data-topic="functions">Advanced Math</button>
-                <button class="filter-btn active" data-topic="statistics">Problem-Solving and Data Analysis</button>
-                <button class="filter-btn active" data-topic="geometry">Geometry</button>
-                <button class="filter-btn active" data-topic="trigonometry">Trigonometry</button>
-
+        <!-- Filters Container -->
+        <div class="filters-container">
+            <!-- Active Filters Display -->
+            <div class="active-filters-section">
+                <button class="active-filters-header" id="activeFiltersToggle">
+        <span class="accordion-title">
+            <span class="accordion-icon">▼</span>
+            Active Filters
+        </span>
+                    <span class="clear-all-btn" id="clearAllFilters">Clear All</span>
+                </button>
+                <div class="active-filters-content active" id="activeFiltersContent">
+                    <div class="active-filters-tags" id="activeFiltersTags">
+                        <!-- Tags will be dynamically inserted here -->
+                    </div>
+                </div>
             </div>
 
-            <label class="filter-label" style="margin-top: 1.5rem;">Filter by Difficulty</label>
-            <div class="filter-buttons" id="difficultyFilters">
-                <button class="filter-btn active" data-difficulty="easy">Easy</button>
-                <button class="filter-btn active" data-difficulty="medium">Medium</button>
-                <button class="filter-btn active" data-difficulty="hard">Hard</button>
+            <!-- Topic & Subskill Accordion -->
+            <div class="filter-section">
+                <h3>Topics & Skills</h3>
+
+                <!-- Algebra Accordion -->
+                <div class="accordion-item">
+                    <button class="accordion-header" data-topic="algebra">
+                <span class="accordion-title">
+                    <span class="accordion-icon">▼</span>
+                    Algebra
+                </span>
+                        <span class="selected-count" data-topic-count="algebra">0 selected</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="subskill-checkboxes">
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="linear-equations-one-variable" checked>
+                                <span>Linear Equations in One Variable</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="linear-functions" checked>
+                                <span>Linear Functions</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="linear-equations-two-variables" checked>
+                                <span>Linear Equations in Two Variables</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="systems-linear-equations" checked>
+                                <span>Systems of Two Linear Equations</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="linear-inequalities" checked>
+                                <span>Linear Inequalities</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Math Accordion -->
+                <div class="accordion-item">
+                    <button class="accordion-header" data-topic="advanced-math">
+                <span class="accordion-title">
+                    <span class="accordion-icon">▼</span>
+                    Advanced Math
+                </span>
+                        <span class="selected-count" data-topic-count="advanced-math">0 selected</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="subskill-checkboxes">
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="nonlinear-functions" checked>
+                                <span>Nonlinear Functions</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="nonlinear-equations" checked>
+                                <span>Nonlinear Equations & Systems</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="equivalent-expressions" checked>
+                                <span>Equivalent Expressions</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Problem Solving & Data Accordion -->
+                <div class="accordion-item">
+                    <button class="accordion-header" data-topic="problem-solving">
+                <span class="accordion-title">
+                    <span class="accordion-icon">▼</span>
+                    Problem Solving & Data Analysis
+                </span>
+                        <span class="selected-count" data-topic-count="problem-solving">0 selected</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="subskill-checkboxes">
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="ratios-rates" checked>
+                                <span>Ratios, Rates & Proportions</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="percentages" checked>
+                                <span>Percentages</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="one-variable-data" checked>
+                                <span>One-Variable Data</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="two-variable-data" checked>
+                                <span>Two-Variable Data & Scatterplots</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="probability" checked>
+                                <span>Probability & Conditional Probability</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="inference" checked>
+                                <span>Inference & Margin of Error</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="statistical-claims" checked>
+                                <span>Statistical Claims & Experiments</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Geometry & Trig Accordion -->
+                <div class="accordion-item">
+                    <button class="accordion-header" data-topic="geometry">
+                <span class="accordion-title">
+                    <span class="accordion-icon">▼</span>
+                    Geometry & Trigonometry
+                </span>
+                        <span class="selected-count" data-topic-count="geometry">0 selected</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="subskill-checkboxes">
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="area-volume" checked>
+                                <span>Area & Volume</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="lines-angles-triangles" checked>
+                                <span>Lines, Angles & Triangles</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="right-triangles" checked>
+                                <span>Right Triangles & Trigonometry</span>
+                            </label>
+                            <label class="subskill-checkbox">
+                                <input type="checkbox" data-subskill="circles" checked>
+                                <span>Circles</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Difficulty Filter -->
+            <div class="filter-section">
+                <h3>Difficulty</h3>
+                <div class="filter-buttons" id="difficultyFilters">
+                    <button class="filter-btn active" data-difficulty="easy">Easy</button>
+                    <button class="filter-btn active" data-difficulty="medium">Medium</button>
+                    <button class="filter-btn active" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+
+            <!-- Progress Filter -->
+            <div class="filter-section">
+                <h3>Progress</h3>
+                <div class="filter-buttons" id="progressFilters">
+                    <button class="filter-btn active" data-progress="all">All Problems</button>
+                    <button class="filter-btn" data-progress="unsolved">Unsolved Only</button>
+                    <button class="filter-btn" data-progress="solved">Solved Only</button>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="filter-section">
+                <h3>Search</h3>
+                <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
+            </div>
         </div>
 
         <div class="search-box">
