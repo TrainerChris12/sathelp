@@ -1,4 +1,9 @@
-// public/app.js - COMPLETE WITH COLLAPSIBLE ACTIVE FILTERS
+// public/app.js - COMPLETE WITH COLLAPSIBLE ACTIVE FILTERS (UPDATED)
+// ✅ Fixes requested:
+// 1) Clicking the correct MC choice flips Show Answer -> Hide Answer (answer is now showing)
+// 2) NEVER allow correct (green) + incorrect (red) simultaneously
+// 3) "Hide Answer" reliably hides the shown correct (whether shown by button OR correct click)
+// 4) No hard-lock after correct; you can still interact (progress still records once)
 
 let problems = [];
 let activeSubskills = new Set();
@@ -117,8 +122,8 @@ function filterProblems() {
 
         // Search filter
         const searchMatch = searchQuery === '' ||
-            p.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.id.toLowerCase().includes(searchQuery.toLowerCase());
+            (p.question || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (p.id || '').toLowerCase().includes(searchQuery.toLowerCase());
 
         return subskillMatch && difficultyMatch && progressMatch && searchMatch;
     });
@@ -177,7 +182,7 @@ function renderProblems() {
                 </h2>
                 <div class="problems-grid">
                     ${topicProblems.map(problem => `
-                        <div class="problem-card" data-id="${problem.id}">
+                        <div class="problem-card" data-id="${problem.id}" data-answer-shown="false" data-answer-source="">
                             <div class="problem-header">
                                 <div class="problem-meta">
                                     <span class="badge badge-difficulty badge-${problem.difficulty}">${problem.difficulty}</span>
@@ -199,6 +204,7 @@ function renderProblems() {
                                     <div class="answer-feedback"></div>
                                 </div>
                             ` : ''}
+
                             ${problem.explanation ? `
                                 <div class="explanation-section" style="display: none;">
                                     <div class="explanation-header">
@@ -211,7 +217,7 @@ function renderProblems() {
                             <div class="problem-footer">
                                 <button class="action-btn secondary show-answer">Show Answer</button>
                                 ${problem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
-                                <button class="action-btn">Practice Similar</button>
+                                <button class="action-btn practice-similar">Practice Similar</button>
                             </div>
                         </div>
                     `).join('')}
@@ -348,7 +354,7 @@ function updateActiveFilterTags() {
 
     // Add event listeners to remove buttons
     tagsContainer.querySelectorAll('.filter-tag-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
             if (btn.dataset.removeSubskill) {
                 const subskill = btn.dataset.removeSubskill;
                 activeSubskills.delete(subskill);
@@ -361,7 +367,7 @@ function updateActiveFilterTags() {
                 if (diffBtn) diffBtn.classList.remove('active');
             } else if (btn.dataset.removeProgress) {
                 activeProgress = 'all';
-                document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('#progressFilters .filter-btn').forEach(b => b.classList.remove('active'));
                 const allBtn = document.querySelector('[data-progress="all"]');
                 if (allBtn) allBtn.classList.add('active');
             } else if (btn.dataset.removeSearch) {
@@ -377,9 +383,79 @@ function updateActiveFilterTags() {
     });
 }
 
-// DOM Content Loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // Active Filters Toggle
+/* =========================
+   ✅ MC Helpers (NEW)
+   ========================= */
+function getCorrectLetter(problem) {
+    return String(problem.answer ?? '').trim().toUpperCase();
+}
+
+function getChoiceLetter(choiceText) {
+    const t = (choiceText || '').trim();
+    return t ? t.charAt(0).toUpperCase() : '';
+}
+
+function setShowAnswerButtonState(card, show) {
+    const btn = card.querySelector('.show-answer');
+    if (!btn) return;
+
+    if (show) {
+        btn.textContent = 'Hide Answer';
+        btn.classList.remove('secondary');
+        btn.classList.add('answered');
+    } else {
+        btn.textContent = 'Show Answer';
+        btn.classList.add('secondary');
+        btn.classList.remove('answered');
+    }
+}
+
+/* =========================
+   DOM Content Loaded
+   ========================= */
+document.addEventListener('DOMContentLoaded', async () => {
+    // ========== BACK TO TOP BUTTON ==========
+    const backToTopBtn = document.getElementById('backToTop');
+
+    if (backToTopBtn) {
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Scroll to top when clicked
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+    // ========== DARK MODE TOGGLE ==========
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.querySelector('.theme-icon');
+
+    if (themeToggle && themeIcon) {
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeIcon.textContent = savedTheme === 'dark' ? '☀' : '☾';
+
+        // Toggle on click
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            themeIcon.textContent = next === 'dark' ? '☀' : '☾';
+        });
+    }
+
+    // ========== ACTIVE FILTERS TOGGLE ==========
     const activeFiltersToggle = document.getElementById('activeFiltersToggle');
     const activeFiltersSection = document.querySelector('.active-filters-section');
     const activeFiltersContent = document.getElementById('activeFiltersContent');
@@ -390,7 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.id === 'clearAllFilters' || e.target.closest('#clearAllFilters')) {
                 return;
             }
-
             activeFiltersSection.classList.toggle('collapsed');
             activeFiltersContent.classList.toggle('active');
         });
@@ -536,7 +611,6 @@ document.addEventListener('DOMContentLoaded', () => {
             activeProgress = 'all';
 
             // Clear search
-            const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.value = '';
             searchQuery = '';
 
@@ -551,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveFilterTags();
 });
 
-// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER)
+// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER) - UPDATED + RELIABLE
 document.addEventListener('click', (e) => {
     if (!e.target.classList.contains('show-answer')) return;
 
@@ -562,41 +636,39 @@ document.addEventListener('click', (e) => {
     const problem = problems.find(p => p.id === problemId);
     if (!problem) return;
 
-    const isShowing = e.target.textContent === 'Hide Answer';
+    const currentlyShown = card.dataset.answerShown === 'true';
+    const nextShown = !currentlyShown;
+
+    card.dataset.answerShown = nextShown ? 'true' : 'false';
+    card.dataset.answerSource = nextShown ? 'button' : '';
 
     // ✅ MULTIPLE CHOICE
     if (problem.choices && problem.choices.length > 0) {
         const choices = card.querySelectorAll('.choice');
+        const correctLetter = getCorrectLetter(problem);
 
-        if (!isShowing) {
-            // SHOW
-            card.querySelectorAll('.choice').forEach(c => {
-                c.classList.remove('selected', 'incorrect');
-            });
+        if (nextShown) {
+            // never allow correct+incorrect together
+            choices.forEach(c => c.classList.remove('incorrect', 'selected'));
 
             choices.forEach(choice => {
-                if (choice.textContent.startsWith(problem.answer + ')')) {
+                if (getChoiceLetter(choice.textContent) === correctLetter) {
                     choice.classList.add('correct');
                     choice.dataset.fromShowAnswer = 'true';
                 }
             });
 
-            e.target.textContent = 'Hide Answer';
-            e.target.classList.remove('secondary');
-            e.target.classList.add('answered');
-
+            setShowAnswerButtonState(card, true);
         } else {
-            // HIDE
+            // remove ONLY what show-answer added
             choices.forEach(choice => {
-                if (choice.dataset.fromShowAnswer) {
+                if (choice.dataset.fromShowAnswer === 'true') {
                     choice.classList.remove('correct');
                     delete choice.dataset.fromShowAnswer;
                 }
             });
 
-            e.target.textContent = 'Show Answer';
-            e.target.classList.add('secondary');
-            e.target.classList.remove('answered');
+            setShowAnswerButtonState(card, false);
         }
 
         return;
@@ -611,27 +683,20 @@ document.addEventListener('click', (e) => {
 
     const correctAnswer = input?.dataset.correct ?? problem.answer;
 
-    if (!isShowing) {
-        // SHOW
+    if (nextShown) {
         feedback.textContent = `Answer: ${correctAnswer}`;
         feedback.className = 'answer-feedback correct';
         feedback.dataset.fromShowAnswer = "true";
 
-        e.target.textContent = 'Hide Answer';
-        e.target.classList.remove('secondary');
-        e.target.classList.add('answered');
-
+        setShowAnswerButtonState(card, true);
     } else {
-        // HIDE
         if (feedback.dataset.fromShowAnswer === "true") {
             feedback.textContent = '';
             feedback.className = 'answer-feedback';
             delete feedback.dataset.fromShowAnswer;
         }
 
-        e.target.textContent = 'Show Answer';
-        e.target.classList.add('secondary');
-        e.target.classList.remove('answered');
+        setShowAnswerButtonState(card, false);
     }
 });
 
@@ -653,47 +718,67 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Click to select answer (MC)
+// ✅ Click to select answer (MC) - UPDATED
+// - Clicking correct flips button to "Hide Answer" + marks answerShown/source
+// - Never allow correct+incorrect simultaneously
+// - No hard lock after correct (still records progress once)
 document.addEventListener('click', async (e) => {
-    if (e.target.classList.contains('choice')) {
-        const card = e.target.closest('.problem-card');
-        const problemId = card.dataset.id;
-        const problem = problems.find(p => p.id === problemId);
+    if (!e.target.classList.contains('choice')) return;
 
-        if (!problemTimers[problemId]) {
-            problemTimers[problemId] = Date.now();
-        }
+    const card = e.target.closest('.problem-card');
+    const problemId = card.dataset.id;
+    const problem = problems.find(p => p.id === problemId);
 
-        const progress = storage.getProgress();
-        const problemData = progress.problems[problemId];
+    if (!problemTimers[problemId]) {
+        problemTimers[problemId] = Date.now();
+    }
 
-        if (problemData && problemData.correct === true) {
-            console.log('Problem already solved correctly - locked');
-            return;
-        }
+    const progress = storage.getProgress();
+    const problemData = progress?.problems?.[problemId];
+    const alreadySolved = problemData && problemData.correct === true;
 
-        if (e.target.classList.contains('selected')) {
-            e.target.classList.remove('selected', 'incorrect');
-            return;
-        }
+    const clicked = e.target;
 
-        card.querySelectorAll('.choice').forEach(c => {
-            c.classList.remove('selected', 'incorrect');
-            if (!c.dataset.fromShowAnswer) {
-                c.classList.remove('correct');
-            }
-        });
+    const answerShown = card.dataset.answerShown === 'true';
+    const answerSource = card.dataset.answerSource || ''; // 'button' | 'correctClick' | ''
 
-        e.target.classList.add('selected');
+    // If answer is shown by the button, let user "play" without adding incorrect red (prevents green+red)
+    if (answerSource === 'button') {
+        // clear selection only
+        card.querySelectorAll('.choice').forEach(c => c.classList.remove('selected', 'incorrect'));
+        clicked.classList.add('selected');
+        return;
+    }
 
-        const selectedLetter = e.target.textContent.trim().charAt(0);
-        const isCorrect = selectedLetter === problem.answer;
-        const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
+    // Otherwise, clear everything first to prevent correct+incorrect together
+    card.querySelectorAll('.choice').forEach(c => {
+        c.classList.remove('selected', 'incorrect', 'correct');
+        delete c.dataset.fromShowAnswer;
+    });
 
-        if (isCorrect) {
-            e.target.classList.add('correct');
-            e.target.classList.remove('selected');
+    clicked.classList.add('selected');
 
+    const selectedLetter = getChoiceLetter(clicked.textContent);
+    const correctLetter = getCorrectLetter(problem);
+    const isCorrect = selectedLetter === correctLetter;
+    const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
+
+    if (isCorrect) {
+        clicked.classList.add('correct');
+        clicked.classList.remove('selected');
+
+        // Mark answer as showing due to correct click
+        card.dataset.answerShown = 'true';
+        card.dataset.answerSource = 'correctClick';
+
+        // Mark so Hide Answer can remove it
+        clicked.dataset.fromShowAnswer = 'true';
+
+        // ✅ Flip button to Hide Answer
+        setShowAnswerButtonState(card, true);
+
+        // ✅ record attempt only if not already solved
+        if (!alreadySolved) {
             const counted = await storage.recordAttempt(problemId, true, timeSpent);
             updateStatsDisplay();
 
@@ -708,18 +793,20 @@ document.addEventListener('click', async (e) => {
                 metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-attempted" title="Got it right but was wrong before">Attempted</span>');
                 console.log(`⚠️ ${problemId} - Correct but doesn't count (was wrong before)`);
             }
+        }
 
-            const showAnswerBtn = card.querySelector('.show-answer');
-            if (showAnswerBtn) {
-                showAnswerBtn.textContent = 'Hide Answer';
-                showAnswerBtn.classList.remove('secondary');
-                showAnswerBtn.classList.add('answered');
-            }
+        delete problemTimers[problemId];
+    } else {
+        // incorrect: do NOT allow correct simultaneously
+        card.dataset.answerShown = 'false';
+        card.dataset.answerSource = '';
+        setShowAnswerButtonState(card, false);
 
-            delete problemTimers[problemId];
-        } else {
-            e.target.classList.add('incorrect');
+        clicked.classList.add('incorrect');
+        clicked.classList.remove('selected');
 
+        // record attempt only if not already solved
+        if (!alreadySolved) {
             await storage.recordAttempt(problemId, false, timeSpent);
             updateStatsDisplay();
 
@@ -730,9 +817,9 @@ document.addEventListener('click', async (e) => {
                     metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-attempted" title="Attempted but not solved">Attempted</span>');
                 }
             }
-
-            console.log(`❌ ${problemId} - Incorrect`);
         }
+
+        console.log(`❌ ${problemId} - Incorrect`);
     }
 });
 
@@ -774,16 +861,15 @@ document.addEventListener('click', async (e) => {
             if (oldBadge) oldBadge.remove();
             metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>');
 
-            const showAnswerBtn = card.querySelector('.show-answer');
-            if (showAnswerBtn) {
-                showAnswerBtn.textContent = 'Hide Answer';
-                showAnswerBtn.classList.remove('secondary');
-                showAnswerBtn.classList.add('answered');
-            }
+            // if they solved, we consider answer "shown"
+            card.dataset.answerShown = 'true';
+            card.dataset.answerSource = 'correctClick';
+            setShowAnswerButtonState(card, true);
 
             console.log(`✅ Correct answer for ${problemId}`);
             delete problemTimers[problemId];
         } else {
+            // ensure no correct+incorrect (for numeric there's no green choice, but keep clean UI)
             feedback.textContent = `✗ Incorrect. Try again!`;
             feedback.className = 'answer-feedback incorrect';
 
@@ -797,82 +883,82 @@ document.addEventListener('click', async (e) => {
 
 // Practice Similar
 document.addEventListener('click', (e) => {
-    if (e.target.textContent === 'Practice Similar') {
-        const card = e.target.closest('.problem-card');
-        const problemId = card.dataset.id;
-        const originalProblem = problems.find(p => p.id === problemId);
+    if (!e.target.classList.contains('practice-similar')) return;
 
-        if (!originalProblem) {
-            console.error('Original problem not found');
-            return;
-        }
+    const card = e.target.closest('.problem-card');
+    const problemId = card.dataset.id;
+    const originalProblem = problems.find(p => p.id === problemId);
 
-        if (!window.problemGenerator) {
-            alert('Problem generator not loaded');
-            return;
-        }
-
-        const newProblem = problemGenerator.generate(originalProblem);
-
-        if (!newProblem) {
-            alert('Problem generation not yet available for this topic. Coming soon!');
-            return;
-        }
-
-        // ✅ Add generated problem to list
-        problems.push(newProblem);
-
-        // ✅ Track generated problems for UI cap
-        generatedUIQueue.unshift(newProblem.id);
-
-        // ✅ If over cap, remove the oldest generated card + remove from problems array
-        if (generatedUIQueue.length > MAX_GENERATED_UI) {
-            const oldestId = generatedUIQueue.pop();
-
-            // remove from problems array
-            const idx = problems.findIndex(p => p.id === oldestId);
-            if (idx > -1) problems.splice(idx, 1);
-
-            // remove from DOM
-            const oldCard = document.querySelector(`.problem-card[data-id="${oldestId}"]`);
-            if (oldCard) oldCard.remove();
-        }
-
-        const newCardHTML = `
-            <div class="problem-card generated-problem" data-id="${newProblem.id}">
-                <div class="problem-header">
-                    <div class="problem-meta">
-                        <span class="badge badge-generated">Generated</span>
-                        <span class="badge badge-difficulty badge-${newProblem.difficulty}">${newProblem.difficulty}</span>
-                    </div>
-                    <div class="problem-id">${newProblem.id}</div>
-                </div>
-                <div class="problem-content">${newProblem.question}</div>
-                <div class="problem-choices">
-                    ${newProblem.choices.map(choice => `<div class="choice">${choice}</div>`).join('')}
-                </div>
-                ${newProblem.explanation ? `
-                    <div class="explanation-section" style="display: none;">
-                        <div class="explanation-header">
-                            <span class="explanation-icon">💡</span>
-                            <strong>Explanation:</strong>
-                        </div>
-                        <div class="explanation-content">${newProblem.explanation}</div>
-                    </div>
-                ` : ''}
-                <div class="problem-footer">
-                    <button class="action-btn secondary show-answer">Show Answer</button>
-                    ${newProblem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
-                    <button class="action-btn">Practice Similar</button>
-                    <button class="action-btn remove-generated">Remove</button>
-                </div>
-            </div>
-        `;
-
-        card.insertAdjacentHTML('afterend', newCardHTML);
-        const newCard = card.nextElementSibling;
-        newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (!originalProblem) {
+        console.error('Original problem not found');
+        return;
     }
+
+    if (!window.problemGenerator) {
+        alert('Problem generator not loaded');
+        return;
+    }
+
+    const newProblem = problemGenerator.generate(originalProblem);
+
+    if (!newProblem) {
+        alert('Problem generation not yet available for this topic. Coming soon!');
+        return;
+    }
+
+    // ✅ Add generated problem to list
+    problems.push(newProblem);
+
+    // ✅ Track generated problems for UI cap
+    generatedUIQueue.unshift(newProblem.id);
+
+    // ✅ If over cap, remove the oldest generated card + remove from problems array
+    if (generatedUIQueue.length > MAX_GENERATED_UI) {
+        const oldestId = generatedUIQueue.pop();
+
+        // remove from problems array
+        const idx = problems.findIndex(p => p.id === oldestId);
+        if (idx > -1) problems.splice(idx, 1);
+
+        // remove from DOM
+        const oldCard = document.querySelector(`.problem-card[data-id="${oldestId}"]`);
+        if (oldCard) oldCard.remove();
+    }
+
+    const newCardHTML = `
+        <div class="problem-card generated-problem" data-id="${newProblem.id}" data-answer-shown="false" data-answer-source="">
+            <div class="problem-header">
+                <div class="problem-meta">
+                    <span class="badge badge-generated">Generated</span>
+                    <span class="badge badge-difficulty badge-${newProblem.difficulty}">${newProblem.difficulty}</span>
+                </div>
+                <div class="problem-id">${newProblem.id}</div>
+            </div>
+            <div class="problem-content">${newProblem.question}</div>
+            <div class="problem-choices">
+                ${newProblem.choices.map(choice => `<div class="choice">${choice}</div>`).join('')}
+            </div>
+            ${newProblem.explanation ? `
+                <div class="explanation-section" style="display: none;">
+                    <div class="explanation-header">
+                        <span class="explanation-icon">💡</span>
+                        <strong>Explanation:</strong>
+                    </div>
+                    <div class="explanation-content">${newProblem.explanation}</div>
+                </div>
+            ` : ''}
+            <div class="problem-footer">
+                <button class="action-btn secondary show-answer">Show Answer</button>
+                ${newProblem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
+                <button class="action-btn practice-similar">Practice Similar</button>
+                <button class="action-btn remove-generated">Remove</button>
+            </div>
+        </div>
+    `;
+
+    card.insertAdjacentHTML('afterend', newCardHTML);
+    const newCard = card.nextElementSibling;
+    newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
 // Remove generated problem

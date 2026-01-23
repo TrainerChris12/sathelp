@@ -1,17 +1,41 @@
+/* Light mode (default) */
 :root {
-    /* College Board Blue Theme */
-    --primary: #0b4167;        /* College Board Blue */
-    --primary-dark: #003d66;   /* Darker blue */
-    --secondary: #01538d;      /* Lighter blue */
-    --accent: #1a339f;         /* Bright blue accent */
-    --bg: #f5f7fa;             /* Light blue-gray background */
-    --surface: #ffffff;        /* White cards */
-    --text: #1a202c;           /* Dark text */
-    --text-light: #4a5568;     /* Gray text */
-    --border: #cbd5e0;         /* Light border */
-    --success: #059669;        /* Keep green for correct */
-    --error: #dc2626;          /* Keep red for incorrect */
-    --warning: #f59e0b;        /* Keep orange for warnings */
+    --primary: #0066b3;
+    --primary-dark: #004d8c;
+    --secondary: #f0f4f8;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.15);
+    --accent: #161e8a;
+    --accent-dark: #003d7c;
+    --card: #ffffff;
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+    --primary: #3363b9;
+    --primary-dark: #f800ff;
+    --secondary: #1e293b;
+    --bg: #0f172a;
+    --bg-card: #1e293b;
+    --text: #f1f5f9;
+    --text-light: #94a3b8;
+    --border: #334155;
+    --success: #22c55e;
+    --error: #f87171;
+    --warning: #fbbf24;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --accent: #3363b9;
+    --accent-dark: #2563eb;
+    --card: #1e293b;
 }
 
 /* Auth Bar */
@@ -19,21 +43,61 @@
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
     color: white;
     padding: 1rem 2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* 3 columns: Toggle | Title | User */
 .auth-bar-content {
     max-width: 1400px;
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 56px 1fr auto; /* ✅ reserved slot for toggle */
+    align-items: center;                 /* ✅ vertical centering */
+    gap: 1rem;
 }
 
-.app-title h2 {
-    margin: 0;
-    font-size: 1.5rem;
+/* Left slot */
+.theme-toggle {
+    justify-self: start;
+    align-self: center;
+
+    width: 40px;
+    height: 40px;
+
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    font-size: 1.2rem;
     color: white;
+
+    transition: transform 0.15s ease, background 0.15s ease;
+    transform-origin: center; /* ✅ scale stays centered */
+}
+
+/* smaller hover so it doesn’t spill */
+.theme-toggle:hover {
+    background: rgba(255,255,255,0.2);
+    transform: scale(1.05); /* ✅ was too big before */
+}
+
+/* Center title */
+.app-title {
+    justify-self: center;
+}
+
+/* Right side */
+.auth-right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .user-section {
@@ -517,8 +581,7 @@ h1 {
 }
 
 .action-btn.secondary {
-    background: transparent;
-    color: var(--accent);
+    color: white;
     border: 2px solid var(--accent);
 }
 
@@ -635,40 +698,28 @@ h1 {
     font-weight: 600;
 }
 
-/* Stats Banner */
 .stats-banner {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--bg-card); /* CHANGE THIS LINE */
+    padding: 1.5rem 1.5rem;
     display: flex;
-    justify-content: space-around;
-    gap: 2rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgb(234, 240, 243) 0%, rgb(98, 165, 197) 100%);
-    backdrop-filter: blur(10px);
-    border-radius: 1px;
-    margin-bottom: 2rem;
-    border-bottom: 3px solid #000000 !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 3rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    position: sticky; /* ADD THIS */
+    top: 0; /* ADD THIS */
+    z-index: 100; /* ADD THIS */
 }
 
 .stat-value {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 2rem;
+    color: var(--text); /* ADD THIS */
+    font-size: 1.5rem;
     font-weight: 700;
-    color: var(--primary);
 }
 
 .stat-label {
+    color: var(--text-light); /* ADD THIS */
     font-size: 0.85rem;
-    color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -776,7 +827,8 @@ h1 {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    margin: auto; /* Centers horizontally within flex container */
+    margin-top: auto;
+    white-space: nowrap;
 }
 
 .reset-btn:hover {
@@ -1069,3 +1121,187 @@ h1 {
     font-weight: 600;
     color: var(--primary);
 }
+
+/* Dark Mode Toggle */
+.auth-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Minimal Dark Mode Toggle - Inside Auth Bar */
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.theme-icon {
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .theme-icon {
+    transform: rotate(180deg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-bar-content {
+        gap: 1rem;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+}
+
+/* Remove old auth-right styles since toggle is no longer there */
+.auth-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Smooth transitions*/
+body,
+.problem-card,
+.stats-banner,
+.stat-value,
+.stat-label {
+    transition: background-color 0.02s ease, color 0.02s ease, border-color 0.15s ease;
+}
+
+/* FIX: Filter buttons in dark mode */
+[data-theme="dark"] .filter-btn {
+    background: #1e293b !important; /* Dark background */
+    color: #f1f5f9 !important; /* White text */
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .filter-btn:hover {
+    background: #334155 !important;
+    border-color: #3b82f6 !important;
+}
+
+[data-theme="dark"] .filter-btn.active {
+    background: #3363b9 !important;
+    color: white !important;
+    border-color: #3b82f6 !important;
+}
+
+/* FIX: Accordion headers in dark mode */
+[data-theme="dark"] .accordion-header {
+    background: #1e293b !important; /* Dark background instead of white */
+    color: #f1f5f9 !important; /* White text */
+}
+
+[data-theme="dark"] .accordion-header:hover {
+    background: #334155 !important;
+}
+
+[data-theme="dark"] .accordion-content {
+    background: #0f172a !important;
+}
+
+[data-theme="dark"] .accordion-title {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .selected-count {
+    color: #94a3b8 !important;
+}
+
+/* FIX: Subskill checkboxes in dark mode */
+[data-theme="dark"] .subskill-checkbox {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .subskill-checkbox span {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .subskill-checkbox:hover {
+    background: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* FIX: Input fields in dark mode */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] .search-input,
+[data-theme="dark"] .answer-input {
+    background: #2b3a54 !important; /* Dark background */
+    color: #f1f5f9 !important; /* White text */
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] input[type="text"]:focus,
+[data-theme="dark"] input[type="number"]:focus,
+[data-theme="dark"] .search-input:focus,
+[data-theme="dark"] .answer-input:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+[data-theme="dark"] input::placeholder {
+    color: #64748b !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] input:-ms-input-placeholder {
+    color: #64748b !important;
+}
+
+[data-theme="dark"] input::-ms-input-placeholder {
+    color: #64748b !important;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background: var(--primary-dark);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top:active {
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}
+
