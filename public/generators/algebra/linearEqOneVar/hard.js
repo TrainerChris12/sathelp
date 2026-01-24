@@ -6,11 +6,34 @@ if (!window.ProblemGenerator) {
     const P = window.ProblemGenerator.prototype;
 
     // =========================================================
+    // HELPER: Generate integer-only choices (no decimals)
+    // Use for: ages, counts, miles, minutes, integers, etc.
+    // =========================================================
+    P._integerChoices = function (correct, count = 4, spread = 5) {
+        const choices = new Set([correct]);
+        const offsets = this.shuffle([-3, -2, -1, 1, 2, 3, 4, 5, -4, -5, 6, -6]);
+        let i = 0;
+        while (choices.size < count && i < offsets.length) {
+            const candidate = correct + offsets[i] * Math.ceil(spread / 3);
+            // Avoid duplicates and ensure variety
+            if (!choices.has(candidate)) {
+                choices.add(candidate);
+            }
+            i++;
+        }
+        // Fallback if still not enough
+        while (choices.size < count) {
+            const rand = correct + this.randomChoice([-1, 1]) * this.randomInt(1, spread * 2);
+            choices.add(rand);
+        }
+        return this.shuffle(Array.from(choices));
+    };
+
+    // =========================================================
     // ✅ FULLY VARIED HARD LINEAR EQUATIONS
     // =========================================================
 
     // 1) Infinitely Many Solutions - MUCH MORE VARIED
-    // FIX: correct s formula so constants truly match for infinite solutions
     P.tplInfiniteSolutionsFractionHard = function (original) {
         const a = this.randomInt(2, 6);
         const b = this.randomInt(3, 25);
@@ -18,8 +41,6 @@ if (!window.ProblemGenerator) {
         let rightCoeff = this.randomInt(-15, 15);
         if (rightCoeff === 0) rightCoeff = -10;
 
-        // ax + b - s/d = a(x + r) = ax + ar
-        // cancel ax => b - s/d = ar  => s = d(b - ar)
         const s = denominator * (b - a * rightCoeff);
 
         const choices = new Set([s]);
@@ -49,14 +70,12 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, labeled, answer, explanation);
     };
 
-    // 2) No Solution k - MUCH MORE VARIED
-    // FIX: ensure constants differ (otherwise could become infinitely many solutions)
+    // 2) No Solution k - Decimals appropriate here (abstract constant k)
     P.tplNoSolutionCleanKHard = function (original) {
         const a = this.randomInt(2, 7);
         const numerator = this.randomInt(8, 45);
         const denom = this.randomInt(8, 30);
 
-        // k chosen so that a*k = numerator/denom
         const k = Number((numerator / (a * denom)).toFixed(3));
 
         const decimalChoices = [
@@ -85,14 +104,14 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-    // 3) Negative coefficient - MUCH MORE VARIED
+    // 3) Negative coefficient - INTEGER solution (abstract variable t)
     P.tplNegativeCoefficientSolveHard = function (original) {
         const a = this.randomInt(2, 6);
         const b = this.randomInt(1, 12);
         const solution = this.randomInt(-35, -10);
         const result = -a * (solution + b);
 
-        const vals = this.generateChoicesNumber(solution, 4, 8);
+        const vals = this._integerChoices(solution, 4, 6);
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question =
@@ -108,7 +127,6 @@ if (!window.ProblemGenerator) {
 
     // =========================================================
     // ✅ HOW MANY SOLUTIONS — VARIED OUTCOMES (ONE / ZERO / INFINITE)
-    // IMPORTANT: DO NOT generate "ax = bx" here (that always forces x=0).
     // =========================================================
     P.tplHowManySolutionsMixedHard = function (original) {
         const choicesText = [
@@ -118,7 +136,6 @@ if (!window.ProblemGenerator) {
             "D) Infinitely many"
         ];
 
-        // more "one solution", but still plenty of zero/infinite
         const outcome = this.randomChoice(["one", "one", "one", "zero", "infinite"]);
 
         const pm = (n) => (n >= 0 ? `+ ${n}` : `- ${Math.abs(n)}`);
@@ -128,7 +145,6 @@ if (!window.ProblemGenerator) {
         let correct = "";
 
         if (outcome === "one") {
-            // ax + c = bx + d (a != b) => exactly one solution (usually nonzero)
             let a = this.randomInt(2, 18);
             let b = this.randomInt(2, 18);
             while (b === a) b = this.randomInt(2, 18);
@@ -139,7 +155,6 @@ if (!window.ProblemGenerator) {
             const c = this.randomInt(-40, 40);
             const d = (a - b) * xSol + c;
 
-            // avoids weird edgecases where constants accidentally match too often
             if (c === d) return this.tplHowManySolutionsMixedHard(original);
 
             question = `How many solutions does the equation ${this.math(`${a}x ${pm(c)} = ${b}x ${pm(d)}`)} have?`;
@@ -154,7 +169,6 @@ if (!window.ProblemGenerator) {
         }
 
         if (outcome === "zero") {
-            // ax + c = ax + d (c != d) => zero solutions
             const a = this.randomInt(2, 18);
             const c = this.randomInt(-40, 40);
             let d = this.randomInt(-40, 40);
@@ -172,7 +186,6 @@ if (!window.ProblemGenerator) {
         }
 
         if (outcome === "infinite") {
-            // disguised identity: a(x+m)+n = ax + (am+n)
             const a = this.randomInt(2, 18);
             const m = this.randomInt(-10, 10);
             const n = this.randomInt(-25, 25);
@@ -193,14 +206,11 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choicesText, correct, this.makeSteps(explanation));
     };
 
-    // ✅ BACKWARDS-COMPATIBILITY FIX:
-    // If other parts of your generator still call tplHowManySolutionsZeroHard,
-    // redirect it to the mixed generator so you STOP getting "-62x = -248x" spam.
     P.tplHowManySolutionsZeroHard = function (original) {
         return this.tplHowManySolutionsMixedHard(original);
     };
 
-    // 6) Solve for expression - MUCH MORE VARIED
+    // 6) Solve for expression - INTEGER values
     P.tplSolveExpressionNegativeHard = function (original) {
         const a = this.randomInt(4, 12);
         const b = this.randomInt(1, 8);
@@ -216,7 +226,7 @@ if (!window.ProblemGenerator) {
             return this.tplSolveExpressionNegativeHard(original);
         }
 
-        const vals = this.generateChoicesNumber(expressionValue, 4, 5);
+        const vals = this._integerChoices(expressionValue, 4, 4);
         const { choices, answer } = this.labelChoices(vals, expressionValue);
 
         const question =
@@ -233,10 +243,12 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-    // 7) Parameter conditions - MUCH MORE VARIED
+    // 7) Parameter conditions - NOW WITH VARIED ANSWERS
     P.tplParameterConditionsHard = function (original) {
-        const a = this.randomInt(5, 15);
-        const const1 = this.randomInt(2, 12);
+        const scenario = this.randomChoice(["D", "C", "B", "A"]);
+
+        let a, const1;
+        let question, explanation, correct;
 
         const choicesText = [
             "A) None",
@@ -245,24 +257,92 @@ if (!window.ProblemGenerator) {
             "D) I and III only"
         ];
 
-        const question =
-            `The equation ${this.math(`${a}x + ${const1} = a(x + b)`)}, where ${this.ital("a")} and ${this.ital("b")} ` +
-            `are constants, has no solutions. Which must be true?<br><br>` +
-            `I. ${this.math(`a = ${a}`)}<br>` +
-            `II. ${this.math(`b = ${const1}`)}<br>` +
-            `III. ${this.math(`b ≠ ${const1}/${a}`)}`;
+        if (scenario === "D") {
+            a = this.randomInt(5, 15);
+            const1 = this.randomInt(2, 12);
 
-        const explanation = this.makeSteps([
-            `Expand the right side: ${this.math(`${a}x + ${const1} = ${a}x + ${a}b`)}`,
-            `For no solution, the ${this.ital("x")}-coefficients match, but constants must differ.`,
-            `So ${this.math(`${const1} ≠ ${a}b`)} ⇒ ${this.math(`b ≠ ${const1}/${a}`)} (III TRUE).`,
-            `I is given as ${this.math(`a = ${a}`)} (I TRUE).`
-        ]);
+            question =
+                `The equation ${this.math(`${a}x + ${const1} = a(x + b)`)}, where ${this.ital("a")} and ${this.ital("b")} ` +
+                `are constants, has no solutions. Which must be true?<br><br>` +
+                `I. ${this.math(`a = ${a}`)}<br>` +
+                `II. ${this.math(`b = ${const1}`)}<br>` +
+                `III. ${this.math(`b ≠ ${const1}/${a}`)}`;
 
-        return this.buildProblem(original, question, choicesText, "D", explanation);
+            explanation = this.makeSteps([
+                `Expand the right side: ${this.math(`${a}x + ${const1} = ax + ab`)}`,
+                `For no solution, the ${this.ital("x")}-coefficients must match (so ${this.math(`a = ${a}`)}), but constants must differ.`,
+                `So ${this.math(`${const1} ≠ ab`)} ⇒ ${this.math(`b ≠ ${const1}/${a}`)} (III TRUE).`,
+                `I is TRUE, II is FALSE, III is TRUE.`
+            ]);
+            correct = "D";
+        }
+        else if (scenario === "C") {
+            a = this.randomInt(3, 10);
+            const bVal = this.randomInt(2, 8);
+            const1 = a * bVal;
+
+            question =
+                `The equation ${this.math(`${a}x + ${const1} = a(x + b)`)}, where ${this.ital("a")} and ${this.ital("b")} ` +
+                `are constants, has infinitely many solutions. Which must be true?<br><br>` +
+                `I. ${this.math(`a = ${a}`)}<br>` +
+                `II. ${this.math(`b = ${bVal}`)}<br>` +
+                `III. ${this.math(`b ≠ ${bVal}`)}`;
+
+            explanation = this.makeSteps([
+                `Expand the right side: ${this.math(`${a}x + ${const1} = ax + ab`)}`,
+                `For infinitely many solutions, both coefficients AND constants must match.`,
+                `So ${this.math(`a = ${a}`)} (I TRUE) and ${this.math(`${const1} = ab`)} ⇒ ${this.math(`b = ${bVal}`)} (II TRUE).`,
+                `III is FALSE since b must equal ${bVal}.`
+            ]);
+            correct = "C";
+        }
+        else if (scenario === "B") {
+            a = this.randomInt(4, 12);
+            const c = this.randomInt(5, 20);
+            const d = this.randomInt(25, 50);
+
+            question =
+                `The equation ${this.math(`${a}x + ${c} = ax + ${d}`)}, where ${this.ital("a")} is a constant, ` +
+                `has no solutions. Which must be true?<br><br>` +
+                `I. ${this.math(`a = ${a}`)}<br>` +
+                `II. ${this.math(`a = ${c}`)}<br>` +
+                `III. ${this.math(`a ≠ ${a}`)}`;
+
+            explanation = this.makeSteps([
+                `For no solution, the ${this.ital("x")}-coefficients must be equal so they cancel, leaving unequal constants.`,
+                `Here ${this.math(`${a} = a`)} means ${this.math(`a = ${a}`)} (I TRUE).`,
+                `II is FALSE, III is FALSE.`
+            ]);
+            correct = "B";
+        }
+        else {
+            let a1 = this.randomInt(3, 10);
+            let a2 = this.randomInt(3, 10);
+            while (a2 === a1) a2 = this.randomInt(3, 10);
+            const c = this.randomInt(5, 25);
+            const d = this.randomInt(5, 25);
+
+            question =
+                `The equation ${this.math(`${a1}x + ${c} = ${a2}x + ${d}`)} has exactly one solution. ` +
+                `Which must be true?<br><br>` +
+                `I. ${this.math(`x = ${c}`)}<br>` +
+                `II. ${this.math(`x = ${d}`)}<br>` +
+                `III. ${this.math(`x = 0`)}`;
+
+            const actualSolution = (d - c) / (a1 - a2);
+            explanation = this.makeSteps([
+                `Solve: ${this.math(`${a1}x - ${a2}x = ${d} - ${c}`)}`,
+                `${this.math(`${a1 - a2}x = ${d - c}`)}`,
+                `${this.math(`x = ${actualSolution}`)}`,
+                `None of the given statements (I, II, III) match this solution.`
+            ]);
+            correct = "A";
+        }
+
+        return this.buildProblem(original, question, choicesText, correct, explanation);
     };
 
-    // 8) Decimal solve - MUCH MORE VARIED
+    // 8) Decimal solve - Decimals appropriate here (abstract variable t with decimal coefficients)
     P.tplDecimalCleanSolveHard = function (original) {
         const a = this.randomChoice([0.5, 0.6, 0.7, 0.8, 0.9, 1.2, 1.5]);
         const b = Number((this.randomInt(2, 12) / 10).toFixed(1));
@@ -272,7 +352,6 @@ if (!window.ProblemGenerator) {
 
         if (Math.abs(a - c) < 1e-9) return this.tplDecimalCleanSolveHard(original);
 
-        // a(t-b)=c(t-d)+e  => (a-c)t = ab - cd + e
         const solution = Number((((a * b) - (c * d) + e) / (a - c)).toFixed(3));
 
         const decimalChoices = [
@@ -297,69 +376,175 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-    // 9) Between which values - MUCH MORE VARIED
+    // 9) Between which values - NOW WITH VARIED ANSWERS
     P.tplBetweenValuesHard = function (original) {
-        const a = this.randomInt(2, 15);
-        const denom1 = this.randomChoice([2, 3, 5, 7]);
-        const denom2 = this.randomChoice([9, 11, 13, 17, 19]);
+        const targetRange = this.randomChoice(["A", "B", "C", "D"]);
+
+        let solution, coeff1, coeff2, const1, const2;
+
+        const ranges = {
+            "A": { min: -10, max: -6, label: "-10 and -6" },
+            "B": { min: -3, max: 3, label: "-3 and 3" },
+            "C": { min: 6, max: 10, label: "6 and 10" },
+            "D": { min: 11, max: 15, label: "11 and 15" }
+        };
 
         const choicesText = [
-            "A) -10 and -6",
-            "B) -3 and 3",
-            "C) 6 and 10",
-            "D) 11 and 15"
+            `A) -10 and -6`,
+            `B) -3 and 3`,
+            `C) 6 and 10`,
+            `D) 11 and 15`
         ];
 
+        const range = ranges[targetRange];
+        solution = this.randomInt(range.min, range.max);
+
+        coeff1 = this.randomInt(2, 8);
+        coeff2 = this.randomInt(2, 8);
+        while (coeff2 === coeff1) coeff2 = this.randomInt(2, 8);
+
+        const1 = this.randomInt(-20, 20);
+        const2 = (coeff1 - coeff2) * solution + const1;
+
+        const pm = (n) => (n >= 0 ? `+ ${n}` : `- ${Math.abs(n)}`);
+
         const question =
-            `If ${this.math(`(x + ${a})/${denom1} = (x + ${a})/${denom2}`)}, the value of ${this.math(`x + ${a}`)} ` +
-            `is between which values?`;
+            `If ${this.math(`${coeff1}x ${pm(const1)} = ${coeff2}x ${pm(const2)}`)}, the value of ${this.ital("x")} ` +
+            `is between which of the following?`;
 
         const explanation = this.makeSteps([
-            `Multiply both sides by ${denom1 * denom2}.`,
-            `${this.math(`${denom2}(x + ${a}) = ${denom1}(x + ${a})`)}`,
-            `${this.math(`(${denom2 - denom1})(x + ${a}) = 0`)}`,
-            `${this.math(`x + ${a} = 0`)}`,
-            `0 is between -3 and 3.`
+            `Move ${this.ital("x")}-terms to one side: ${this.math(`${coeff1}x - ${coeff2}x = ${const2} - ${const1 >= 0 ? const1 : `(${const1})`}`)}`,
+            `Simplify: ${this.math(`${coeff1 - coeff2}x = ${const2 - const1}`)}`,
+            `Solve: ${this.math(`x = ${solution}`)}`,
+            `${solution} is between ${range.label}.`
         ]);
 
-        return this.buildProblem(original, question, choicesText, "B", explanation);
+        return this.buildProblem(original, question, choicesText, targetRange, explanation);
     };
 
-    // 11) Infinitely many a+b - MUCH MORE VARIED
+    // 11) Infinitely many a+b - INTEGER sum
     P.tplInfiniteSolutionsABFormHard = function (original) {
-        const a = this.randomInt(2, 12);
-        const leftConstant = this.randomInt(5, 35);
-        const sum = a + leftConstant;
-        const denom = this.randomChoice([2, 3, 4, 5, 6]);
+        const variant = this.randomChoice(["fraction", "distribute", "combined"]);
 
-        const vals = this.generateChoicesNumber(sum, 4, 6);
-        const { choices, answer } = this.labelChoices(vals, sum);
+        let question, explanation, sum, vals;
 
-        const question =
-            `The equation ${this.math(`(ax + ${leftConstant})/${denom} = (${a}x + b)/${denom}`)} has infinitely many solutions. ` +
-            `What is ${this.math(`a + b`)}?`;
+        if (variant === "fraction") {
+            const a = this.randomInt(2, 12);
+            const leftConstant = this.randomInt(5, 35);
+            sum = a + leftConstant;
+            const denom = this.randomChoice([2, 3, 4, 5, 6]);
 
-        const explanation = this.makeSteps([
-            `Since the denominators are the same, the numerators must be equal for infinitely many solutions.`,
-            `${this.math(`ax + ${leftConstant} = ${a}x + b`)}`,
-            `So ${this.math(`b = ${leftConstant}`)} and ${this.math(`a + b = ${a} + ${leftConstant} = ${sum}`)}.`
-        ]);
+            vals = this._integerChoices(sum, 4, 5);
+            const { choices, answer } = this.labelChoices(vals, sum);
 
-        return this.buildProblem(original, question, choices, answer, explanation);
+            question =
+                `The equation ${this.math(`(ax + ${leftConstant})/${denom} = (${a}x + b)/${denom}`)} has infinitely many solutions. ` +
+                `What is ${this.math(`a + b`)}?`;
+
+            explanation = this.makeSteps([
+                `Since the denominators are the same, the numerators must be equal for infinitely many solutions.`,
+                `${this.math(`ax + ${leftConstant} = ${a}x + b`)}`,
+                `So ${this.math(`a = ${a}`)} and ${this.math(`b = ${leftConstant}`)}.`,
+                `${this.math(`a + b = ${a} + ${leftConstant} = ${sum}`)}`
+            ]);
+
+            return this.buildProblem(original, question, choices, answer, explanation);
+        }
+        else if (variant === "distribute") {
+            const a = this.randomInt(2, 10);
+            const c = this.randomInt(1, 8);
+            const d = this.randomInt(-10, 10);
+            const rightConst = a * c + d;
+            sum = a + rightConst;
+
+            vals = this._integerChoices(sum, 4, 6);
+            const { choices, answer } = this.labelChoices(vals, sum);
+
+            question =
+                `The equation ${this.math(`${a}(x + ${c}) + ${d >= 0 ? d : `(${d})`} = ax + b`)} has infinitely many solutions. ` +
+                `What is ${this.math(`a + b`)}?`;
+
+            explanation = this.makeSteps([
+                `Distribute left side: ${this.math(`${a}x + ${a * c} + ${d >= 0 ? d : `(${d})`} = ax + b`)}`,
+                `Simplify: ${this.math(`${a}x + ${rightConst} = ax + b`)}`,
+                `For infinitely many solutions: ${this.math(`a = ${a}`)} and ${this.math(`b = ${rightConst}`)}.`,
+                `${this.math(`a + b = ${sum}`)}`
+            ]);
+
+            return this.buildProblem(original, question, choices, answer, explanation);
+        }
+        else {
+            const c = this.randomInt(2, 5);
+            const a = this.randomInt(2, 8);
+            const b = this.randomInt(1, 10);
+            const d = this.randomChoice([2, 3, 4, 6]);
+            const e = (c * a) / d;
+            const f = (c * b) / d;
+
+            if (!Number.isInteger(e) || !Number.isInteger(f) || e < 1 || f < 1) {
+                return this.tplInfiniteSolutionsABFormHard(original);
+            }
+
+            sum = a + b;
+
+            vals = this._integerChoices(sum, 4, 5);
+            const { choices, answer } = this.labelChoices(vals, sum);
+
+            question =
+                `The equation ${this.math(`${c}(ax + b) = ${d}(${e}x + ${f})`)} has infinitely many solutions. ` +
+                `What is ${this.math(`a + b`)}?`;
+
+            explanation = this.makeSteps([
+                `Distribute both sides: ${this.math(`${c}ax + ${c}b = ${d * e}x + ${d * f}`)}`,
+                `For infinitely many solutions, coefficients must match: ${this.math(`${c}a = ${d * e}`)} so ${this.math(`a = ${a}`)}.`,
+                `Constants must match: ${this.math(`${c}b = ${d * f}`)} so ${this.math(`b = ${b}`)}.`,
+                `${this.math(`a + b = ${sum}`)}`
+            ]);
+
+            return this.buildProblem(original, question, choices, answer, explanation);
+        }
     };
 
-    // 12) Polygon - MUCH MORE VARIED
+    // 12) Polygon - NOW WITH VARIED ANSWERS
     P.tplPolygonSidesEquationHard = function (original) {
         const total = this.randomInt(20, 45);
         const multiplier = this.randomInt(3, 9);
         const fixed = this.randomInt(3, 12);
 
-        const choicesText = [
-            `A) ${multiplier}n + ${fixed - 2} = ${total}`,
-            `B) ${multiplier + 1}n + ${fixed} = ${total}`,
-            `C) n + ${multiplier} = ${total}`,
-            `D) ${multiplier + 2}n + ${fixed} = ${total}`
-        ];
+        const correctCoeff = multiplier + 1;
+
+        const correctPos = this.randomChoice(["A", "B", "C", "D"]);
+
+        let choicesText;
+        if (correctPos === "A") {
+            choicesText = [
+                `A) ${correctCoeff}n + ${fixed} = ${total}`,
+                `B) ${correctCoeff + 1}n + ${fixed} = ${total}`,
+                `C) n + ${multiplier} = ${total}`,
+                `D) ${correctCoeff + 2}n + ${fixed} = ${total}`
+            ];
+        } else if (correctPos === "B") {
+            choicesText = [
+                `A) ${correctCoeff - 1}n + ${fixed} = ${total}`,
+                `B) ${correctCoeff}n + ${fixed} = ${total}`,
+                `C) n + ${multiplier} = ${total}`,
+                `D) ${correctCoeff + 1}n + ${fixed} = ${total}`
+            ];
+        } else if (correctPos === "C") {
+            choicesText = [
+                `A) ${correctCoeff - 2}n + ${fixed} = ${total}`,
+                `B) ${correctCoeff - 1}n + ${fixed} = ${total}`,
+                `C) ${correctCoeff}n + ${fixed} = ${total}`,
+                `D) ${correctCoeff + 1}n + ${fixed} = ${total}`
+            ];
+        } else {
+            choicesText = [
+                `A) ${correctCoeff - 2}n + ${fixed} = ${total}`,
+                `B) ${correctCoeff - 1}n + ${fixed} = ${total}`,
+                `C) n + ${multiplier} = ${total}`,
+                `D) ${correctCoeff}n + ${fixed} = ${total}`
+            ];
+        }
 
         const question =
             `Each side of a ${total}-sided polygon has one of three lengths. ` +
@@ -371,41 +556,118 @@ if (!window.ProblemGenerator) {
             `8 cm sides: ${this.math(`${multiplier}n`)}`,
             `4 cm sides: ${fixed}`,
             `Total sides: ${this.math(`n + ${multiplier}n + ${fixed} = ${total}`)}`,
-            `Combine like terms: ${this.math(`${multiplier + 1}n + ${fixed} = ${total}`)}`
+            `Combine like terms: ${this.math(`${correctCoeff}n + ${fixed} = ${total}`)}`
         ]);
 
-        return this.buildProblem(original, question, choicesText, "B", explanation);
+        return this.buildProblem(original, question, choicesText, correctPos, explanation);
     };
 
-    // 13) Parameter no solution - MUCH MORE VARIED
+    // 13) Parameter no solution - NOW WITH VARIED ANSWERS (fractions appropriate)
     P.tplParameterNoSolutionCleanHard = function (original) {
-        const a = this.randomInt(2, 6);
-        const multiplier = this.randomInt(4, 12);
+        const variant = this.randomChoice(["positive", "negative", "larger", "fraction"]);
 
-        const p = Number((1 / multiplier).toFixed(3));
+        let question, explanation, choicesText, correct;
 
-        const choicesText = [
-            `A) -1/${multiplier}`,
-            `B) 1/${multiplier}`,
-            `C) ${multiplier}`,
-            `D) -${multiplier}`
-        ];
+        if (variant === "positive") {
+            const a = this.randomInt(2, 6);
+            const multiplier = this.randomInt(4, 12);
+            const result = this.randomInt(50, 150);
 
-        const question =
-            `In ${this.math(`-${a}x + ${a * multiplier}px = ${this.randomInt(50, 150)}`)}, ${this.ital("p")} is a constant. ` +
-            `The equation has no solution. What is ${this.ital("p")}?`;
+            choicesText = [
+                `A) -1/${multiplier}`,
+                `B) 1/${multiplier}`,
+                `C) ${multiplier}`,
+                `D) -${multiplier}`
+            ];
 
-        const explanation = this.makeSteps([
-            `For no solution, the ${this.ital("x")}-coefficient must become 0 so you get a false statement.`,
-            `${this.math(`-${a} + ${a * multiplier}p = 0`)}`,
-            `${this.math(`${multiplier}p = 1`)}`,
-            `${this.math(`p = 1/${multiplier}`)}`
-        ]);
+            question =
+                `In ${this.math(`-${a}x + ${a * multiplier}px = ${result}`)}, ${this.ital("p")} is a constant. ` +
+                `The equation has no solution. What is ${this.ital("p")}?`;
 
-        return this.buildProblem(original, question, choicesText, "B", explanation);
+            explanation = this.makeSteps([
+                `For no solution, the ${this.ital("x")}-coefficient must become 0.`,
+                `${this.math(`-${a} + ${a * multiplier}p = 0`)}`,
+                `${this.math(`p = 1/${multiplier}`)}`
+            ]);
+            correct = "B";
+        }
+        else if (variant === "negative") {
+            const a = this.randomInt(2, 6);
+            const multiplier = this.randomInt(4, 12);
+            const result = this.randomInt(50, 150);
+
+            choicesText = [
+                `A) -1/${multiplier}`,
+                `B) -${multiplier}`,
+                `C) ${multiplier}`,
+                `D) 1/${multiplier}`
+            ];
+
+            question =
+                `In ${this.math(`${a}x - ${a * multiplier}px = ${result}`)}, ${this.ital("p")} is a constant. ` +
+                `The equation has no solution. What is ${this.ital("p")}?`;
+
+            explanation = this.makeSteps([
+                `For no solution, the ${this.ital("x")}-coefficient must become 0.`,
+                `${this.math(`${a} - ${a * multiplier}p = 0`)}`,
+                `${this.math(`p = 1/${multiplier}`)}`
+            ]);
+            correct = "D";
+        }
+        else if (variant === "larger") {
+            const a = this.randomInt(2, 5);
+            const b = this.randomInt(2, 4);
+            const result = this.randomInt(30, 100);
+
+            const pVal = -a / b;
+            const pDisplay = Number.isInteger(pVal) ? `${pVal}` : `-${a}/${b}`;
+
+            choicesText = [
+                `A) ${a}/${b}`,
+                `B) -${b}/${a}`,
+                `C) ${pDisplay}`,
+                `D) ${b}/${a}`
+            ];
+
+            question =
+                `In ${this.math(`${a}x + ${b}px = ${result}`)}, ${this.ital("p")} is a constant. ` +
+                `The equation has no solution. What is ${this.ital("p")}?`;
+
+            explanation = this.makeSteps([
+                `For no solution, the ${this.ital("x")}-coefficient must become 0.`,
+                `${this.math(`${a} + ${b}p = 0`)}`,
+                `${this.math(`p = ${pDisplay}`)}`
+            ]);
+            correct = "C";
+        }
+        else {
+            const a = this.randomInt(3, 8);
+            const b = this.randomInt(2, 6);
+            const result = this.randomInt(40, 120);
+
+            choicesText = [
+                `A) -${a}/${b}`,
+                `B) ${a}/${b}`,
+                `C) -${b}/${a}`,
+                `D) ${b}/${a}`
+            ];
+
+            question =
+                `In ${this.math(`(${a}/${b})x + px = ${result}`)}, ${this.ital("p")} is a constant. ` +
+                `The equation has no solution. What is ${this.ital("p")}?`;
+
+            explanation = this.makeSteps([
+                `For no solution, the ${this.ital("x")}-coefficient must become 0.`,
+                `${this.math(`${a}/${b} + p = 0`)}`,
+                `${this.math(`p = -${a}/${b}`)}`
+            ]);
+            correct = "A";
+        }
+
+        return this.buildProblem(original, question, choicesText, correct, explanation);
     };
 
-    // 14) Bidirectional rate - MUCH MORE VARIED
+    // 14) Bidirectional rate - INTEGER minutes
     P.tplBidirectionalRateCleanHard = function (original) {
         const initial = this.randomInt(12, 28) * 1000;
         const fillRate = this.randomInt(50, 120);
@@ -418,7 +680,7 @@ if (!window.ProblemGenerator) {
         if (netRate <= 0) return this.tplBidirectionalRateCleanHard(original);
         if (Math.abs(increase / netRate - time) > 0.5) return this.tplBidirectionalRateCleanHard(original);
 
-        const vals = this.generateChoicesNumber(time, 4, 15);
+        const vals = this._integerChoices(time, 4, 12);
         const { choices, answer } = this.labelChoices(vals, time);
 
         const question =
@@ -435,7 +697,7 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-    // 15) Constant rate drain - MUCH MORE VARIED
+    // 15) Constant rate drain - INTEGER minutes
     P.tplConstantRateDrainCleanHard = function (original) {
         const initial = this.randomInt(600, 1200);
         const time1 = this.randomInt(8, 20);
@@ -451,11 +713,11 @@ if (!window.ProblemGenerator) {
         const target = initial - targetRemoved;
         const totalTime = targetRemoved / rate;
 
-        if (target < 50) {
+        if (target < 50 || !Number.isInteger(totalTime)) {
             return this.tplConstantRateDrainCleanHard(original);
         }
 
-        const vals = this.generateChoicesNumber(totalTime, 4, 7);
+        const vals = this._integerChoices(totalTime, 4, 5);
         const { choices, answer } = this.labelChoices(vals, totalTime);
 
         const question =
@@ -473,8 +735,9 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-    // ===== VARIETY TEMPLATES - ALL WIDENED RANGES =====
+    // ===== VARIETY TEMPLATES - ALL WITH INTEGER CHOICES WHERE APPROPRIATE =====
 
+    // Miles should be integers
     P.tplRentalMilesEqualHard = function (original) {
         const miles = this.randomInt(40, 250);
         let rate1 = this.randomChoice([0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]);
@@ -487,7 +750,7 @@ if (!window.ProblemGenerator) {
 
         if (flat1 < 10 || flat1 > 150) return this.tplRentalMilesEqualHard(original);
 
-        const vals = this.generateChoicesNumber(miles, 4, 35);
+        const vals = this._integerChoices(miles, 4, 25);
         const { choices, answer } = this.labelChoices(vals, miles);
 
         const question =
@@ -504,11 +767,12 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Consecutive integers - must be integers
     P.tplConsecutiveIntegersHard = function (original) {
         const start = this.randomInt(-25, 25);
         const sum = start + (start + 1);
 
-        const vals = this.generateChoicesNumber(start, 4, 9);
+        const vals = this._integerChoices(start, 4, 6);
         const { choices, answer } = this.labelChoices(vals, start);
 
         const question =
@@ -524,6 +788,7 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Perimeter/dimension - should be integers
     P.tplPerimeterExpressionHard = function (original) {
         const w = this.randomInt(3, 25);
         const mult = this.randomInt(2, 6);
@@ -531,7 +796,7 @@ if (!window.ProblemGenerator) {
         const L = mult * w + add;
         const Pval = 2 * (w + L);
 
-        const vals = this.generateChoicesNumber(w, 4, 9);
+        const vals = this._integerChoices(w, 4, 6);
         const { choices, answer } = this.labelChoices(vals, w);
 
         const question =
@@ -548,6 +813,7 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Price - should be integers (dollars)
     P.tplDiscountAndTaxHard = function (original) {
         const originalPrice = this.randomInt(40, 200);
         const discount = this.randomChoice([10, 12, 15, 18, 20, 25, 30]);
@@ -555,27 +821,36 @@ if (!window.ProblemGenerator) {
 
         const finalPrice = Math.round(originalPrice * (1 - discount / 100) * (1 + tax / 100));
 
-        const vals = this.generateChoicesNumber(originalPrice, 4, 25);
+        const vals = this._integerChoices(originalPrice, 4, 20);
         const { choices, answer } = this.labelChoices(vals, originalPrice);
 
+        // Randomly choose item type for variety
+        const item = this.randomChoice([
+            "a jacket", "a pair of shoes", "a backpack", "a watch",
+            "a laptop bag", "a pair of headphones", "a sweater", "a calculator"
+        ]);
+
         const question =
-            `Item discounted ${discount}%, then taxed ${tax}%. Final price $${finalPrice}. Original price?`;
+            `A store sells ${item} at a ${discount}% discount. After applying a ${tax}% sales tax to the discounted price, ` +
+            `the final cost is $${finalPrice}. What was the original price of ${item.replace("a ", "the ")}?`;
 
         const explanation = this.makeSteps([
-            `Final = Original × (1 − ${discount}%) × (1 + ${tax}%).`,
-            `Work backwards: divide by those factors to get the original price.`,
-            `Original = $${originalPrice}`
+            `Let ${this.ital("p")} be the original price.`,
+            `After ${discount}% discount: ${this.math(`p × ${(1 - discount / 100).toFixed(2)}`)}`,
+            `After ${tax}% tax: ${this.math(`p × ${(1 - discount / 100).toFixed(2)} × ${(1 + tax / 100).toFixed(2)} = ${finalPrice}`)}`,
+            `Solving for ${this.ital("p")}: ${this.math(`p = ${finalPrice} ÷ ${((1 - discount / 100) * (1 + tax / 100)).toFixed(4)} = ${originalPrice}`)}`
         ]);
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Time - should be integers (minutes)
     P.tplWorkRateHard = function (original) {
         const rate = this.randomInt(4, 20);
         const time = this.randomInt(8, 30);
         const total = rate * time;
 
-        const vals = this.generateChoicesNumber(time, 4, 8);
+        const vals = this._integerChoices(time, 4, 6);
         const { choices, answer } = this.labelChoices(vals, time);
 
         const question =
@@ -588,6 +863,7 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Age - MUST be integers
     P.tplAgeDifferenceHard = function (original) {
         const olderNow = this.randomInt(15, 75);
         const diff = this.randomInt(2, 30);
@@ -595,7 +871,7 @@ if (!window.ProblemGenerator) {
 
         if (youngerNow < 1) return this.tplAgeDifferenceHard(original);
 
-        const vals = this.generateChoicesNumber(youngerNow, 4, 10);
+        const vals = this._integerChoices(youngerNow, 4, 8);
         const { choices, answer } = this.labelChoices(vals, youngerNow);
 
         const question =
@@ -610,11 +886,12 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Temperature - should be integers (degrees)
     P.tplTemperatureConversionHard = function (original) {
         const C = this.randomInt(-20, 45);
         const F = Math.round((9 / 5) * C + 32);
 
-        const vals = this.generateChoicesNumber(C, 4, 15);
+        const vals = this._integerChoices(C, 4, 10);
         const { choices, answer } = this.labelChoices(vals, C);
 
         const question =
@@ -630,13 +907,14 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // GB - should be integers
     P.tplPhonePlanHard = function (original) {
         const base = this.randomInt(15, 80);
         const perGB = this.randomInt(4, 25);
         const gb = this.randomInt(1, 18);
         const total = base + perGB * gb;
 
-        const vals = this.generateChoicesNumber(gb, 4, 5);
+        const vals = this._integerChoices(gb, 4, 4);
         const { choices, answer } = this.labelChoices(vals, gb);
 
         const question =
@@ -652,16 +930,16 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Pounds - should be integers
     P.tplShippingWeightHard = function (original) {
         const base = this.randomInt(4, 15);
         const perLb = this.randomChoice([1.00, 1.25, 1.50, 1.75, 2.00, 2.25, 2.50, 2.75]);
         const lbs = this.randomInt(2, 20);
         const total = Number((base + perLb * lbs).toFixed(2));
 
-        const vals = this.generateChoicesNumber(lbs, 4, 5);
+        const vals = this._integerChoices(lbs, 4, 4);
         const { choices, answer } = this.labelChoices(vals, lbs);
 
-        // SAT-style wording
         const question =
             `A shipping company charges a flat fee of $${base} plus $${perLb.toFixed(2)} per pound. ` +
             `The total cost to ship a package was $${total.toFixed(2)}. ` +
@@ -676,7 +954,7 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
-
+    // Abstract variable x - integers
     P.tplDistributeBothSidesHard = function (original) {
         let a = this.randomInt(2, 12);
         const b = this.randomInt(1, 12);
@@ -691,7 +969,7 @@ if (!window.ProblemGenerator) {
             return this.tplDistributeBothSidesHard(original);
         }
 
-        const vals = this.generateChoicesNumber(solution, 4, 8);
+        const vals = this._integerChoices(solution, 4, 6);
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question =
@@ -707,12 +985,13 @@ if (!window.ProblemGenerator) {
         return this.buildProblem(original, question, choices, answer, explanation);
     };
 
+    // Speed - should be integers (mph)
     P.tplUnitRateConversionHard = function (original) {
         const speed = this.randomInt(20, 85);
         const hours = this.randomInt(2, 10);
         const miles = speed * hours;
 
-        const vals = this.generateChoicesNumber(speed, 4, 15);
+        const vals = this._integerChoices(speed, 4, 10);
         const { choices, answer } = this.labelChoices(vals, speed);
 
         const question =
