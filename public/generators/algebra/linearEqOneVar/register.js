@@ -51,7 +51,21 @@ if (!window.ProblemGenerator) {
             "tplShippingWeightHard",
             "tplDistributeBothSidesHard",
             "tplUnitRateConversionHard",
-
+            "tplInfiniteSolutionsFractionHard",
+            "tplNoSolutionFractionalKHard",
+            "tplNoSolutionParameterKSimpleHard",
+            "tplNegativeCoefficientSolveHard",
+            "tplHowManySolutionsOneSolutionHard",
+            "tplFractionsEqualExpressionZeroHard",
+            "tplSolveExpressionNegativeHard",
+            "tplParameterConditionsHard",
+            "tplDecimalPreciseSolveHard",
+            "tplBetweenValuesHard",
+            "tplHowManySolutionsZeroHard",
+            "tplCompoundMultiplierHard",
+            "tplInfiniteSolutionsABFormHard",
+            "tplPolygonSidesEquationHard",
+            "tplBidirectionalRateHard",
         ],
     });
 
