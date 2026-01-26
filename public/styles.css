@@ -1,44 +1,106 @@
+/* =========================================================
+   styles.css (REPLACEMENT FILE)
+   Cleaned + de-duplicated
+   - Single source of truth for: stats banner, back-to-top, calculator
+   - Keeps your original look/feel
+   - Matches your current HTML structure (filters-container / filter-section / accordion)
+   ========================================================= */
+
+/* =========================
+   THEME TOKENS
+   ========================= */
+
 /* Light mode (default) */
 :root {
     --primary: #0066b3;
     --primary-dark: #004d8c;
     --secondary: #f0f4f8;
+
     --bg: #f8fafc;
     --bg-card: #ffffff;
+
     --text: #1e293b;
     --text-light: #64748b;
+
     --border: #e2e8f0;
+
     --success: #10b981;
     --error: #ef4444;
     --warning: #f59e0b;
+
     --shadow: rgba(0, 0, 0, 0.1);
     --shadow-hover: rgba(0, 0, 0, 0.15);
+
     --accent: #161e8a;
     --accent-dark: #003d7c;
+
     --card: #ffffff;
+
+    /* calculator width controlled by JS */
+    --calculator-width: 500px;
 }
 
 /* Dark mode */
 [data-theme="dark"] {
     --primary: #3363b9;
-    --primary-dark: #f800ff;
+    --primary-dark: #1f2a66;
     --secondary: #1e293b;
+
     --bg: #0f172a;
     --bg-card: #1e293b;
+
     --text: #f1f5f9;
     --text-light: #94a3b8;
+
     --border: #334155;
+
     --success: #22c55e;
     --error: #f87171;
     --warning: #fbbf24;
+
     --shadow: rgba(0, 0, 0, 0.3);
     --shadow-hover: rgba(0, 0, 0, 0.5);
+
     --accent: #3363b9;
     --accent-dark: #2563eb;
+
     --card: #1e293b;
 }
 
-/* Auth Bar */
+/* =========================
+   BASE
+   ========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+}
+
+/* Smooth transitions */
+body,
+.problem-card,
+.stats-banner,
+.stat-value,
+.stat-label,
+.filter-btn,
+.accordion-header,
+.search-input,
+.answer-input {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* =========================
+   AUTH BAR
+   ========================= */
+
 .auth-bar {
     background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
     color: white;
@@ -51,21 +113,20 @@
     max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 56px 1fr auto; /* ✅ reserved slot for toggle */
-    align-items: center;                 /* ✅ vertical centering */
+    grid-template-columns: 56px 1fr auto; /* reserved slot for toggle */
+    align-items: center;
     gap: 1rem;
 }
 
-/* Left slot */
 .theme-toggle {
     justify-self: start;
     align-self: center;
-
     width: 40px;
     height: 40px;
 
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
+
     border: 1px solid rgba(255,255,255,0.2);
     border-radius: 8px;
 
@@ -78,26 +139,24 @@
     color: white;
 
     transition: transform 0.15s ease, background 0.15s ease;
-    transform-origin: center; /* ✅ scale stays centered */
+    transform-origin: center;
 }
 
-/* smaller hover so it doesn’t spill */
 .theme-toggle:hover {
     background: rgba(255,255,255,0.2);
-    transform: scale(1.05); /* ✅ was too big before */
+    transform: scale(1.05);
 }
 
-/* Center title */
+.theme-icon {
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .theme-icon {
+    transform: rotate(180deg);
+}
+
 .app-title {
     justify-self: center;
-}
-
-/* Right side */
-.auth-right {
-    justify-self: end;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
 }
 
 .user-section {
@@ -162,18 +221,10 @@
 .logout-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    font-family: 'IBM Plex Mono', monospace;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-}
+/* =========================
+   HEADER
+   ========================= */
 
 .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
@@ -245,15 +296,94 @@ h1 {
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================
+   STATS BANNER (sticky)
+   ========================= */
+
+.stats-banner {
+    background: var(--bg-card);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+
+    border-bottom: 1px solid var(--border);
+
+    position: sticky;
+    top: 0;
+    z-index: 500;
+
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 70px;
+    flex: 0 0 auto;
+}
+
+.stat-value {
+    color: var(--text);
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+/* Reset Button */
+.reset-btn {
+    padding: 0.6rem 1.2rem;
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--error);
+    border: 2px solid var(--error);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.reset-btn:hover {
+    background: var(--error);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.reset-icon {
+    font-size: 1.2rem;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.reset-btn:hover .reset-icon {
+    transform: rotate(180deg);
+}
+
+/* =========================
+   MAIN LAYOUT
+   ========================= */
 
 .container {
     max-width: 1400px;
@@ -269,7 +399,8 @@ h1 {
     animation: fadeInUp 0.8s ease 0.4s backwards;
 }
 
-.filters {
+/* Your HTML uses filters-container + filter-section */
+.filters-container {
     background: var(--card);
     border: 2px solid var(--border);
     border-radius: 12px;
@@ -277,16 +408,24 @@ h1 {
     box-shadow: 0 4px 6px rgba(0,0,0,0.04);
 }
 
-.filter-label {
+.filter-section {
+    margin-bottom: 1.75rem;
+}
+
+.filter-section:last-child {
+    margin-bottom: 0;
+}
+
+.filter-section h3 {
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-light);
     margin-bottom: 1rem;
-    display: block;
 }
 
+/* Buttons */
 .filter-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -296,7 +435,7 @@ h1 {
 .filter-btn {
     padding: 0.6rem 1.2rem;
     border: 2px solid var(--border);
-    background: white;
+    background: var(--bg-card);
     color: var(--text);
     border-radius: 8px;
     cursor: pointer;
@@ -319,14 +458,7 @@ h1 {
     font-weight: 600;
 }
 
-.search-box {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.04);
-}
-
+/* Search */
 .search-input {
     width: 100%;
     padding: 0.9rem 1.2rem;
@@ -335,6 +467,8 @@ h1 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.95rem;
     transition: all 0.3s ease;
+    background: var(--bg-card);
+    color: var(--text);
 }
 
 .search-input:focus {
@@ -342,6 +476,14 @@ h1 {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
 }
+
+.search-input::placeholder {
+    color: var(--text-light);
+}
+
+/* =========================
+   STATS CARDS
+   ========================= */
 
 .stats {
     display: grid;
@@ -372,12 +514,16 @@ h1 {
     margin-bottom: 0.3rem;
 }
 
-.stat-label {
+.stat-card .stat-label {
     font-size: 0.85rem;
     color: var(--text-light);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
+/* =========================
+   PROBLEMS
+   ========================= */
 
 .problems-container {
     animation: fadeInUp 0.8s ease 0.8s backwards;
@@ -426,6 +572,9 @@ h1 {
     padding: 2rem;
     transition: all 0.3s ease;
     position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .problem-card.practice-problem {
@@ -455,6 +604,12 @@ h1 {
     transform: scaleY(1);
 }
 
+.problem-card svg,
+.problem-card img {
+    max-width: 100%;
+    height: auto;
+}
+
 .problem-header {
     display: flex;
     justify-content: space-between;
@@ -480,9 +635,10 @@ h1 {
     letter-spacing: 0.04em;
 }
 
+/* NOTE: kept your original intent here */
 .badge-source {
     background: rgba(30, 58, 138, 0.1);
-    color: var(--secondary);
+    color: var(--text);
     border: 1px solid rgba(30, 58, 138, 0.2);
 }
 
@@ -492,21 +648,10 @@ h1 {
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-.badge-difficulty {
-    color: white;
-}
-
-.badge-easy {
-    background: var(--success);
-}
-
-.badge-medium {
-    background: var(--warning);
-}
-
-.badge-hard {
-    background: var(--error);
-}
+.badge-difficulty { color: white; }
+.badge-easy { background: var(--success); }
+.badge-medium { background: var(--warning); }
+.badge-hard { background: var(--error); }
 
 .problem-id {
     color: var(--text-light);
@@ -520,6 +665,14 @@ h1 {
     margin-bottom: 1.5rem;
     color: var(--text);
     white-space: pre-wrap;
+}
+
+.problem-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    border: 2px solid var(--border);
 }
 
 .problem-choices {
@@ -536,11 +689,23 @@ h1 {
     font-size: 0.95rem;
     transition: all 0.2s ease;
     cursor: pointer;
+    color: var(--text);
 }
 
 .choice:hover {
     background: rgba(245, 158, 11, 0.05);
     border-color: var(--accent);
+}
+
+.choice.selected {
+    border-color: var(--accent);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.choice.incorrect {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: var(--error);
+    font-weight: 600;
 }
 
 .choice.correct {
@@ -549,9 +714,10 @@ h1 {
     font-weight: 600;
 }
 
+/* Footer + buttons */
 .problem-footer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* fixed wrap centering */
     align-items: center;
     padding-top: 1.25rem;
     border-top: 2px solid var(--border);
@@ -572,6 +738,8 @@ h1 {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    flex: 0 1 220px; /* wraps cleanly */
+    text-align: center;
 }
 
 .action-btn:hover {
@@ -602,43 +770,7 @@ h1 {
     font-size: 1.1rem;
 }
 
-@media (max-width: 968px) {
-    h1 {
-        font-size: 3rem;
-    }
-
-    .controls {
-        grid-template-columns: 1fr;
-    }
-
-    .topic-header {
-        font-size: 1.8rem;
-    }
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2.5rem;
-    }
-
-    .problem-header {
-        flex-direction: column;
-    }
-
-    .problem-footer {
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-.problem-image {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 1.5rem;
-    border-radius: 8px;
-    border: 2px solid var(--border);
-}
-
+/* Answer input group */
 .answer-input-group {
     margin-bottom: 1.5rem;
 }
@@ -651,6 +783,8 @@ h1 {
     font-size: 1rem;
     margin-top: 0.5rem;
     font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg-card);
+    color: var(--text);
 }
 
 .check-answer-btn {
@@ -681,66 +815,10 @@ h1 {
     color: var(--error);
 }
 
-.choice.selected {
-    border-color: var(--accent);
-    background: rgba(245, 158, 11, 0.1);
-}
+/* =========================
+   GENERATED PROBLEM STYLING
+   ========================= */
 
-.choice.incorrect {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: var(--error);
-    font-weight: 600;
-}
-
-.choice.correct {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: var(--success);
-    font-weight: 600;
-}
-
-.stats-banner {
-    background: var(--bg-card); /* CHANGE THIS LINE */
-    padding: 1.5rem 1.5rem;
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    position: sticky; /* ADD THIS */
-    top: 0; /* ADD THIS */
-    z-index: 100; /* ADD THIS */
-}
-
-.stat-value {
-    color: var(--text); /* ADD THIS */
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.stat-label {
-    color: var(--text-light); /* ADD THIS */
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-@media (max-width: 768px) {
-    .stats-banner {
-        flex-wrap: wrap;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    .stat-value {
-        font-size: 1.5rem;
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-    }
-}
-
-/* Generated Problem Styling */
 .problem-card.generated-problem {
     border: 2px dashed var(--accent);
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(251, 191, 36, 0.03) 100%);
@@ -760,7 +838,10 @@ h1 {
     background: #dc2626;
 }
 
-/* Explanation Section */
+/* =========================
+   EXPLANATION SECTION
+   ========================= */
+
 .explanation-section {
     margin-top: 1.5rem;
     padding: 1.5rem;
@@ -771,14 +852,8 @@ h1 {
 }
 
 @keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .explanation-header {
@@ -812,81 +887,10 @@ h1 {
     font-size: 0.9rem;
 }
 
-/* Reset Button */
-.reset-btn {
-    padding: 0.6rem 1.2rem;
-    background: rgba(220, 38, 38, 0.1);
-    color: var(--error);
-    border: 2px solid var(--error);
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    margin-top: auto;
-    white-space: nowrap;
-}
+/* =========================
+   ACTIVE FILTERS
+   ========================= */
 
-.reset-btn:hover {
-    background: var(--error);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-}
-
-.reset-icon {
-    font-size: 1.2rem;
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.reset-btn:hover .reset-icon {
-    transform: rotate(180deg);
-}
-
-/* Subskill Filters */
-.subskill-filters-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.subskill-group {
-    display: none; /* Hidden by default, shown when parent topic is active */
-}
-
-.subskill-group.active {
-    display: block;
-}
-
-.subskill-group-title {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin: 0 0 0.75rem 0;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.subskill-buttons {
-    flex-wrap: wrap;
-}
-
-.subskill-buttons .filter-btn {
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
-}
-
-/* Show all subskill groups when "All Topics" is selected */
-.show-all-subskills .subskill-group {
-    display: block;
-}
-
-/* Active Filters Section */
 .active-filters-section {
     background: rgba(0, 102, 179, 0.05);
     border-radius: 8px;
@@ -978,15 +982,9 @@ h1 {
 }
 
 @keyframes tagPop {
-    0% {
-        transform: scale(0);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 .filter-tag-remove {
@@ -1023,7 +1021,10 @@ h1 {
     font-style: italic;
 }
 
-/* Accordion Styles */
+/* =========================
+   ACCORDION + SUBSKILLS
+   ========================= */
+
 .accordion-item {
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -1037,7 +1038,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    background: white;
+    background: var(--bg-card);
     border: none;
     cursor: pointer;
     transition: background 0.2s;
@@ -1080,7 +1081,7 @@ h1 {
 }
 
 .accordion-item.active .accordion-content {
-    max-height: 500px;
+    max-height: 600px;
     border-top: 1px solid var(--border);
 }
 
@@ -1122,142 +1123,10 @@ h1 {
     color: var(--primary);
 }
 
-/* Dark Mode Toggle */
-.auth-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
+/* =========================
+   BACK TO TOP (single definition)
+   ========================= */
 
-/* Minimal Dark Mode Toggle - Inside Auth Bar */
-
-.theme-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-.theme-icon {
-    transition: transform 0.3s ease;
-}
-
-[data-theme="dark"] .theme-icon {
-    transform: rotate(180deg);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .auth-bar-content {
-        gap: 1rem;
-    }
-
-    .theme-toggle {
-        width: 36px;
-        height: 36px;
-        font-size: 1rem;
-    }
-}
-
-/* Remove old auth-right styles since toggle is no longer there */
-.auth-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* Smooth transitions*/
-body,
-.problem-card,
-.stats-banner,
-.stat-value,
-.stat-label {
-    transition: background-color 0.02s ease, color 0.02s ease, border-color 0.15s ease;
-}
-
-/* FIX: Filter buttons in dark mode */
-[data-theme="dark"] .filter-btn {
-    background: #1e293b !important; /* Dark background */
-    color: #f1f5f9 !important; /* White text */
-    border-color: #334155 !important;
-}
-
-[data-theme="dark"] .filter-btn:hover {
-    background: #334155 !important;
-    border-color: #3b82f6 !important;
-}
-
-[data-theme="dark"] .filter-btn.active {
-    background: #3363b9 !important;
-    color: white !important;
-    border-color: #3b82f6 !important;
-}
-
-/* FIX: Accordion headers in dark mode */
-[data-theme="dark"] .accordion-header {
-    background: #1e293b !important; /* Dark background instead of white */
-    color: #f1f5f9 !important; /* White text */
-}
-
-[data-theme="dark"] .accordion-header:hover {
-    background: #334155 !important;
-}
-
-[data-theme="dark"] .accordion-content {
-    background: #0f172a !important;
-}
-
-[data-theme="dark"] .accordion-title {
-    color: #f1f5f9 !important;
-}
-
-[data-theme="dark"] .selected-count {
-    color: #94a3b8 !important;
-}
-
-/* FIX: Subskill checkboxes in dark mode */
-[data-theme="dark"] .subskill-checkbox {
-    color: #f1f5f9 !important;
-}
-
-[data-theme="dark"] .subskill-checkbox span {
-    color: #f1f5f9 !important;
-}
-
-[data-theme="dark"] .subskill-checkbox:hover {
-    background: rgba(59, 130, 246, 0.1) !important;
-}
-
-/* FIX: Input fields in dark mode */
-[data-theme="dark"] input[type="text"],
-[data-theme="dark"] input[type="number"],
-[data-theme="dark"] .search-input,
-[data-theme="dark"] .answer-input {
-    background: #2b3a54 !important; /* Dark background */
-    color: #f1f5f9 !important; /* White text */
-    border-color: #334155 !important;
-}
-
-[data-theme="dark"] input[type="text"]:focus,
-[data-theme="dark"] input[type="number"]:focus,
-[data-theme="dark"] .search-input:focus,
-[data-theme="dark"] .answer-input:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
-
-[data-theme="dark"] input::placeholder {
-    color: #64748b !important;
-    opacity: 1 !important;
-}
-
-[data-theme="dark"] input:-ms-input-placeholder {
-    color: #64748b !important;
-}
-
-[data-theme="dark"] input::-ms-input-placeholder {
-    color: #64748b !important;
-}
-
-/* Back to Top Button */
 .back-to-top {
     position: fixed;
     bottom: 2rem;
@@ -1272,10 +1141,13 @@ body,
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    z-index: 999;
+    z-index: 900; /* below calculator panel */
     opacity: 0;
     visibility: hidden;
-    transform: translateY(100px);
+    transform: translateY(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .back-to-top.visible {
@@ -1286,7 +1158,7 @@ body,
 
 .back-to-top:hover {
     background: var(--primary-dark);
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -1294,8 +1166,386 @@ body,
     transform: translateY(-2px);
 }
 
-/* Responsive */
+/* =========================
+   CALCULATOR PANEL (resizable)
+   IMPORTANT: This assumes you REMOVED the floating .calculator-toggle button from HTML.
+   You open it via JS toggling:
+   - .calculator-panel.open
+   - body.calculator-open
+   ========================= */
+
+.calculator-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--calculator-width, 500px);
+    min-width: 350px;
+    max-width: 75vw;
+    height: 100vh;
+    background: var(--bg-card);
+    border-left: 2px solid var(--border);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+}
+
+.calculator-panel.open {
+    transform: translateX(0);
+}
+
+/* shift site left so it doesn’t get covered */
+body.calculator-open .container,
+body.calculator-open .auth-bar-content,
+body.calculator-open .stats-banner {
+    margin-right: var(--calculator-width, 500px);
+    max-width: none;
+    transition: margin-right 0.3s ease;
+}
+
+/* Resize handle */
+.calculator-resize-handle {
+    position: absolute;
+    left: -5px;
+    top: 0;
+    width: 12px;
+    height: 100%;
+    cursor: ew-resize;
+    background: transparent;
+    z-index: 10;
+}
+
+.calculator-resize-handle::after {
+    content: '⋮';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 18px;
+    opacity: 0.5;
+}
+
+.calculator-resize-handle:hover::after,
+.calculator-resize-handle.dragging::after {
+    color: var(--primary);
+    opacity: 1;
+}
+
+/* Header */
+.calculator-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #7c3aed;
+    color: white;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.calculator-header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.calculator-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calculator-width-display {
+    font-size: 10px;
+    opacity: 0.7;
+    background: rgba(255,255,255,0.15);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.calculator-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.calculator-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Tabs */
+.calculator-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.calculator-tab {
+    flex: 1;
+    padding: 10px 6px;
+    background: var(--secondary);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-light);
+    transition: all 0.2s;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.calculator-tab:hover {
+    background: var(--bg);
+}
+
+.calculator-tab.active {
+    background: var(--bg-card);
+    color: #7c3aed;
+    box-shadow: inset 0 -2px 0 #7c3aed;
+}
+
+/* Content */
+.calculator-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.calculator-frame {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.calculator-frame.active {
+    display: block;
+}
+
+/* SAT note */
+.calculator-note {
+    padding: 8px 12px;
+    background: #fef3c7;
+    border-top: 1px solid #fcd34d;
+    font-size: 11px;
+    color: #92400e;
+    flex-shrink: 0;
+}
+
+.calculator-note strong {
+    color: #78350f;
+}
+
+/* Resizing state */
+body.calculator-resizing {
+    user-select: none !important;
+    cursor: ew-resize !important;
+}
+
+body.calculator-resizing * {
+    cursor: ew-resize !important;
+}
+
+body.calculator-resizing iframe {
+    pointer-events: none;
+}
+
+/* Remove lag while dragging */
+body.calculator-resizing .container,
+body.calculator-resizing .auth-bar-content,
+body.calculator-resizing .stats-banner,
+body.calculator-resizing .problem-card,
+body.calculator-resizing .problems-grid {
+    transition: none !important;
+}
+
+/* =========================
+   DARK MODE FIXES (inputs + buttons + accordion)
+   ========================= */
+
+[data-theme="dark"] .filter-btn {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .filter-btn:hover {
+    background: #334155;
+    border-color: #3b82f6;
+}
+
+[data-theme="dark"] .filter-btn.active {
+    background: #3363b9;
+    color: white;
+    border-color: #3b82f6;
+}
+
+[data-theme="dark"] .accordion-header {
+    background: #1e293b;
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .accordion-header:hover {
+    background: #334155;
+}
+
+[data-theme="dark"] .accordion-content {
+    background: #0f172a;
+}
+
+[data-theme="dark"] .accordion-title {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .selected-count {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .subskill-checkbox span {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .subskill-checkbox:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] .search-input,
+[data-theme="dark"] .answer-input {
+    background: #2b3a54;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+[data-theme="dark"] input[type="text"]:focus,
+[data-theme="dark"] input[type="number"]:focus,
+[data-theme="dark"] .search-input:focus,
+[data-theme="dark"] .answer-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] input::placeholder {
+    color: #64748b;
+    opacity: 1;
+}
+
+/* Calculator dark */
+[data-theme="dark"] .calculator-panel {
+    background: var(--bg-card);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .calculator-header {
+    background: #6d28d9;
+}
+
+[data-theme="dark"] .calculator-tab {
+    background: #0f172a;
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .calculator-tab:hover {
+    background: #1e293b;
+}
+
+[data-theme="dark"] .calculator-tab.active {
+    background: #1e293b;
+    color: #a78bfa;
+    box-shadow: inset 0 -2px 0 #a78bfa;
+}
+
+[data-theme="dark"] .calculator-note {
+    background: #422006;
+    border-color: #854d0e;
+    color: #fcd34d;
+}
+
+[data-theme="dark"] .calculator-note strong {
+    color: #fef3c7;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 968px) {
+    h1 { font-size: 3rem; }
+    .controls { grid-template-columns: 1fr; }
+    .topic-header { font-size: 1.8rem; }
+}
+
 @media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+
+    .auth-bar { padding: 0.75rem 1rem; }
+    .auth-bar-content {
+        grid-template-columns: 40px 1fr auto;
+        gap: 0.5rem;
+    }
+
+    .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .problem-header { flex-direction: column; }
+    .problem-footer { flex-direction: column; align-items: stretch; }
+    .problem-footer .action-btn { width: 100%; }
+
+    .container { padding: 1rem; }
+    .problem-card { padding: 1.25rem; }
+
+    .stats-banner {
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .stat-value { font-size: 1.05rem; }
+    .stat-label { font-size: 0.6rem; letter-spacing: 0; }
+
+    /* Reset becomes icon-only if your HTML includes .reset-text */
+    .reset-btn { padding: 0.5rem 0.6rem; }
+    .reset-btn .reset-text { display: none; }
+
+    /* Calculator fullscreen on smaller screens */
+    body.calculator-open .container,
+    body.calculator-open .auth-bar-content,
+    body.calculator-open .stats-banner {
+        margin-right: 0;
+    }
+
+    .calculator-panel {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .calculator-resize-handle,
+    .calculator-width-display {
+        display: none !important;
+    }
+
     .back-to-top {
         bottom: 1.5rem;
         right: 1.5rem;
@@ -1305,3 +1555,168 @@ body,
     }
 }
 
+/* Fullscreen calculator earlier if you want */
+@media (max-width: 1100px) {
+    body.calculator-open .container,
+    body.calculator-open .auth-bar-content,
+    body.calculator-open .stats-banner {
+        margin-right: 0 !important;
+    }
+
+    .calculator-panel {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .calculator-resize-handle,
+    .calculator-width-display {
+        display: none !important;
+    }
+}
+
+/* =========================================================
+   FIX: Footer buttons full-width ONLY on small screens
+   (prevents giant rectangles during mid-squish layouts)
+   Paste at VERY BOTTOM of styles.css
+   ========================================================= */
+
+/* Default (desktop / normal): wrap + centered, buttons stay normal */
+.problem-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Buttons: normal sizing when wrapping */
+.problem-footer .action-btn {
+    width: auto;
+    flex: 0 1 auto;
+    max-width: 100%;
+}
+
+/* SMALL SCREENS: stack + full-width buttons (your request) */
+@media (max-width: 768px) {
+    .problem-footer {
+        flex-direction: column;
+        align-items: center; /* centers the column */
+    }
+
+    .problem-footer .action-btn {
+        width: 100% !important;     /* span the card */
+        max-width: 520px;           /* optional: prevents “too wide” on tablets */
+        flex: 0 0 auto !important;  /* stop weird flex-basis stretching */
+        text-align: center;
+    }
+}
+
+/* EXTRA SMALL: slightly tighter so full-width doesn't feel huge */
+@media (max-width: 420px) {
+    .problem-footer .action-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+.stats-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 🔥 no dead space */
+    gap: 1rem;
+}
+
+/* stats cluster */
+.stats-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+/* right buttons */
+.stats-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.stats-calc-btn {
+    background: transparent !important;
+    border: none;
+    padding: 0.3rem;
+}
+
+/* --- Stats banner layout --- */
+.stats-banner{
+    background: var(--bg-card);
+    display:flex;
+    align-items:center;
+    gap: 1.25rem;
+    padding: .65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 500;
+}
+
+/* keep stat tiles from stretching weirdly */
+.stat-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width: 60px;
+    flex: 0 0 auto;
+}
+
+/* ✅ right-side actions (reset then calc in top-right corner) */
+.stats-actions{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    flex: 0 0 auto;
+}
+
+/* ✅ reset should not force height */
+.stats-actions .reset-btn{
+    margin: 0;
+    align-self:center;
+}
+
+/* ✅ calc button fixed size, never stretches the bar */
+.stats-calc-btn{
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex: 0 0 auto;
+    line-height: 1;
+}
+
+/* icon fits inside without growing */
+.stats-calc-btn .calc-icon{
+    width: 18px;
+    height: 18px;
+    display:block;
+    object-fit: contain;
+}
+
+/* hover */
+.stats-calc-btn:hover{
+    border-color: var(--accent);
+}
+
+/* dark mode polish */
+[data-theme="dark"] .stats-calc-btn{
+    background: #1e293b;
+    border-color: #334155;
+}

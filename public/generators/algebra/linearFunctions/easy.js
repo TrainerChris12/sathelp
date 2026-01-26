@@ -138,16 +138,41 @@ if (!window.ProblemGenerator) {
             svg += `<line x1="${toSvgX(linePoints.x1)}" y1="${toSvgY(linePoints.y1)}" x2="${toSvgX(linePoints.x2)}" y2="${toSvgY(linePoints.y2)}" stroke="#2563eb" stroke-width="3"/>`;
         }
 
-        // Points (no labels that give away answers)
+        // Points with smart label positioning to avoid line overlap
         for (const pt of points) {
             const svgX = toSvgX(pt.x);
             const svgY = toSvgY(pt.y);
-            const color = pt.color || "#2563eb";
-            const radius = pt.radius || 5;
-            svg += `<circle cx="${svgX}" cy="${svgY}" r="${radius}" fill="${color}" stroke="white" stroke-width="2"/>`;
-            // Only show label if explicitly provided and not the answer
+            const pointColor = pt.color || "#dc2626"; // Red for visibility against blue line
+            const radius = pt.radius || 6;
+
+            // Draw point with white outline for visibility
+            svg += `<circle cx="${svgX}" cy="${svgY}" r="${radius}" fill="${pointColor}" stroke="white" stroke-width="2"/>`;
+
+            // Smart label positioning based on slope to avoid line overlap
             if (pt.label) {
-                svg += `<text x="${svgX + 10}" y="${svgY - 8}" font-size="12" fill="${color}" font-weight="bold">${pt.label}</text>`;
+                // Determine label position based on slope direction
+                // For positive slope: label above-left of point
+                // For negative slope: label above-right of point
+                // Default: above the point
+                let labelX = svgX;
+                let labelY = svgY - 12; // Default above
+                let anchor = "middle";
+
+                if (slope > 0) {
+                    // Positive slope: put label above and to the left
+                    labelX = svgX - 8;
+                    labelY = svgY - 12;
+                    anchor = "end";
+                } else if (slope < 0) {
+                    // Negative slope: put label above and to the right
+                    labelX = svgX + 8;
+                    labelY = svgY - 12;
+                    anchor = "start";
+                }
+
+                // Draw label with white background for readability
+                const labelText = pt.label;
+                svg += `<text x="${labelX}" y="${labelY}" font-size="11" fill="#333" font-weight="bold" text-anchor="${anchor}" style="paint-order: stroke; stroke: white; stroke-width: 3px;">${labelText}</text>`;
             }
         }
 
@@ -358,54 +383,55 @@ if (!window.ProblemGenerator) {
 
     /**
      * Type 4: Find the slope from a graph (rate of change)
-     * Uses two clearly marked points for calculation
+     * Uses two clearly marked points that require actual slope calculation
+     * FIXED: Avoids x=1 which makes the problem trivial (y-value = rate)
      */
     P.tplGraphFindSlopeEasy = function (original) {
         const yTick = this.randomChoice([5, 10]);
         const xTick = 1;
 
-        // Choose two x-values with nice separation
-        const x1 = this.randomInt(1, 2);
-        const x2 = x1 + this.randomInt(2, 3);
+        // IMPORTANT: Both x-values must be >= 2 so slope formula is actually needed
+        // If x1=1, then y1 would just BE the rate, making the problem trivial
+        const x1 = this.randomInt(2, 3);
+        const x2 = x1 + this.randomInt(2, 3); // Ensures x2 is 4-6
         const run = x2 - x1;
 
-        // Slope is a clean integer
-        const slope = this.randomInt(2, 5) * (yTick / run);
-        // Ensure slope comes out to a nice number
-        const actualSlope = Math.round(slope);
-        const rise = actualSlope * run;
+        // Slope is a clean integer that works nicely with the run
+        const slope = this.randomChoice([2, 3, 4, 5]);
+        const rise = slope * run;
 
-        const yIntercept = yTick * this.randomInt(0, 1);
+        // Small or zero y-intercept to keep values reasonable
+        const yIntercept = yTick * this.randomChoice([0, 1]);
 
-        const y1 = actualSlope * x1 + yIntercept;
-        const y2 = actualSlope * x2 + yIntercept;
+        const y1 = slope * x1 + yIntercept;
+        const y2 = slope * x2 + yIntercept;
 
-        const xMax = 6;
-        const yMax = Math.min(50, Math.ceil((actualSlope * xMax + yIntercept + yTick) / yTick) * yTick);
+        const xMax = 7;
+        const yMax = Math.min(60, Math.ceil((y2 + yTick) / yTick) * yTick);
 
         const contexts = [
-            { xLabel: "Miles", yLabel: "Cost (dollars)", title: "Delivery Cost", q: "cost per mile", unit: "dollars per mile" },
-            { xLabel: "Hours", yLabel: "Distance (miles)", title: "Road Trip", q: "speed in miles per hour", unit: "mph" },
-            { xLabel: "Items", yLabel: "Total Cost ($)", title: "Bulk Purchase", q: "cost per item", unit: "dollars per item" }
+            { xLabel: "Hours", yLabel: "Miles", title: "Distance Traveled", q: "speed in miles per hour", unit: "mph" },
+            { xLabel: "Hours", yLabel: "Pay ($)", title: "Earnings", q: "hourly pay rate", unit: "dollars per hour" },
+            { xLabel: "Gallons", yLabel: "Cost ($)", title: "Gas Purchase", q: "price per gallon", unit: "dollars per gallon" }
         ];
         const ctx = this.randomChoice(contexts);
 
         const graph = this._generateLinearGraphSVG({
-            slope: actualSlope, yIntercept, xMax, yMax, xTick, yTick,
+            slope, yIntercept, xMin: 0, xMax, yMin: 0, yMax, xTick, yTick,
             xLabel: ctx.xLabel, yLabel: ctx.yLabel, title: ctx.title,
             points: [
-                { x: x1, y: y1, label: `(${x1}, ${y1})` },
-                { x: x2, y: y2, label: `(${x2}, ${y2})` }
+                { x: x1, y: y1, label: `(${x1}, ${y1})`, color: "#dc2626" },
+                { x: x2, y: y2, label: `(${x2}, ${y2})`, color: "#dc2626" }
             ]
         });
 
-        // Wrong answers are nearby integers
-        const wrongSlopes = this.shuffle([actualSlope + 1, actualSlope - 1, actualSlope + 2, actualSlope * 2])
-            .filter(s => s !== actualSlope && s > 0)
+        // Wrong answers: nearby values but not the correct slope
+        const wrongSlopes = this.shuffle([slope + 1, slope - 1, slope + 2, Math.round(slope * 1.5)])
+            .filter(s => s !== slope && s > 0)
             .slice(0, 3);
 
-        const allVals = this.shuffle([actualSlope, ...wrongSlopes]);
-        const { choices, answer } = this.labelChoices(allVals.slice(0, 4), actualSlope);
+        const allVals = this.shuffle([slope, ...wrongSlopes]);
+        const { choices, answer } = this.labelChoices(allVals.slice(0, 4), slope);
 
         const question =
             `The graph shows ${ctx.title.toLowerCase()}. Two points are labeled.<br><br>` +
@@ -415,7 +441,7 @@ if (!window.ProblemGenerator) {
         const explanation = this.makeSteps([
             `Use the two labeled points: (${x1}, ${y1}) and (${x2}, ${y2}).`,
             `Slope = rise ÷ run = (${y2} − ${y1}) ÷ (${x2} − ${x1})`,
-            `= ${rise} ÷ ${run} = ${actualSlope} ${ctx.unit}`
+            `= ${rise} ÷ ${run} = ${slope} ${ctx.unit}`
         ]);
 
         return this.buildProblem(original, question, choices, answer, explanation);

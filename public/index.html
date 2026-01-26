@@ -42,25 +42,38 @@
         <span class="stat-value" id="statAttempts">0/0</span>
         <span class="stat-label">Correct / Total</span>
     </div>
+
     <div class="stat-item">
         <span class="stat-value" id="statAccuracy">0%</span>
         <span class="stat-label">Accuracy</span>
     </div>
+
     <div class="stat-item">
         <span class="stat-value" id="statStreak">0</span>
         <span class="stat-label">Current Streak</span>
     </div>
+
     <div class="stat-item">
         <span class="stat-value" id="statTime">0</span>
         <span class="stat-label">Minutes Practiced</span>
     </div>
-    <div class="stat-item">
+
+    <!-- ✅ actions pinned to the right -->
+    <div class="stats-actions">
         <button id="resetProgress" class="reset-btn" title="Reset all progress">
             <span class="reset-icon">↻</span>
-            Reset
+            <span class="reset-text">Reset</span>
+        </button>
+
+        <button class="stats-calc-btn" id="calculatorToggle" title="Open Calculator">
+            <img class="calc-icon" alt="Calculator">
         </button>
     </div>
 </div>
+
+
+
+
 
 <div class="container">
     <div class="controls">
@@ -308,5 +321,57 @@
 <script defer src="./storage-manager.js"></script>
 <script defer src="./apps.js"></script>
 
+
+<!-- Calculator Panel -->
+<div class="calculator-panel" id="calculatorPanel">
+    <!-- Resize Handle (drag to adjust width) -->
+    <div class="calculator-resize-handle" id="calculatorResizeHandle"></div>
+
+    <div class="calculator-header">
+        <h3>📐 Calculator</h3>
+        <div class="calculator-header-actions">
+            <span class="calculator-width-display" id="calculatorWidthDisplay">500px</span>
+            <button class="calculator-close" id="calculatorClose" title="Close">×</button>
+        </div>
+    </div>
+
+    <div class="calculator-tabs">
+        <button class="calculator-tab active" data-calc="graphing">📈 Graphing</button>
+        <button class="calculator-tab" data-calc="scientific">🔬 Scientific</button>
+        <button class="calculator-tab" data-calc="basic">🔢 Basic</button>
+    </div>
+
+    <div class="calculator-content">
+        <!-- Desmos Graphing Calculator -->
+        <iframe
+                id="calcGraphing"
+                class="calculator-frame active"
+                src="https://www.desmos.com/calculator"
+                title="Desmos Graphing Calculator">
+        </iframe>
+
+        <!-- Desmos Scientific Calculator -->
+        <iframe
+                id="calcScientific"
+                class="calculator-frame"
+                src="about:blank"
+                data-src="https://www.desmos.com/scientific"
+                title="Desmos Scientific Calculator">
+        </iframe>
+
+        <!-- Basic Calculator -->
+        <iframe
+                id="calcBasic"
+                class="calculator-frame"
+                src="about:blank"
+                data-src="https://www.desmos.com/fourfunction"
+                title="Basic Calculator">
+        </iframe>
+    </div>
+
+    <div class="calculator-note">
+        <strong>💡 SAT Tip:</strong> Desmos graphing calculator is built into the digital SAT!
+    </div>
+</div>
 </body>
 </html>

@@ -1,9 +1,5 @@
-// public/app.js - COMPLETE WITH COLLAPSIBLE ACTIVE FILTERS (UPDATED)
-// ✅ Fixes requested:
-// 1) Clicking the correct MC choice flips Show Answer -> Hide Answer (answer is now showing)
-// 2) NEVER allow correct (green) + incorrect (red) simultaneously
-// 3) "Hide Answer" reliably hides the shown correct (whether shown by button OR correct click)
-// 4) No hard-lock after correct; you can still interact (progress still records once)
+// public/app.js - COMPLETE WITH FILTER PERSISTENCE
+// ✅ Filters now save to localStorage and restore on page reload
 
 let problems = [];
 let activeSubskills = new Set();
@@ -45,6 +41,71 @@ const subskillDisplayNames = {
     'right-triangles': 'Right Triangles & Trig',
     'circles': 'Circles'
 };
+
+// =========================================================
+// ✅ FILTER PERSISTENCE
+// =========================================================
+
+// Save filters to localStorage
+function saveFiltersToStorage() {
+    const filterState = {
+        subskills: Array.from(activeSubskills),
+        difficulties: Array.from(activeDifficulties),
+        progress: activeProgress,
+        search: searchQuery
+    };
+    localStorage.setItem('satPracticeFilters', JSON.stringify(filterState));
+}
+
+// Load filters from localStorage
+function loadFiltersFromStorage() {
+    const saved = localStorage.getItem('satPracticeFilters');
+    if (!saved) return false;
+
+    try {
+        const filterState = JSON.parse(saved);
+
+        // Restore subskills
+        if (filterState.subskills && Array.isArray(filterState.subskills)) {
+            activeSubskills = new Set(filterState.subskills);
+            document.querySelectorAll('[data-subskill]').forEach(checkbox => {
+                checkbox.checked = activeSubskills.has(checkbox.dataset.subskill);
+            });
+        }
+
+        // Restore difficulties
+        if (filterState.difficulties && Array.isArray(filterState.difficulties)) {
+            activeDifficulties = new Set(filterState.difficulties);
+            document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
+                btn.classList.toggle('active', activeDifficulties.has(btn.dataset.difficulty));
+            });
+        }
+
+        // Restore progress filter
+        if (filterState.progress) {
+            activeProgress = filterState.progress;
+            document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.progress === activeProgress);
+            });
+        }
+
+        // Restore search
+        if (filterState.search) {
+            searchQuery = filterState.search;
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = searchQuery;
+        }
+
+        return true;
+    } catch (e) {
+        console.error('Error loading saved filters:', e);
+        return false;
+    }
+}
+
+// =========================================================
+// UTILITY FUNCTIONS
+// =========================================================
 
 // Shuffle array
 function shuffleArray(array) {
@@ -379,12 +440,13 @@ function updateActiveFilterTags() {
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
+            saveFiltersToStorage(); // ✅ Save after removing filter tag
         });
     });
 }
 
 /* =========================
-   ✅ MC Helpers (NEW)
+   ✅ MC Helpers
    ========================= */
 function getCorrectLetter(problem) {
     return String(problem.answer ?? '').trim().toUpperCase();
@@ -418,7 +480,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const backToTopBtn = document.getElementById('backToTop');
 
     if (backToTopBtn) {
-        // Show/hide button based on scroll position
         window.addEventListener('scroll', () => {
             if (window.pageYOffset > 300) {
                 backToTopBtn.classList.add('visible');
@@ -427,7 +488,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         });
 
-        // Scroll to top when clicked
         backToTopBtn.addEventListener('click', () => {
             window.scrollTo({
                 top: 0,
@@ -435,17 +495,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
     }
+
     // ========== DARK MODE TOGGLE ==========
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.querySelector('.theme-icon');
 
     if (themeToggle && themeIcon) {
-        // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         themeIcon.textContent = savedTheme === 'dark' ? '☀' : '☾';
 
-        // Toggle on click
         themeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
@@ -462,7 +521,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (activeFiltersToggle) {
         activeFiltersToggle.addEventListener('click', (e) => {
-            // Don't toggle if clicking "Clear All" button
             if (e.target.id === 'clearAllFilters' || e.target.closest('#clearAllFilters')) {
                 return;
             }
@@ -471,7 +529,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Keep active filters open by default
     if (activeFiltersSection) {
         activeFiltersSection.classList.remove('collapsed');
     }
@@ -487,7 +544,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Open first accordion by default
     const firstAccordion = document.querySelector('.accordion-item');
     if (firstAccordion) {
         firstAccordion.classList.add('active');
@@ -507,13 +563,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
+            saveFiltersToStorage(); // ✅ Save after subskill change
         });
     });
 
-    // Initialize all subskills as active
-    document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-        activeSubskills.add(checkbox.dataset.subskill);
-    });
+    // ✅ Load saved filters OR initialize all as active
+    const loadedFilters = loadFiltersFromStorage();
+    if (!loadedFilters) {
+        // Default: all subskills active, all difficulties active
+        document.querySelectorAll('[data-subskill]').forEach(checkbox => {
+            checkbox.checked = true;
+            activeSubskills.add(checkbox.dataset.subskill);
+        });
+        // Difficulties are already initialized to all active
+        document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
+            btn.classList.add('active');
+        });
+    }
 
     // Difficulty filters
     const difficultyFilters = document.getElementById('difficultyFilters');
@@ -532,6 +598,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 updateActiveFilterTags();
                 renderProblems();
+                saveFiltersToStorage(); // ✅ Save after difficulty change
             }
         });
     }
@@ -543,7 +610,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (e.target.classList.contains('filter-btn')) {
                 const progress = e.target.dataset.progress;
 
-                // If clicking "all", just activate it
                 if (progress === 'all') {
                     document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
                         btn.classList.remove('active');
@@ -551,15 +617,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     e.target.classList.add('active');
                     activeProgress = 'all';
                 } else {
-                    // For "solved" or "unsolved", toggle behavior
                     if (e.target.classList.contains('active')) {
-                        // If already active, deactivate and go back to "all"
                         e.target.classList.remove('active');
                         const allBtn = document.querySelector('[data-progress="all"]');
                         if (allBtn) allBtn.classList.add('active');
                         activeProgress = 'all';
                     } else {
-                        // If not active, activate it and deactivate others
                         document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
                             btn.classList.remove('active');
                         });
@@ -570,6 +633,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 updateActiveFilterTags();
                 renderProblems();
+                saveFiltersToStorage(); // ✅ Save after progress change
             }
         });
     }
@@ -581,6 +645,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             searchQuery = e.target.value;
             updateActiveFilterTags();
             renderProblems();
+            saveFiltersToStorage(); // ✅ Save after search change
         });
     }
 
@@ -588,7 +653,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const clearAllBtn = document.getElementById('clearAllFilters');
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent toggling the accordion
+            e.stopPropagation();
 
             // Uncheck all subskills
             document.querySelectorAll('[data-subskill]').forEach(checkbox => {
@@ -617,6 +682,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
+            saveFiltersToStorage(); // ✅ Save after clearing all
         });
     }
 
@@ -625,7 +691,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateActiveFilterTags();
 });
 
-// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER) - UPDATED + RELIABLE
+// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER)
 document.addEventListener('click', (e) => {
     if (!e.target.classList.contains('show-answer')) return;
 
@@ -642,13 +708,12 @@ document.addEventListener('click', (e) => {
     card.dataset.answerShown = nextShown ? 'true' : 'false';
     card.dataset.answerSource = nextShown ? 'button' : '';
 
-    // ✅ MULTIPLE CHOICE
+    // MULTIPLE CHOICE
     if (problem.choices && problem.choices.length > 0) {
         const choices = card.querySelectorAll('.choice');
         const correctLetter = getCorrectLetter(problem);
 
         if (nextShown) {
-            // never allow correct+incorrect together
             choices.forEach(c => c.classList.remove('incorrect', 'selected'));
 
             choices.forEach(choice => {
@@ -660,7 +725,6 @@ document.addEventListener('click', (e) => {
 
             setShowAnswerButtonState(card, true);
         } else {
-            // remove ONLY what show-answer added
             choices.forEach(choice => {
                 if (choice.dataset.fromShowAnswer === 'true') {
                     choice.classList.remove('correct');
@@ -674,7 +738,7 @@ document.addEventListener('click', (e) => {
         return;
     }
 
-    // ✅ SHORT ANSWER (number input)
+    // SHORT ANSWER (number input)
     const inputGroup = card.querySelector('.answer-input-group');
     if (!inputGroup) return;
 
@@ -718,10 +782,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ✅ Click to select answer (MC) - UPDATED
-// - Clicking correct flips button to "Hide Answer" + marks answerShown/source
-// - Never allow correct+incorrect simultaneously
-// - No hard lock after correct (still records progress once)
+// ✅ Click to select answer (MC)
 document.addEventListener('click', async (e) => {
     if (!e.target.classList.contains('choice')) return;
 
@@ -740,17 +801,14 @@ document.addEventListener('click', async (e) => {
     const clicked = e.target;
 
     const answerShown = card.dataset.answerShown === 'true';
-    const answerSource = card.dataset.answerSource || ''; // 'button' | 'correctClick' | ''
+    const answerSource = card.dataset.answerSource || '';
 
-    // If answer is shown by the button, let user "play" without adding incorrect red (prevents green+red)
     if (answerSource === 'button') {
-        // clear selection only
         card.querySelectorAll('.choice').forEach(c => c.classList.remove('selected', 'incorrect'));
         clicked.classList.add('selected');
         return;
     }
 
-    // Otherwise, clear everything first to prevent correct+incorrect together
     card.querySelectorAll('.choice').forEach(c => {
         c.classList.remove('selected', 'incorrect', 'correct');
         delete c.dataset.fromShowAnswer;
@@ -767,17 +825,13 @@ document.addEventListener('click', async (e) => {
         clicked.classList.add('correct');
         clicked.classList.remove('selected');
 
-        // Mark answer as showing due to correct click
         card.dataset.answerShown = 'true';
         card.dataset.answerSource = 'correctClick';
 
-        // Mark so Hide Answer can remove it
         clicked.dataset.fromShowAnswer = 'true';
 
-        // ✅ Flip button to Hide Answer
         setShowAnswerButtonState(card, true);
 
-        // ✅ record attempt only if not already solved
         if (!alreadySolved) {
             const counted = await storage.recordAttempt(problemId, true, timeSpent);
             updateStatsDisplay();
@@ -797,7 +851,6 @@ document.addEventListener('click', async (e) => {
 
         delete problemTimers[problemId];
     } else {
-        // incorrect: do NOT allow correct simultaneously
         card.dataset.answerShown = 'false';
         card.dataset.answerSource = '';
         setShowAnswerButtonState(card, false);
@@ -805,7 +858,6 @@ document.addEventListener('click', async (e) => {
         clicked.classList.add('incorrect');
         clicked.classList.remove('selected');
 
-        // record attempt only if not already solved
         if (!alreadySolved) {
             await storage.recordAttempt(problemId, false, timeSpent);
             updateStatsDisplay();
@@ -861,7 +913,6 @@ document.addEventListener('click', async (e) => {
             if (oldBadge) oldBadge.remove();
             metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>');
 
-            // if they solved, we consider answer "shown"
             card.dataset.answerShown = 'true';
             card.dataset.answerSource = 'correctClick';
             setShowAnswerButtonState(card, true);
@@ -869,7 +920,6 @@ document.addEventListener('click', async (e) => {
             console.log(`✅ Correct answer for ${problemId}`);
             delete problemTimers[problemId];
         } else {
-            // ensure no correct+incorrect (for numeric there's no green choice, but keep clean UI)
             feedback.textContent = `✗ Incorrect. Try again!`;
             feedback.className = 'answer-feedback incorrect';
 
@@ -906,21 +956,16 @@ document.addEventListener('click', (e) => {
         return;
     }
 
-    // ✅ Add generated problem to list
     problems.push(newProblem);
 
-    // ✅ Track generated problems for UI cap
     generatedUIQueue.unshift(newProblem.id);
 
-    // ✅ If over cap, remove the oldest generated card + remove from problems array
     if (generatedUIQueue.length > MAX_GENERATED_UI) {
         const oldestId = generatedUIQueue.pop();
 
-        // remove from problems array
         const idx = problems.findIndex(p => p.id === oldestId);
         if (idx > -1) problems.splice(idx, 1);
 
-        // remove from DOM
         const oldCard = document.querySelector(`.problem-card[data-id="${oldestId}"]`);
         if (oldCard) oldCard.remove();
     }
@@ -967,7 +1012,6 @@ document.addEventListener('click', (e) => {
         const card = e.target.closest('.problem-card');
         const problemId = card.dataset.id;
 
-        // ✅ remove from queue (important)
         generatedUIQueue = generatedUIQueue.filter(id => id !== problemId);
 
         const index = problems.findIndex(p => p.id === problemId);
@@ -1009,3 +1053,238 @@ if (document.readyState === 'loading') {
 } else {
     init();
 }
+
+/* =========================================================
+   RESIZABLE CALCULATOR PANEL JS (FIXED)
+   - No nested buttons
+   - Icon swaps light/dark + open/close
+   - Keeps button size stable (CSS handles sizing)
+   ========================================================= */
+
+(function () {
+    const calculatorToggle = document.getElementById('calculatorToggle');
+    const calculatorPanel = document.getElementById('calculatorPanel');
+    const calculatorClose = document.getElementById('calculatorClose');
+    const calculatorTabs = document.querySelectorAll('.calculator-tab');
+    const calculatorFrames = document.querySelectorAll('.calculator-frame');
+    const resizeHandle = document.getElementById('calculatorResizeHandle');
+    const widthDisplay = document.getElementById('calculatorWidthDisplay');
+
+    if (!calculatorToggle || !calculatorPanel) return;
+
+    // ✅ icon element INSIDE the button
+    const iconImg = calculatorToggle.querySelector('img');
+
+    // ====== ICON PATHS (edit these to match your files) ======
+    const ICONS = {
+        light: {
+            closed: '/images/icons/black-calc.png',
+            open:   '/images/icons/black-x.png'     // optional (or use calc icon still)
+        },
+        dark: {
+            closed: '/images/icons/white-calc.png',
+            open:   '/images/icons/white-x.png'     // optional
+        }
+    };
+
+    // Default and saved width
+    const DEFAULT_WIDTH = 500;
+    const MIN_WIDTH = 350;
+    const MAX_WIDTH = 800;
+
+    let calculatorWidth = parseInt(localStorage.getItem('calculatorWidth'), 10) || DEFAULT_WIDTH;
+    let isResizing = false;
+
+    // Apply initial width
+    setCalculatorWidth(calculatorWidth);
+
+    // ====== Helpers ======
+    function getTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    function isOpen() {
+        return calculatorPanel.classList.contains('open');
+    }
+
+    function setToggleIcon() {
+        if (!iconImg) return;
+
+        const theme = getTheme();
+        const open = isOpen();
+
+        // Use X icons if you have them; otherwise fall back to calc icons
+        const src =
+            open
+                ? (ICONS[theme].open || ICONS[theme].closed)
+                : ICONS[theme].closed;
+
+        iconImg.src = src;
+    }
+
+    function openCalculator() {
+        calculatorPanel.classList.add('open');
+        document.body.classList.add('calculator-open');
+        calculatorToggle.classList.add('active');
+        calculatorToggle.title = 'Close Calculator';
+
+        localStorage.setItem('calculatorOpen', 'true');
+        setToggleIcon();
+    }
+
+    function closeCalculator() {
+        calculatorPanel.classList.remove('open');
+        document.body.classList.remove('calculator-open');
+        calculatorToggle.classList.remove('active');
+        calculatorToggle.title = 'Open Calculator';
+
+        localStorage.setItem('calculatorOpen', 'false');
+        setToggleIcon();
+    }
+
+    function setCalculatorWidth(width) {
+        calculatorWidth = width;
+        document.documentElement.style.setProperty('--calculator-width', `${width}px`);
+        if (widthDisplay) widthDisplay.textContent = `${width}px`;
+    }
+
+    // ====== Toggle click ======
+    calculatorToggle.addEventListener('click', () => {
+        if (isOpen()) closeCalculator();
+        else openCalculator();
+    });
+
+    // Close button
+    if (calculatorClose) calculatorClose.addEventListener('click', closeCalculator);
+
+    // Escape closes
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen()) closeCalculator();
+    });
+
+    // ====== Tabs ======
+    calculatorTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            const calcType = tab.dataset.calc;
+
+            calculatorTabs.forEach((t) => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            calculatorFrames.forEach((frame) => {
+                frame.classList.remove('active');
+
+                const frameType = frame.id.replace('calc', '').toLowerCase();
+                if (frameType === calcType) {
+                    frame.classList.add('active');
+
+                    // Lazy load iframe
+                    if (frame.src === 'about:blank' && frame.dataset.src) {
+                        frame.src = frame.dataset.src;
+                    }
+                }
+            });
+
+            localStorage.setItem('calculatorTab', calcType);
+        });
+    });
+
+    // Restore tab
+    const savedTab = localStorage.getItem('calculatorTab');
+    if (savedTab) {
+        const tabToActivate = document.querySelector(`.calculator-tab[data-calc="${savedTab}"]`);
+        if (tabToActivate) tabToActivate.click();
+    }
+
+    // ====== Resizing ======
+    if (resizeHandle) {
+        resizeHandle.addEventListener('mousedown', startResize);
+        resizeHandle.addEventListener('touchstart', startResize, { passive: false });
+    }
+
+    function startResize(e) {
+        e.preventDefault();
+        isResizing = true;
+
+        document.body.classList.add('calculator-resizing');
+        resizeHandle.classList.add('dragging');
+
+        document.addEventListener('mousemove', doResize);
+        document.addEventListener('mouseup', stopResize);
+        document.addEventListener('touchmove', doResize, { passive: false });
+        document.addEventListener('touchend', stopResize);
+    }
+
+    function doResize(e) {
+        if (!isResizing) return;
+        e.preventDefault();
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const windowWidth = window.innerWidth;
+        let newWidth = windowWidth - clientX;
+
+        newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, newWidth));
+        setCalculatorWidth(newWidth);
+    }
+
+    function stopResize() {
+        if (!isResizing) return;
+
+        isResizing = false;
+        document.body.classList.remove('calculator-resizing');
+        resizeHandle.classList.remove('dragging');
+
+        document.removeEventListener('mousemove', doResize);
+        document.removeEventListener('mouseup', stopResize);
+        document.removeEventListener('touchmove', doResize);
+        document.removeEventListener('touchend', stopResize);
+
+        localStorage.setItem('calculatorWidth', calculatorWidth);
+    }
+
+    // ====== Restore open state ======
+    const savedCalcState = localStorage.getItem('calculatorOpen');
+    if (savedCalcState === 'true') openCalculator();
+    else closeCalculator(); // ensures icon is correct on load
+
+    // ====== Window resize behavior ======
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+            document.documentElement.style.setProperty('--calculator-width', '100%');
+        } else {
+            setCalculatorWidth(calculatorWidth);
+        }
+    });
+
+    // ====== Update icon if theme changes elsewhere ======
+    // If your theme toggle sets data-theme, this will keep the icon synced.
+    const themeObserver = new MutationObserver(() => setToggleIcon());
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    // Initial icon set
+    setToggleIcon();
+})();
+
+const calcIcon = calculatorToggle.querySelector('.calc-icon');
+
+function updateCalcIcon() {
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark'
+        ? 'dark'
+        : 'light';
+
+    calcIcon.src =
+        theme === 'dark'
+            ? 'images/icons/white-calc.png'
+            : 'images/icons/black-calc.png';
+}
+
+// run once on load
+updateCalcIcon();
+
+// update when theme changes
+const themeObserver = new MutationObserver(updateCalcIcon);
+themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+});
+
+
