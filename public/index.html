@@ -3,22 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAT Math Problem Bank</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Math Practice Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 <body>
 
-
 <!-- User Auth Bar -->
 <div class="auth-bar">
     <div class="auth-bar-content">
-        <!-- Dark Mode Toggle - Left Corner -->
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-            <span class="theme-icon">☾</span>
-        </button>
-
         <div class="app-title">
             <h2>SAT Math Practice</h2>
         </div>
@@ -28,52 +22,61 @@
         </div>
     </div>
 </div>
+
 <div class="header">
     <div class="header-content">
-        <h1>SAT Math Problem Bank</h1>
-        <p class="subtitle">Comprehensive collection of official SAT math questions organized by topic</p>
-        <a href="../admin/index.html" class="admin-link">Admin Panel →</a>
+        <h1>Math Practice Hub</h1>
+        <p class="subtitle">Comprehensive collection of SAT-style math questions organized by topic</p>
     </div>
 </div>
 
 <!-- Stats Banner -->
 <div class="stats-banner">
-    <div class="stat-item">
-        <span class="stat-value" id="statAttempts">0/0</span>
-        <span class="stat-label">Correct / Total</span>
+    <div class="stats-left">
+        <div class="stat-item">
+            <span class="stat-value" id="statAttempts">0/0</span>
+            <span class="stat-label">Correct / Total</span>
+        </div>
+
+        <div class="stat-item">
+            <span class="stat-value" id="statAccuracy">0%</span>
+            <span class="stat-label">Accuracy</span>
+        </div>
+
+        <div class="stat-item">
+            <span class="stat-value" id="statStreak">0</span>
+            <span class="stat-label">Current Streak</span>
+        </div>
+
+        <div class="stat-item">
+            <span class="stat-value" id="statTime">0</span>
+            <span class="stat-label">Minutes Practiced</span>
+        </div>
     </div>
 
-    <div class="stat-item">
-        <span class="stat-value" id="statAccuracy">0%</span>
-        <span class="stat-label">Accuracy</span>
-    </div>
-
-    <div class="stat-item">
-        <span class="stat-value" id="statStreak">0</span>
-        <span class="stat-label">Current Streak</span>
-    </div>
-
-    <div class="stat-item">
-        <span class="stat-value" id="statTime">0</span>
-        <span class="stat-label">Minutes Practiced</span>
-    </div>
-
-    <!-- ✅ actions pinned to the right -->
+    <!-- ✅ Actions on the right -->
     <div class="stats-actions">
+        <!-- ✅ Theme toggle moved here so it's always accessible -->
+        <button class="stats-theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+            <span class="theme-icon">☾</span>
+        </button>
+
         <button id="resetProgress" class="reset-btn" title="Reset all progress">
             <span class="reset-icon">↻</span>
             <span class="reset-text">Reset</span>
         </button>
 
+        <!-- ✅ Calculator mode toggle: inline (⊟) vs popup window (⧉) -->
+        <button class="calc-mode-btn" id="calcModeToggle" title="Switch to popup window">
+            <span class="calc-mode-icon">⊟</span>
+        </button>
+
+        <!-- ✅ Calculator button with emoji icon -->
         <button class="stats-calc-btn" id="calculatorToggle" title="Open Calculator">
-            <img class="calc-icon" alt="Calculator">
+            🖩
         </button>
     </div>
 </div>
-
-
-
-
 
 <div class="container">
     <div class="controls">
@@ -263,7 +266,7 @@
                 </div>
             </div>
 
-            <!-- Search (ONLY ONE SEARCH INPUT NOW ✅) -->
+            <!-- Search -->
             <div class="filter-section">
                 <h3>Search</h3>
                 <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
@@ -291,36 +294,37 @@
         <div class="loading">Loading problems...</div>
     </div>
 </div>
+
 <!-- Back to Top Button -->
 <button class="back-to-top" id="backToTop" aria-label="Back to top">
     <span>↑</span>
 </button>
+
 <!-- Firebase SDK -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-<!-- ✅ Core generator FIRST -->
+<!-- Core generator FIRST -->
 <script defer src="./problem-generator.js"></script>
 
-<!-- ✅ Linear Eq One Var templates -->
+<!-- Linear Eq One Var templates -->
 <script defer src="./generators/algebra/linearEqOneVar/easy.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/medium.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/hard.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/register.js"></script>
 
-<!-- ✅ Linear Fucntions templates -->
+<!-- Linear Functions templates -->
 <script defer src="./generators/algebra/linearFunctions/easy.js"></script>
 <script defer src="./generators/algebra/linearFunctions/register.js"></script>
 
-<!-- ✅ Create instance LAST -->
+<!-- Create instance LAST -->
 <script defer src="./problem-generator-bootstrap.js"></script>
 
 <!-- Your app scripts -->
 <script defer src="./firebase-config.js"></script>
 <script defer src="./storage-manager.js"></script>
 <script defer src="./apps.js"></script>
-
 
 <!-- Calculator Panel -->
 <div class="calculator-panel" id="calculatorPanel">
@@ -373,5 +377,6 @@
         <strong>💡 SAT Tip:</strong> Desmos graphing calculator is built into the digital SAT!
     </div>
 </div>
+
 </body>
 </html>

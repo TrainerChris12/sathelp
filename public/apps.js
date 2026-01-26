@@ -1,5 +1,7 @@
-// public/app.js - COMPLETE WITH FILTER PERSISTENCE
-// ✅ Filters now save to localStorage and restore on page reload
+// public/app.js - FIXED CALCULATOR ICON VERSION
+// ✅ Proper icon switching for light/dark mode
+// ✅ Icon positioned in stats banner
+// ✅ Proper open/close functionality
 
 let problems = [];
 let activeSubskills = new Set();
@@ -8,11 +10,9 @@ let activeProgress = 'all';
 let searchQuery = '';
 const problemTimers = {};
 
-// ✅ UI cap for generated problems (keeps the page fast)
 const MAX_GENERATED_UI = 150;
-let generatedUIQueue = []; // newest first
+let generatedUIQueue = [];
 
-// Display name mappings
 const topicDisplayNames = {
     'algebra': 'Algebra',
     'advanced-math': 'Advanced Math',
@@ -43,10 +43,9 @@ const subskillDisplayNames = {
 };
 
 // =========================================================
-// ✅ FILTER PERSISTENCE
+// FILTER PERSISTENCE
 // =========================================================
 
-// Save filters to localStorage
 function saveFiltersToStorage() {
     const filterState = {
         subskills: Array.from(activeSubskills),
@@ -57,7 +56,6 @@ function saveFiltersToStorage() {
     localStorage.setItem('satPracticeFilters', JSON.stringify(filterState));
 }
 
-// Load filters from localStorage
 function loadFiltersFromStorage() {
     const saved = localStorage.getItem('satPracticeFilters');
     if (!saved) return false;
@@ -65,7 +63,6 @@ function loadFiltersFromStorage() {
     try {
         const filterState = JSON.parse(saved);
 
-        // Restore subskills
         if (filterState.subskills && Array.isArray(filterState.subskills)) {
             activeSubskills = new Set(filterState.subskills);
             document.querySelectorAll('[data-subskill]').forEach(checkbox => {
@@ -73,7 +70,6 @@ function loadFiltersFromStorage() {
             });
         }
 
-        // Restore difficulties
         if (filterState.difficulties && Array.isArray(filterState.difficulties)) {
             activeDifficulties = new Set(filterState.difficulties);
             document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
@@ -81,7 +77,6 @@ function loadFiltersFromStorage() {
             });
         }
 
-        // Restore progress filter
         if (filterState.progress) {
             activeProgress = filterState.progress;
             document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
@@ -89,7 +84,6 @@ function loadFiltersFromStorage() {
             });
         }
 
-        // Restore search
         if (filterState.search) {
             searchQuery = filterState.search;
             const searchInput = document.getElementById('searchInput');
@@ -107,7 +101,6 @@ function loadFiltersFromStorage() {
 // UTILITY FUNCTIONS
 // =========================================================
 
-// Shuffle array
 function shuffleArray(array) {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -117,7 +110,6 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Get progress badge for a problem
 function getProgressBadge(problemId) {
     if (!window.storage) return '';
 
@@ -137,7 +129,6 @@ function getProgressBadge(problemId) {
     return '<span class="badge badge-attempted" title="Attempted but not solved">Attempted</span>';
 }
 
-// Load problems from JSON
 async function loadProblems() {
     console.log('Loading problems...');
     try {
@@ -159,21 +150,17 @@ async function loadProblems() {
     }
 }
 
-// Filter problems
 function filterProblems() {
     const progress = storage ? storage.getProgress() : { problems: {} };
 
     return problems.filter(p => {
-        // Subskill filter
         let subskillMatch = true;
         if (activeSubskills.size > 0) {
             subskillMatch = activeSubskills.has(p.subskill);
         }
 
-        // Difficulty filter
         const difficultyMatch = activeDifficulties.has(p.difficulty);
 
-        // Progress filter
         let progressMatch = true;
         if (activeProgress === 'solved') {
             progressMatch = progress.problems[p.id]?.correct === true;
@@ -181,7 +168,6 @@ function filterProblems() {
             progressMatch = !progress.problems[p.id]?.correct;
         }
 
-        // Search filter
         const searchMatch = searchQuery === '' ||
             (p.question || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
             (p.id || '').toLowerCase().includes(searchQuery.toLowerCase());
@@ -190,7 +176,6 @@ function filterProblems() {
     });
 }
 
-// Organize by topic and subskill
 function organizeByTopicAndSubskill(problemsList) {
     const organized = {};
 
@@ -209,7 +194,6 @@ function organizeByTopicAndSubskill(problemsList) {
     return organized;
 }
 
-// Render problems
 function renderProblems() {
     console.log('Rendering problems...');
     const container = document.getElementById('problemsContainer');
@@ -293,7 +277,6 @@ function renderProblems() {
     if (visibleElem) visibleElem.textContent = filteredProblems.length;
 }
 
-// Update stats display
 function updateStatsDisplay() {
     if (!storage) return;
 
@@ -314,7 +297,6 @@ function updateStatsDisplay() {
     console.log('📊 Stats updated:', stats);
 }
 
-// Update user UI
 function updateUserUI() {
     const userSection = document.getElementById('userSection');
     if (!userSection || !storage) return;
@@ -338,7 +320,6 @@ function updateUserUI() {
     }
 }
 
-// Update selected counts for each topic
 function updateSelectedCounts() {
     const topicSubskills = {
         'algebra': ['linear-equations-one-variable', 'linear-functions', 'linear-equations-two-variables', 'systems-linear-equations', 'linear-inequalities'],
@@ -359,14 +340,12 @@ function updateSelectedCounts() {
     });
 }
 
-// Update active filter tags display
 function updateActiveFilterTags() {
     const tagsContainer = document.getElementById('activeFiltersTags');
     if (!tagsContainer) return;
 
     let tagsHTML = '';
 
-    // Subskill tags
     activeSubskills.forEach(subskill => {
         const displayName = subskillDisplayNames[subskill] || subskill;
         tagsHTML += `
@@ -377,7 +356,6 @@ function updateActiveFilterTags() {
         `;
     });
 
-    // Difficulty tags
     activeDifficulties.forEach(difficulty => {
         tagsHTML += `
             <div class="filter-tag difficulty-${difficulty}">
@@ -387,7 +365,6 @@ function updateActiveFilterTags() {
         `;
     });
 
-    // Progress tag (if not "all")
     if (activeProgress !== 'all') {
         tagsHTML += `
             <div class="filter-tag progress">
@@ -397,7 +374,6 @@ function updateActiveFilterTags() {
         `;
     }
 
-    // Search tag
     if (searchQuery) {
         tagsHTML += `
             <div class="filter-tag">
@@ -413,7 +389,6 @@ function updateActiveFilterTags() {
 
     tagsContainer.innerHTML = tagsHTML;
 
-    // Add event listeners to remove buttons
     tagsContainer.querySelectorAll('.filter-tag-remove').forEach(btn => {
         btn.addEventListener('click', () => {
             if (btn.dataset.removeSubskill) {
@@ -440,14 +415,11 @@ function updateActiveFilterTags() {
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
-            saveFiltersToStorage(); // ✅ Save after removing filter tag
+            saveFiltersToStorage();
         });
     });
 }
 
-/* =========================
-   ✅ MC Helpers
-   ========================= */
 function getCorrectLetter(problem) {
     return String(problem.answer ?? '').trim().toUpperCase();
 }
@@ -563,19 +535,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
-            saveFiltersToStorage(); // ✅ Save after subskill change
+            saveFiltersToStorage();
         });
     });
 
-    // ✅ Load saved filters OR initialize all as active
     const loadedFilters = loadFiltersFromStorage();
     if (!loadedFilters) {
-        // Default: all subskills active, all difficulties active
         document.querySelectorAll('[data-subskill]').forEach(checkbox => {
             checkbox.checked = true;
             activeSubskills.add(checkbox.dataset.subskill);
         });
-        // Difficulties are already initialized to all active
         document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
             btn.classList.add('active');
         });
@@ -598,7 +567,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 updateActiveFilterTags();
                 renderProblems();
-                saveFiltersToStorage(); // ✅ Save after difficulty change
+                saveFiltersToStorage();
             }
         });
     }
@@ -633,7 +602,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 updateActiveFilterTags();
                 renderProblems();
-                saveFiltersToStorage(); // ✅ Save after progress change
+                saveFiltersToStorage();
             }
         });
     }
@@ -645,7 +614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             searchQuery = e.target.value;
             updateActiveFilterTags();
             renderProblems();
-            saveFiltersToStorage(); // ✅ Save after search change
+            saveFiltersToStorage();
         });
     }
 
@@ -655,19 +624,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         clearAllBtn.addEventListener('click', (e) => {
             e.stopPropagation();
 
-            // Uncheck all subskills
             document.querySelectorAll('[data-subskill]').forEach(checkbox => {
                 checkbox.checked = false;
             });
             activeSubskills.clear();
 
-            // Reset difficulty
             document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             activeDifficulties.clear();
 
-            // Reset progress to "all"
             document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -675,14 +641,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (allProgressBtn) allProgressBtn.classList.add('active');
             activeProgress = 'all';
 
-            // Clear search
             if (searchInput) searchInput.value = '';
             searchQuery = '';
 
             updateSelectedCounts();
             updateActiveFilterTags();
             renderProblems();
-            saveFiltersToStorage(); // ✅ Save after clearing all
+            saveFiltersToStorage();
         });
     }
 
@@ -691,7 +656,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateActiveFilterTags();
 });
 
-// ✅ Show/hide answer (MULTIPLE CHOICE + SHORT ANSWER)
+// Show/hide answer
 document.addEventListener('click', (e) => {
     if (!e.target.classList.contains('show-answer')) return;
 
@@ -708,7 +673,6 @@ document.addEventListener('click', (e) => {
     card.dataset.answerShown = nextShown ? 'true' : 'false';
     card.dataset.answerSource = nextShown ? 'button' : '';
 
-    // MULTIPLE CHOICE
     if (problem.choices && problem.choices.length > 0) {
         const choices = card.querySelectorAll('.choice');
         const correctLetter = getCorrectLetter(problem);
@@ -738,7 +702,6 @@ document.addEventListener('click', (e) => {
         return;
     }
 
-    // SHORT ANSWER (number input)
     const inputGroup = card.querySelector('.answer-input-group');
     if (!inputGroup) return;
 
@@ -782,7 +745,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ✅ Click to select answer (MC)
+// Click to select answer (MC)
 document.addEventListener('click', async (e) => {
     if (!e.target.classList.contains('choice')) return;
 
@@ -875,7 +838,7 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-// Check answer for input fields (number)
+// Check answer for input fields
 document.addEventListener('click', async (e) => {
     if (e.target.classList.contains('check-answer-btn')) {
         const inputGroup = e.target.closest('.answer-input-group');
@@ -1054,11 +1017,9 @@ if (document.readyState === 'loading') {
     init();
 }
 
+
 /* =========================================================
-   RESIZABLE CALCULATOR PANEL JS (FIXED)
-   - No nested buttons
-   - Icon swaps light/dark + open/close
-   - Keeps button size stable (CSS handles sizing)
+   ✅ CALCULATOR - Inline Panel OR Actual Popup Window
    ========================================================= */
 
 (function () {
@@ -1069,77 +1030,101 @@ if (document.readyState === 'loading') {
     const calculatorFrames = document.querySelectorAll('.calculator-frame');
     const resizeHandle = document.getElementById('calculatorResizeHandle');
     const widthDisplay = document.getElementById('calculatorWidthDisplay');
+    const calcModeToggle = document.getElementById('calcModeToggle');
+    const calcModeIcon = document.querySelector('.calc-mode-icon');
 
     if (!calculatorToggle || !calculatorPanel) return;
 
-    // ✅ icon element INSIDE the button
-    const iconImg = calculatorToggle.querySelector('img');
-
-    // ====== ICON PATHS (edit these to match your files) ======
-    const ICONS = {
-        light: {
-            closed: '/images/icons/black-calc.png',
-            open:   '/images/icons/black-x.png'     // optional (or use calc icon still)
-        },
-        dark: {
-            closed: '/images/icons/white-calc.png',
-            open:   '/images/icons/white-x.png'     // optional
-        }
-    };
-
-    // Default and saved width
     const DEFAULT_WIDTH = 500;
     const MIN_WIDTH = 350;
     const MAX_WIDTH = 800;
 
     let calculatorWidth = parseInt(localStorage.getItem('calculatorWidth'), 10) || DEFAULT_WIDTH;
     let isResizing = false;
+    let isPopupMode = localStorage.getItem('calculatorPopupMode') === 'true';
+    let popupWindow = null;
 
-    // Apply initial width
     setCalculatorWidth(calculatorWidth);
 
-    // ====== Helpers ======
-    function getTheme() {
-        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    // Apply saved mode icon
+    updateModeIcon();
+
+    // ✅ Helper functions
+    function updateModeIcon() {
+        if (!calcModeIcon || !calcModeToggle) return;
+
+        if (isPopupMode) {
+            calcModeIcon.textContent = '⧉'; // external window icon
+            calcModeToggle.classList.add('popup-mode');
+            calcModeToggle.title = 'Switch to inline mode';
+        } else {
+            calcModeIcon.textContent = '⊟'; // sidebar icon
+            calcModeToggle.classList.remove('popup-mode');
+            calcModeToggle.title = 'Switch to popup window';
+        }
     }
 
-    function isOpen() {
+    function isInlineOpen() {
         return calculatorPanel.classList.contains('open');
     }
 
-    function setToggleIcon() {
-        if (!iconImg) return;
-
-        const theme = getTheme();
-        const open = isOpen();
-
-        // Use X icons if you have them; otherwise fall back to calc icons
-        const src =
-            open
-                ? (ICONS[theme].open || ICONS[theme].closed)
-                : ICONS[theme].closed;
-
-        iconImg.src = src;
-    }
-
-    function openCalculator() {
+    function openInlineCalculator() {
         calculatorPanel.classList.add('open');
         document.body.classList.add('calculator-open');
         calculatorToggle.classList.add('active');
         calculatorToggle.title = 'Close Calculator';
-
-        localStorage.setItem('calculatorOpen', 'true');
-        setToggleIcon();
     }
 
-    function closeCalculator() {
+    function closeInlineCalculator() {
         calculatorPanel.classList.remove('open');
         document.body.classList.remove('calculator-open');
         calculatorToggle.classList.remove('active');
         calculatorToggle.title = 'Open Calculator';
+    }
 
-        localStorage.setItem('calculatorOpen', 'false');
-        setToggleIcon();
+    function openPopupCalculator() {
+        // Close popup if already open
+        if (popupWindow && !popupWindow.closed) {
+            popupWindow.focus();
+            return;
+        }
+
+        const savedTab = localStorage.getItem('calculatorTab') || 'graphing';
+
+        // Determine which calculator URL to open
+        let calcUrl = 'https://www.desmos.com/calculator'; // default graphing
+        if (savedTab === 'scientific') {
+            calcUrl = 'https://www.desmos.com/scientific';
+        } else if (savedTab === 'basic') {
+            calcUrl = 'https://www.desmos.com/fourfunction';
+        }
+
+        // Open popup window
+        const width = 800;
+        const height = 700;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
+
+        popupWindow = window.open(
+            calcUrl,
+            'CalculatorPopup',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
+        );
+
+        if (popupWindow) {
+            calculatorToggle.classList.add('active');
+            calculatorToggle.title = 'Calculator opened in new window';
+
+            // Monitor popup close
+            const checkPopup = setInterval(() => {
+                if (!popupWindow || popupWindow.closed) {
+                    clearInterval(checkPopup);
+                    calculatorToggle.classList.remove('active');
+                    calculatorToggle.title = 'Open Calculator';
+                    popupWindow = null;
+                }
+            }, 500);
+        }
     }
 
     function setCalculatorWidth(width) {
@@ -1148,21 +1133,59 @@ if (document.readyState === 'loading') {
         if (widthDisplay) widthDisplay.textContent = `${width}px`;
     }
 
-    // ====== Toggle click ======
+    function toggleCalcMode() {
+        // Close whatever is currently open
+        if (isPopupMode) {
+            if (popupWindow && !popupWindow.closed) {
+                popupWindow.close();
+                popupWindow = null;
+            }
+        } else {
+            closeInlineCalculator();
+        }
+
+        // Switch mode
+        isPopupMode = !isPopupMode;
+        localStorage.setItem('calculatorPopupMode', isPopupMode);
+
+        updateModeIcon();
+
+        // Reset toggle button
+        calculatorToggle.classList.remove('active');
+        calculatorToggle.title = 'Open Calculator';
+    }
+
+    // ✅ Main toggle click - opens inline OR popup based on mode
     calculatorToggle.addEventListener('click', () => {
-        if (isOpen()) closeCalculator();
-        else openCalculator();
+        if (isPopupMode) {
+            openPopupCalculator();
+        } else {
+            if (isInlineOpen()) {
+                closeInlineCalculator();
+            } else {
+                openInlineCalculator();
+            }
+        }
     });
 
-    // Close button
-    if (calculatorClose) calculatorClose.addEventListener('click', closeCalculator);
+    // ✅ Mode toggle click
+    if (calcModeToggle) {
+        calcModeToggle.addEventListener('click', toggleCalcMode);
+    }
 
-    // Escape closes
+    // ✅ Close button (only for inline)
+    if (calculatorClose) {
+        calculatorClose.addEventListener('click', closeInlineCalculator);
+    }
+
+    // ✅ Escape key (only closes inline)
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isOpen()) closeCalculator();
+        if (e.key === 'Escape' && isInlineOpen()) {
+            closeInlineCalculator();
+        }
     });
 
-    // ====== Tabs ======
+    // ✅ Tabs (only for inline)
     calculatorTabs.forEach((tab) => {
         tab.addEventListener('click', () => {
             const calcType = tab.dataset.calc;
@@ -1177,7 +1200,6 @@ if (document.readyState === 'loading') {
                 if (frameType === calcType) {
                     frame.classList.add('active');
 
-                    // Lazy load iframe
                     if (frame.src === 'about:blank' && frame.dataset.src) {
                         frame.src = frame.dataset.src;
                     }
@@ -1188,14 +1210,13 @@ if (document.readyState === 'loading') {
         });
     });
 
-    // Restore tab
     const savedTab = localStorage.getItem('calculatorTab');
     if (savedTab) {
         const tabToActivate = document.querySelector(`.calculator-tab[data-calc="${savedTab}"]`);
         if (tabToActivate) tabToActivate.click();
     }
 
-    // ====== Resizing ======
+    // ✅ Resizing (only for inline)
     if (resizeHandle) {
         resizeHandle.addEventListener('mousedown', startResize);
         resizeHandle.addEventListener('touchstart', startResize, { passive: false });
@@ -1241,12 +1262,7 @@ if (document.readyState === 'loading') {
         localStorage.setItem('calculatorWidth', calculatorWidth);
     }
 
-    // ====== Restore open state ======
-    const savedCalcState = localStorage.getItem('calculatorOpen');
-    if (savedCalcState === 'true') openCalculator();
-    else closeCalculator(); // ensures icon is correct on load
-
-    // ====== Window resize behavior ======
+    // ✅ Window resize behavior (only affects inline)
     window.addEventListener('resize', () => {
         if (window.innerWidth <= 768) {
             document.documentElement.style.setProperty('--calculator-width', '100%');
@@ -1255,36 +1271,10 @@ if (document.readyState === 'loading') {
         }
     });
 
-    // ====== Update icon if theme changes elsewhere ======
-    // If your theme toggle sets data-theme, this will keep the icon synced.
-    const themeObserver = new MutationObserver(() => setToggleIcon());
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-    // Initial icon set
-    setToggleIcon();
+    // ✅ Cleanup popup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (popupWindow && !popupWindow.closed) {
+            popupWindow.close();
+        }
+    });
 })();
-
-const calcIcon = calculatorToggle.querySelector('.calc-icon');
-
-function updateCalcIcon() {
-    const theme = document.documentElement.getAttribute('data-theme') === 'dark'
-        ? 'dark'
-        : 'light';
-
-    calcIcon.src =
-        theme === 'dark'
-            ? 'images/icons/white-calc.png'
-            : 'images/icons/black-calc.png';
-}
-
-// run once on load
-updateCalcIcon();
-
-// update when theme changes
-const themeObserver = new MutationObserver(updateCalcIcon);
-themeObserver.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme']
-});
-
-

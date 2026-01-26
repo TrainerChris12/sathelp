@@ -1,9 +1,8 @@
 /* =========================================================
-   styles.css (REPLACEMENT FILE)
-   Cleaned + de-duplicated
-   - Single source of truth for: stats banner, back-to-top, calculator
-   - Keeps your original look/feel
-   - Matches your current HTML structure (filters-container / filter-section / accordion)
+   styles.css (FIXED VERSION)
+   - Calculator icon properly positioned in stats banner
+   - Proper light/dark mode icon support
+   - Clean layout and functionality
    ========================================================= */
 
 /* =========================
@@ -84,7 +83,7 @@ body {
     line-height: 1.7;
 }
 
-/* Smooth transitions */
+/* Smooth transitions - FAST */
 body,
 .problem-card,
 .stats-banner,
@@ -94,7 +93,7 @@ body,
 .accordion-header,
 .search-input,
 .answer-input {
-    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    transition: background-color 0.05s ease, color 0.05s ease, border-color 0.05s ease;
 }
 
 /* =========================
@@ -108,55 +107,18 @@ body,
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* 3 columns: Toggle | Title | User */
+/* 2 columns: Title | User */
 .auth-bar-content {
     max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 56px 1fr auto; /* reserved slot for toggle */
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: 1rem;
 }
 
-.theme-toggle {
-    justify-self: start;
-    align-self: center;
-    width: 40px;
-    height: 40px;
-
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
-    font-size: 1.2rem;
-    color: white;
-
-    transition: transform 0.15s ease, background 0.15s ease;
-    transform-origin: center;
-}
-
-.theme-toggle:hover {
-    background: rgba(255,255,255,0.2);
-    transform: scale(1.05);
-}
-
-.theme-icon {
-    transition: transform 0.3s ease;
-}
-
-[data-theme="dark"] .theme-icon {
-    transform: rotate(180deg);
-}
-
 .app-title {
-    justify-self: center;
+    justify-self: start;
 }
 
 .user-section {
@@ -227,7 +189,7 @@ body,
    ========================= */
 
 .header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: var(--primary);
     color: white;
     padding: 4rem 2rem 3rem;
     position: relative;
@@ -261,7 +223,7 @@ body,
 }
 
 h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Inter', sans-serif;
     font-size: 4rem;
     font-weight: 900;
     margin-bottom: 0.5rem;
@@ -277,24 +239,6 @@ h1 {
     letter-spacing: 0.02em;
 }
 
-.admin-link {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.6rem 1.5rem;
-    background: rgba(255,255,255,0.1);
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    border: 2px solid rgba(255,255,255,0.2);
-    transition: all 0.3s ease;
-}
-
-.admin-link:hover {
-    background: rgba(255,255,255,0.2);
-    border-color: var(--accent);
-}
-
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
@@ -306,11 +250,12 @@ h1 {
 
 .stats-banner {
     background: var(--bg-card);
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.2rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
+    min-height: 50px;
 
     border-bottom: 1px solid var(--border);
 
@@ -319,30 +264,118 @@ h1 {
     z-index: 500;
 
     flex-wrap: wrap;
-    row-gap: 0.5rem;
+}
+
+/* Left side: stats */
+.stats-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex: 1;
+    row-gap: 0.4rem;
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 70px;
+    min-width: 60px;
     flex: 0 0 auto;
 }
 
 .stat-value {
     color: var(--text);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .stat-label {
     color: var(--text-light);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     white-space: nowrap;
+}
+
+/* Right side: actions (theme + reset + calc mode + calculator) */
+.stats-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+}
+
+/* ✅ Theme Toggle in Stats Banner */
+.stats-theme-toggle {
+    width: 40px;
+    height: 40px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 2px solid rgba(124, 58, 237, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.3rem;
+    color: var(--text);
+}
+
+.stats-theme-toggle:hover {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.theme-icon {
+    transition: transform 0.3s ease;
+}
+
+[data-theme="dark"] .theme-icon {
+    transform: rotate(180deg);
+}
+
+/* ✅ Calculator Mode Toggle Button */
+.calc-mode-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.2rem;
+    color: var(--text);
+    font-weight: bold;
+}
+
+.calc-mode-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.calc-mode-btn.popup-mode {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: var(--success);
+}
+
+.calc-mode-icon {
+    display: inline-block;
+    line-height: 1;
 }
 
 /* Reset Button */
@@ -379,6 +412,37 @@ h1 {
 
 .reset-btn:hover .reset-icon {
     transform: rotate(180deg);
+}
+
+/* ✅ Calculator Toggle Button (in stats banner) */
+.stats-calc-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 2px solid rgba(124, 58, 237, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.8rem;  /* ✅ Bigger emoji */
+    color: var(--text);
+    line-height: 1;
+}
+
+.stats-calc-btn:hover {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: rgba(124, 58, 237, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.stats-calc-btn.active {
+    background: rgba(124, 58, 237, 0.2);
+    border-color: #7c3aed;
 }
 
 /* =========================
@@ -541,7 +605,7 @@ h1 {
 }
 
 .topic-header {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Inter', sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
     color: var(--primary);
@@ -635,7 +699,6 @@ h1 {
     letter-spacing: 0.04em;
 }
 
-/* NOTE: kept your original intent here */
 .badge-source {
     background: rgba(30, 58, 138, 0.1);
     color: var(--text);
@@ -717,7 +780,7 @@ h1 {
 /* Footer + buttons */
 .problem-footer {
     display: flex;
-    justify-content: center; /* fixed wrap centering */
+    justify-content: center;
     align-items: center;
     padding-top: 1.25rem;
     border-top: 2px solid var(--border);
@@ -738,7 +801,7 @@ h1 {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    flex: 0 1 220px; /* wraps cleanly */
+    flex: 0 1 220px;
     text-align: center;
 }
 
@@ -1124,7 +1187,7 @@ h1 {
 }
 
 /* =========================
-   BACK TO TOP (single definition)
+   BACK TO TOP
    ========================= */
 
 .back-to-top {
@@ -1141,7 +1204,7 @@ h1 {
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    z-index: 900; /* below calculator panel */
+    z-index: 1000; /* ✅ Higher than problem cards */
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
@@ -1167,11 +1230,7 @@ h1 {
 }
 
 /* =========================
-   CALCULATOR PANEL (resizable)
-   IMPORTANT: This assumes you REMOVED the floating .calculator-toggle button from HTML.
-   You open it via JS toggling:
-   - .calculator-panel.open
-   - body.calculator-open
+   CALCULATOR PANEL (inline mode only)
    ========================= */
 
 .calculator-panel {
@@ -1196,7 +1255,7 @@ h1 {
     transform: translateX(0);
 }
 
-/* shift site left so it doesn’t get covered */
+/* Inline mode shifts content */
 body.calculator-open .container,
 body.calculator-open .auth-bar-content,
 body.calculator-open .stats-banner {
@@ -1205,7 +1264,6 @@ body.calculator-open .stats-banner {
     transition: margin-right 0.3s ease;
 }
 
-/* Resize handle */
 .calculator-resize-handle {
     position: absolute;
     left: -5px;
@@ -1234,7 +1292,6 @@ body.calculator-open .stats-banner {
     opacity: 1;
 }
 
-/* Header */
 .calculator-header {
     display: flex;
     align-items: center;
@@ -1289,7 +1346,6 @@ body.calculator-open .stats-banner {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* Tabs */
 .calculator-tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -1319,7 +1375,6 @@ body.calculator-open .stats-banner {
     box-shadow: inset 0 -2px 0 #7c3aed;
 }
 
-/* Content */
 .calculator-content {
     flex: 1;
     overflow: hidden;
@@ -1339,7 +1394,6 @@ body.calculator-open .stats-banner {
     display: block;
 }
 
-/* SAT note */
 .calculator-note {
     padding: 8px 12px;
     background: #fef3c7;
@@ -1353,7 +1407,6 @@ body.calculator-open .stats-banner {
     color: #78350f;
 }
 
-/* Resizing state */
 body.calculator-resizing {
     user-select: none !important;
     cursor: ew-resize !important;
@@ -1367,7 +1420,6 @@ body.calculator-resizing iframe {
     pointer-events: none;
 }
 
-/* Remove lag while dragging */
 body.calculator-resizing .container,
 body.calculator-resizing .auth-bar-content,
 body.calculator-resizing .stats-banner,
@@ -1377,7 +1429,7 @@ body.calculator-resizing .problems-grid {
 }
 
 /* =========================
-   DARK MODE FIXES (inputs + buttons + accordion)
+   DARK MODE FIXES
    ========================= */
 
 [data-theme="dark"] .filter-btn {
@@ -1448,7 +1500,6 @@ body.calculator-resizing .problems-grid {
     opacity: 1;
 }
 
-/* Calculator dark */
 [data-theme="dark"] .calculator-panel {
     background: var(--bg-card);
     border-color: var(--border);
@@ -1498,37 +1549,59 @@ body.calculator-resizing .problems-grid {
 
     .auth-bar { padding: 0.75rem 1rem; }
     .auth-bar-content {
-        grid-template-columns: 40px 1fr auto;
+        grid-template-columns: 1fr auto;
         gap: 0.5rem;
     }
 
-    .theme-toggle {
+    .stats-theme-toggle {
         width: 36px;
         height: 36px;
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
     .problem-header { flex-direction: column; }
-    .problem-footer { flex-direction: column; align-items: stretch; }
-    .problem-footer .action-btn { width: 100%; }
+    .problem-footer {
+        flex-direction: column;
+        align-items: center;
+    }
+    .problem-footer .action-btn {
+        width: 100% !important;
+        max-width: 520px;
+        flex: 0 0 auto !important;
+    }
 
     .container { padding: 1rem; }
     .problem-card { padding: 1.25rem; }
 
     .stats-banner {
         justify-content: space-between;
-        gap: 0.75rem;
-        padding: 0.6rem 0.75rem;
+        gap: 0.5rem;
+        padding: 0.5rem 0.6rem;
+        min-height: 45px;
     }
 
-    .stat-value { font-size: 1.05rem; }
-    .stat-label { font-size: 0.6rem; letter-spacing: 0; }
+    .stats-left {
+        gap: 0.6rem;
+    }
 
-    /* Reset becomes icon-only if your HTML includes .reset-text */
-    .reset-btn { padding: 0.5rem 0.6rem; }
+    .stat-value { font-size: 1rem; }
+    .stat-label { font-size: 0.55rem; letter-spacing: 0; }
+
+    .stats-actions {
+        gap: 0.4rem;
+    }
+
+    .stats-theme-toggle,
+    .calc-mode-btn,
+    .stats-calc-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+    }
+
+    .reset-btn { padding: 0.45rem 0.5rem; }
     .reset-btn .reset-text { display: none; }
 
-    /* Calculator fullscreen on smaller screens */
     body.calculator-open .container,
     body.calculator-open .auth-bar-content,
     body.calculator-open .stats-banner {
@@ -1555,7 +1628,6 @@ body.calculator-resizing .problems-grid {
     }
 }
 
-/* Fullscreen calculator earlier if you want */
 @media (max-width: 1100px) {
     body.calculator-open .container,
     body.calculator-open .auth-bar-content,
@@ -1575,148 +1647,9 @@ body.calculator-resizing .problems-grid {
     }
 }
 
-/* =========================================================
-   FIX: Footer buttons full-width ONLY on small screens
-   (prevents giant rectangles during mid-squish layouts)
-   Paste at VERY BOTTOM of styles.css
-   ========================================================= */
-
-/* Default (desktop / normal): wrap + centered, buttons stay normal */
-.problem-footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-/* Buttons: normal sizing when wrapping */
-.problem-footer .action-btn {
-    width: auto;
-    flex: 0 1 auto;
-    max-width: 100%;
-}
-
-/* SMALL SCREENS: stack + full-width buttons (your request) */
-@media (max-width: 768px) {
-    .problem-footer {
-        flex-direction: column;
-        align-items: center; /* centers the column */
-    }
-
-    .problem-footer .action-btn {
-        width: 100% !important;     /* span the card */
-        max-width: 520px;           /* optional: prevents “too wide” on tablets */
-        flex: 0 0 auto !important;  /* stop weird flex-basis stretching */
-        text-align: center;
-    }
-}
-
-/* EXTRA SMALL: slightly tighter so full-width doesn't feel huge */
 @media (max-width: 420px) {
     .problem-footer .action-btn {
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
     }
-}
-
-.stats-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* 🔥 no dead space */
-    gap: 1rem;
-}
-
-/* stats cluster */
-.stats-left {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-
-/* right buttons */
-.stats-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
-
-.stats-calc-btn {
-    background: transparent !important;
-    border: none;
-    padding: 0.3rem;
-}
-
-/* --- Stats banner layout --- */
-.stats-banner{
-    background: var(--bg-card);
-    display:flex;
-    align-items:center;
-    gap: 1.25rem;
-    padding: .65rem 1rem;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 500;
-}
-
-/* keep stat tiles from stretching weirdly */
-.stat-item{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-width: 60px;
-    flex: 0 0 auto;
-}
-
-/* ✅ right-side actions (reset then calc in top-right corner) */
-.stats-actions{
-    margin-left:auto;
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    flex: 0 0 auto;
-}
-
-/* ✅ reset should not force height */
-.stats-actions .reset-btn{
-    margin: 0;
-    align-self:center;
-}
-
-/* ✅ calc button fixed size, never stretches the bar */
-.stats-calc-btn{
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    flex: 0 0 auto;
-    line-height: 1;
-}
-
-/* icon fits inside without growing */
-.stats-calc-btn .calc-icon{
-    width: 18px;
-    height: 18px;
-    display:block;
-    object-fit: contain;
-}
-
-/* hover */
-.stats-calc-btn:hover{
-    border-color: var(--accent);
-}
-
-/* dark mode polish */
-[data-theme="dark"] .stats-calc-btn{
-    background: #1e293b;
-    border-color: #334155;
 }
