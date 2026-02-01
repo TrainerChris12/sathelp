@@ -951,5 +951,190 @@
     "answer": "B",
     "explanation": "Set h(x) = 0: 10 - 2x = 0. Subtract 10: -2x = -10. Divide by -2: x = 5.",
     "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-021",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "For the linear function g, g(2) = 8 and g(5) = 17. What is the value of g(10)?",
+    "choices": ["A) 29", "B) 32", "C) 35", "D) 38"],
+    "answer": "B",
+    "explanation": "Slope: (17 - 8)/(5 - 2) = 9/3 = 3. Using g(2) = 8: 8 = 3(2) + b, so b = 2. Therefore g(10) = 3(10) + 2 = 32.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-022",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A delivery service charges $4.50 for the first mile and $2.25 for each additional mile. What is the total charge, in dollars, for a delivery of 8 miles?",
+    "choices": ["A) $18.00", "B) $20.25", "C) $22.50", "D) $24.75"],
+    "answer": "B",
+    "explanation": "First mile: $4.50. Additional 7 miles: 7 × $2.25 = $15.75. Total: $4.50 + $15.75 = $20.25.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-023",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "An online store charges a $15 shipping fee plus $8 per item. A customer's total charge was $63. How many items did the customer order?",
+    "choices": ["A) 4", "B) 5", "C) 6", "D) 7"],
+    "answer": "C",
+    "explanation": "15 + 8n = 63. Subtract 15: 8n = 48. Divide by 8: n = 6.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-024",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A coffee shop sells small cups for $3 and large cups for $5. One morning, the shop sold 40 cups total and collected $156 in revenue. If s represents small cups and L represents large cups, which system represents this situation?",
+    "choices": [
+      "A) s + L = 40 and 3s + 5L = 156",
+      "B) s + L = 156 and 3s + 5L = 40",
+      "C) s + L = 40 and 5s + 3L = 156",
+      "D) 3s + 5L = 40 and s + L = 156"
+    ],
+    "answer": "A",
+    "explanation": "Total cups: s + L = 40. Revenue: 3s + 5L = 156.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-025",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A farmer plants corn and soybeans on 200 acres. Corn requires 25 gallons per acre and soybeans require 18 gallons per acre. If c represents corn acres and s represents soybean acres, and the farmer uses 4,550 gallons total, which equation represents water usage?",
+    "choices": [
+      "A) 25c + 18s = 200",
+      "B) c + s = 4,550",
+      "C) 25c + 18s = 4,550",
+      "D) 18c + 25s = 4,550"
+    ],
+    "answer": "C",
+    "explanation": "Water: 25c + 18s = 4,550.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-026",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A cyclist travels 2.5 miles in 10 minutes. What is the cyclist's speed in miles per hour?",
+    "choices": ["A) 12 mph", "B) 15 mph", "C) 18 mph", "D) 20 mph"],
+    "answer": "B",
+    "explanation": "Rate: 2.5/10 = 0.25 miles per minute. Convert: 0.25 × 60 = 15 mph.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-027",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A subscription costs $12 per month. After 8 months, what is the total cost in dollars?",
+    "choices": ["A) $84", "B) $90", "C) $96", "D) $102"],
+    "answer": "C",
+    "explanation": "Cost = 12(8) = 96.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-028",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A plant is 8 inches tall when planted. It grows 1.5 inches per week. Which function gives height h, in inches, after w weeks?",
+    "choices": [
+      "A) h = 8w + 1.5",
+      "B) h = 1.5w + 8",
+      "C) h = 8w - 1.5",
+      "D) h = 1.5(w + 8)"
+    ],
+    "answer": "B",
+    "explanation": "Initial height: 8 (y-intercept). Growth rate: 1.5 (slope). Therefore h = 1.5w + 8.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-029",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A bakery sells cookies for $0.75 and brownies for $1.25. Yesterday, they sold 60 items total and earned $58. How many cookies were sold?",
+    "choices": ["A) 26", "B) 32", "C) 34", "D) 38"],
+    "answer": "C",
+    "explanation": "Let c = cookies, b = brownies. From c + b = 60, we get b = 60 - c. Substitute into 0.75c + 1.25b = 58: 0.75c + 1.25(60 - c) = 58. Simplify: 0.75c + 75 - 1.25c = 58, so -0.5c = -17, thus c = 34.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-030",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "For the linear function f, f(1) = 5, f(3) = 13, and f(5) = 21. If f(x) = mx + b, what is the value of m?",
+    "choices": ["A) 2", "B) 3", "C) 4", "D) 5"],
+    "answer": "C",
+    "explanation": "Slope: m = (13 - 5)/(3 - 1) = 8/2 = 4.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-031",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "An electrician charges $75 for a service call plus $50 per hour. Which expression represents the total charge, in dollars, for h hours?",
+    "choices": [
+      "A) 50h + 75",
+      "B) 75h + 50",
+      "C) 125h",
+      "D) 50(h + 75)"
+    ],
+    "answer": "A",
+    "explanation": "Fixed fee: $75. Hourly rate: $50 per hour. Total: 50h + 75.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-032",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A theater sold adult tickets for $15 and student tickets for $8. They sold 120 tickets total and collected $1,455. How many adult tickets were sold?",
+    "choices": ["A) 55", "B) 60", "C) 65", "D) 70"],
+    "answer": "C",
+    "explanation": "Let a = adult tickets. From a + s = 120, we get s = 120 - a. Substitute into 15a + 8s = 1,455: 15a + 8(120 - a) = 1,455. Simplify: 15a + 960 - 8a = 1,455, so 7a = 495, thus a = 65.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-033",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A water tank contains 800 gallons. Water drains at 15 gallons per hour. How many gallons remain after 12 hours?",
+    "choices": ["A) 560", "B) 580", "C) 620", "D) 640"],
+    "answer": "C",
+    "explanation": "V(t) = 800 - 15t. After 12 hours: V(12) = 800 - 15(12) = 800 - 180 = 620.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-034",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A gym membership costs $30 per month. After 5 months, a member has paid $150 total. After 9 months, what is the total paid?",
+    "choices": ["A) $240", "B) $255", "C) $270", "D) $285"],
+    "answer": "C",
+    "explanation": "Cost = 30m. After 9 months: 30(9) = 270.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-M-035",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "medium",
+    "question": "A candle is 20 cm tall. It burns at 2.5 cm per hour. How many hours until it burns completely?",
+    "choices": ["A) 6", "B) 7", "C) 8", "D) 10"],
+    "answer": "C",
+    "explanation": "h = 20 - 2.5t. When h = 0: 0 = 20 - 2.5t, so 2.5t = 20, thus t = 8.",
+    "type": "practice"
   }
 ]

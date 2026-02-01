@@ -300,6 +300,52 @@
     <span>↑</span>
 </button>
 
+<!-- Report Issue Modal -->
+<div class="modal-overlay" id="reportModalOverlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🚩 Report Problem Issue</h3>
+            <button class="modal-close" id="closeReportModal">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="report-problem-info">
+                <p><strong>Problem ID:</strong> <span id="reportProblemId"></span></p>
+                <p><strong>Topic:</strong> <span id="reportTopic"></span></p>
+                <p><strong>Difficulty:</strong> <span id="reportDifficulty"></span></p>
+            </div>
+
+            <div class="form-group">
+                <label for="issueType">Issue Type:</label>
+                <select id="issueType" class="form-control">
+                    <option value="">Select issue type...</option>
+                    <option value="wrong-answer">Wrong Answer</option>
+                    <option value="typo">Typo/Grammar Error</option>
+                    <option value="unclear">Unclear Question</option>
+                    <option value="wrong-difficulty">Wrong Difficulty Level</option>
+                    <option value="broken-image">Broken/Missing Image</option>
+                    <option value="wrong-explanation">Wrong Explanation</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="issueDescription">Description:</label>
+                <textarea id="issueDescription" class="form-control" rows="5" placeholder="Please describe the issue in detail..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="reporterEmail">Your Email (optional):</label>
+                <input type="email" id="reporterEmail" class="form-control" placeholder="your.email@example.com">
+                <small>We'll only use this to follow up if needed</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" id="cancelReport">Cancel</button>
+            <button class="btn-submit" id="submitReport">Submit Report</button>
+        </div>
+    </div>
+</div>
+
 <!-- Firebase SDK -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -316,6 +362,7 @@
 
 <!-- Linear Functions templates -->
 <script defer src="./generators/algebra/linearFunctions/easy.js"></script>
+<script defer src="./generators/algebra/linearFunctions/medium.js"></script>
 <script defer src="./generators/algebra/linearFunctions/register.js"></script>
 
 <!-- Create instance LAST -->

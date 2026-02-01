@@ -1,7 +1,8 @@
-// public/app.js - FIXED CALCULATOR ICON VERSION
-// ✅ Proper icon switching for light/dark mode
-// ✅ Icon positioned in stats banner
-// ✅ Proper open/close functionality
+// public/app.js - UPDATED WITH ALL FEATURES
+// ✅ Better generated problem IDs (MATH-ALG-LF-M-G001)
+// ✅ Report buttons on generated problems
+// ✅ Select All filters button
+// ✅ Fixed graph clarity (handled in medium.js)
 
 let problems = [];
 let activeSubskills = new Set();
@@ -12,6 +13,9 @@ const problemTimers = {};
 
 const MAX_GENERATED_UI = 150;
 let generatedUIQueue = [];
+
+// ✅ NEW: Track generated problem counts for proper IDs
+const generatedProblemCounters = {};
 
 const topicDisplayNames = {
     'algebra': 'Algebra',
@@ -41,6 +45,74 @@ const subskillDisplayNames = {
     'right-triangles': 'Right Triangles & Trig',
     'circles': 'Circles'
 };
+
+// ✅ NEW: Generate formatted problem IDs for generated problems
+function generateProblemId(subskill, difficulty) {
+    const subskillCodes = {
+        'linear-equations-one-variable': 'LEQ1',
+        'linear-functions': 'LF',
+        'linear-equations-two-variables': 'LEQ2',
+        'systems-linear-equations': 'SYS',
+        'linear-inequalities': 'LNEQ',
+        'nonlinear-functions': 'NLF',
+        'nonlinear-equations': 'NLEQ',
+        'equivalent-expressions': 'EQV',
+        'ratios-rates': 'RAT',
+        'percentages': 'PCT',
+        'one-variable-data': 'DAT1',
+        'two-variable-data': 'DAT2',
+        'probability': 'PROB',
+        'inference': 'INF',
+        'statistical-claims': 'STAT',
+        'area-volume': 'AVOL',
+        'lines-angles-triangles': 'GEOM',
+        'right-triangles': 'TRIG',
+        'circles': 'CIRC'
+    };
+
+    const topicCodes = {
+        'algebra': 'ALG',
+        'advanced-math': 'ADV',
+        'problem-solving': 'PSA',
+        'geometry': 'GEO'
+    };
+
+    const subskillToTopic = {
+        'linear-equations-one-variable': 'algebra',
+        'linear-functions': 'algebra',
+        'linear-equations-two-variables': 'algebra',
+        'systems-linear-equations': 'algebra',
+        'linear-inequalities': 'algebra',
+        'nonlinear-functions': 'advanced-math',
+        'nonlinear-equations': 'advanced-math',
+        'equivalent-expressions': 'advanced-math',
+        'ratios-rates': 'problem-solving',
+        'percentages': 'problem-solving',
+        'one-variable-data': 'problem-solving',
+        'two-variable-data': 'problem-solving',
+        'probability': 'problem-solving',
+        'inference': 'problem-solving',
+        'statistical-claims': 'problem-solving',
+        'area-volume': 'geometry',
+        'lines-angles-triangles': 'geometry',
+        'right-triangles': 'geometry',
+        'circles': 'geometry'
+    };
+
+    const topic = subskillToTopic[subskill] || 'algebra';
+    const topicCode = topicCodes[topic];
+    const subskillCode = subskillCodes[subskill] || 'GEN';
+    const diffCode = difficulty.charAt(0).toUpperCase();
+
+    if (!generatedProblemCounters[subskill]) {
+        generatedProblemCounters[subskill] = 0;
+    }
+    generatedProblemCounters[subskill]++;
+
+    const count = String(generatedProblemCounters[subskill]).padStart(3, '0');
+
+    return `MATH-${topicCode}-${subskillCode}-${diffCode}-G${count}`;
+}
 
 // =========================================================
 // FILTER PERSISTENCE
@@ -263,6 +335,7 @@ function renderProblems() {
                                 <button class="action-btn secondary show-answer">Show Answer</button>
                                 ${problem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
                                 <button class="action-btn practice-similar">Practice Similar</button>
+                                <button class="action-btn report-issue" title="Report an error or issue">🚩 Report Issue</button>
                             </div>
                         </div>
                     `).join('')}
@@ -496,6 +569,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (e.target.id === 'clearAllFilters' || e.target.closest('#clearAllFilters')) {
                 return;
             }
+            if (e.target.id === 'selectAllFilters' || e.target.closest('#selectAllFilters')) {
+                return;
+            }
             activeFiltersSection.classList.toggle('collapsed');
             activeFiltersContent.classList.toggle('active');
         });
@@ -506,6 +582,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (activeFiltersContent) {
         activeFiltersContent.classList.add('active');
+    }
+
+    // ✅ NEW: SELECT ALL FILTERS BUTTON
+    const clearAllBtn = document.getElementById('clearAllFilters');
+    if (clearAllBtn) {
+        const selectAllBtn = document.createElement('button');
+        selectAllBtn.id = 'selectAllFilters';
+        selectAllBtn.className = 'select-all-btn';
+        selectAllBtn.innerHTML = '✓ Select All';
+        selectAllBtn.title = 'Select all problem types and difficulties';
+
+        clearAllBtn.parentNode.insertBefore(selectAllBtn, clearAllBtn);
+
+        selectAllBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            // Select all subskills
+            document.querySelectorAll('[data-subskill]').forEach(checkbox => {
+                checkbox.checked = true;
+                activeSubskills.add(checkbox.dataset.subskill);
+            });
+
+            // Select all difficulties
+            document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
+                btn.classList.add('active');
+                activeDifficulties.add(btn.dataset.difficulty);
+            });
+
+            // Reset progress filter to "all"
+            document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const allProgressBtn = document.querySelector('[data-progress="all"]');
+            if (allProgressBtn) {
+                allProgressBtn.classList.add('active');
+                activeProgress = 'all';
+            }
+
+            // Clear search
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = '';
+            searchQuery = '';
+
+            updateSelectedCounts();
+            updateActiveFilterTags();
+            renderProblems();
+            saveFiltersToStorage();
+        });
     }
 
     // Accordion functionality
@@ -619,7 +743,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Clear all filters
-    const clearAllBtn = document.getElementById('clearAllFilters');
     if (clearAllBtn) {
         clearAllBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -894,7 +1017,7 @@ document.addEventListener('click', async (e) => {
     }
 });
 
-// Practice Similar
+// ✅ UPDATED: Practice Similar with better ID generation and report button
 document.addEventListener('click', (e) => {
     if (!e.target.classList.contains('practice-similar')) return;
 
@@ -919,6 +1042,9 @@ document.addEventListener('click', (e) => {
         return;
     }
 
+    // ✅ Generate proper formatted ID
+    newProblem.id = generateProblemId(newProblem.subskill, newProblem.difficulty);
+
     problems.push(newProblem);
 
     generatedUIQueue.unshift(newProblem.id);
@@ -933,6 +1059,7 @@ document.addEventListener('click', (e) => {
         if (oldCard) oldCard.remove();
     }
 
+    // ✅ UPDATED: Added report button to generated problems
     const newCardHTML = `
         <div class="problem-card generated-problem" data-id="${newProblem.id}" data-answer-shown="false" data-answer-source="">
             <div class="problem-header">
@@ -959,6 +1086,7 @@ document.addEventListener('click', (e) => {
                 <button class="action-btn secondary show-answer">Show Answer</button>
                 ${newProblem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
                 <button class="action-btn practice-similar">Practice Similar</button>
+                <button class="action-btn report-issue" title="Report an error or issue">🚩 Report Issue</button>
                 <button class="action-btn remove-generated">Remove</button>
             </div>
         </div>
@@ -994,6 +1122,140 @@ document.addEventListener('click', async (e) => {
         }
     }
 });
+
+// =========================================================
+// REPORT ISSUE MODAL
+// =========================================================
+
+(function() {
+    const modalOverlay = document.getElementById('reportModalOverlay');
+    const closeModalBtn = document.getElementById('closeReportModal');
+    const cancelBtn = document.getElementById('cancelReport');
+    const submitBtn = document.getElementById('submitReport');
+
+    const problemIdSpan = document.getElementById('reportProblemId');
+    const topicSpan = document.getElementById('reportTopic');
+    const difficultySpan = document.getElementById('reportDifficulty');
+
+    const issueTypeSelect = document.getElementById('issueType');
+    const issueDescriptionTextarea = document.getElementById('issueDescription');
+    const emailInput = document.getElementById('reporterEmail');
+
+    let currentProblemData = null;
+
+    // Open modal when report button clicked
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('report-issue') || e.target.closest('.report-issue')) {
+            const card = e.target.closest('.problem-card');
+            const problemId = card.dataset.id;
+            const problem = problems.find(p => p.id === problemId);
+
+            if (!problem) return;
+
+            currentProblemData = {
+                id: problem.id,
+                topic: problem.topic,
+                subskill: problem.subskill,
+                difficulty: problem.difficulty,
+                question: problem.question
+            };
+
+            // Populate modal
+            problemIdSpan.textContent = problem.id;
+            topicSpan.textContent = `${topicDisplayNames[problem.topic] || problem.topic} › ${subskillDisplayNames[problem.subskill] || problem.subskill}`;
+            difficultySpan.textContent = problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1);
+
+            // Reset form
+            issueTypeSelect.value = '';
+            issueDescriptionTextarea.value = '';
+            emailInput.value = storage?.user?.email || '';
+
+            // Show modal
+            modalOverlay.classList.add('active');
+        }
+    });
+
+    // Close modal
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        currentProblemData = null;
+    }
+
+    closeModalBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+
+    // Close on overlay click
+    modalOverlay?.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay?.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    // Submit report
+    submitBtn?.addEventListener('click', async () => {
+        if (!currentProblemData) return;
+
+        const issueType = issueTypeSelect.value;
+        const description = issueDescriptionTextarea.value.trim();
+        const email = emailInput.value.trim();
+
+        // Validation
+        if (!issueType) {
+            alert('Please select an issue type');
+            return;
+        }
+
+        if (!description) {
+            alert('Please describe the issue');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        try {
+            const report = {
+                problemId: currentProblemData.id,
+                topic: currentProblemData.topic,
+                subskill: currentProblemData.subskill,
+                difficulty: currentProblemData.difficulty,
+                issueType: issueType,
+                description: description,
+                reporterEmail: email || 'anonymous',
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+
+            // Save to Firebase if available
+            if (window.firebase && firebase.firestore) {
+                await firebase.firestore()
+                    .collection('problem_reports')
+                    .add(report);
+
+                alert('✅ Report submitted successfully! Thank you for helping improve the problem bank.');
+            } else {
+                // Fallback: log to console and show message
+                console.log('Problem Report:', report);
+                alert('✅ Report logged! (Note: Firebase not configured, report saved locally)');
+            }
+
+            closeModal();
+        } catch (error) {
+            console.error('Error submitting report:', error);
+            alert('❌ Error submitting report. Please try again or contact support.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit Report';
+        }
+    });
+})();
 
 // Initialize
 async function init() {

@@ -1,8 +1,8 @@
 /* =========================================================
-   styles.css (FIXED VERSION)
-   - Calculator icon properly positioned in stats banner
-   - Proper light/dark mode icon support
-   - Clean layout and functionality
+   styles.css (UPDATED VERSION)
+   - Added Select All button styling
+   - Enhanced generated problem ID styling
+   - All previous features maintained
    ========================================================= */
 
 /* =========================
@@ -826,6 +826,17 @@ h1 {
     border-color: var(--success);
 }
 
+.action-btn.report-issue {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    border: 2px solid var(--error);
+}
+
+.action-btn.report-issue:hover {
+    background: var(--error);
+    color: white;
+}
+
 .no-results {
     text-align: center;
     padding: 5rem 2rem;
@@ -885,11 +896,28 @@ h1 {
 .problem-card.generated-problem {
     border: 2px dashed var(--accent);
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(251, 191, 36, 0.03) 100%);
+    border-left: 4px solid #8b5cf6;
 }
 
 .badge-generated {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ✅ Enhanced Generated Problem ID Styling */
+.generated-problem .problem-id {
+    color: #8b5cf6;
+    font-weight: 700;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] .generated-problem .problem-id {
+    color: #a78bfa;
 }
 
 .remove-generated {
@@ -995,6 +1023,45 @@ h1 {
 
 .active-filters-section.collapsed .accordion-icon {
     transform: rotate(-90deg);
+}
+
+/* ✅ SELECT ALL BUTTON */
+.select-all-btn {
+    padding: 0.4rem 0.9rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+    text-transform: none;
+    letter-spacing: 0.02em;
+}
+
+.select-all-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+.select-all-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme="dark"] .select-all-btn {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+[data-theme="dark"] .select-all-btn:hover {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 .clear-all-btn {
@@ -1429,6 +1496,205 @@ body.calculator-resizing .problems-grid {
 }
 
 /* =========================
+   REPORT ISSUE MODAL
+   ========================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-light);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.report-problem-info {
+    background: rgba(0, 102, 179, 0.05);
+    border-left: 4px solid var(--primary);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.report-problem-info p {
+    margin: 0.5rem 0;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.report-problem-info strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95rem;
+    background: var(--bg-card);
+    color: var(--text);
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 102, 179, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 2px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-cancel {
+    background: var(--secondary);
+    color: var(--text);
+    border: 2px solid var(--border);
+}
+
+.btn-cancel:hover {
+    background: var(--border);
+}
+
+.btn-submit {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-submit:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 179, 0.3);
+}
+
+.btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .form-control {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* =========================
    DARK MODE FIXES
    ========================= */
 
@@ -1651,5 +1917,9 @@ body.calculator-resizing .problems-grid {
     .problem-footer .action-btn {
         padding: 0.6rem 1rem;
         font-size: 0.85rem;
+    }
+
+    .action-btn.report-issue {
+        padding: 0.6rem 0.8rem;
     }
 }
