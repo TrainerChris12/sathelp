@@ -1,61 +1,86 @@
 [
   {
-    "id": "MATH-ALG-001",
+    "id": "MATH-ALG-LE-E-001",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 4x + 5 = 17, what is the value of 8x - 3?",
     "imageUrl": null,
-    "choices": ["A) 18", "B) 21", "C) 24", "D) 27"],
+    "choices": [
+      "A) 18",
+      "B) 21",
+      "C) 24",
+      "D) 27"
+    ],
     "answer": "B",
     "explanation": "Start with 4x + 5 = 17. Subtract 5 from both sides to get 4x = 12. Divide both sides by 4 to get x = 3. Now plug x = 3 into 8x - 3: 8(3) - 3 = 24 - 3 = 21."
   },
   {
-    "id": "MATH-ALG-002",
+    "id": "MATH-ALG-LE-E-002",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 6x - 42 = -36, what is the value of x - 7?",
     "imageUrl": null,
-    "choices": ["A) -36", "B) -30", "C) -6", "D) -1"],
+    "choices": [
+      "A) -36",
+      "B) -30",
+      "C) -6",
+      "D) -1"
+    ],
     "answer": "C",
-    "explanation": "Notice that 6x - 42 is the same as 6(x - 7). So the equation becomes 6(x - 7) = -36. Divide both sides by 6: x - 7 = -6. That's the answer directly—you don't even need to find x separately."
+    "explanation": "Notice that 6x - 42 is the same as 6(x - 7). So the equation becomes 6(x - 7) = -36. Divide both sides by 6: x - 7 = -6. That's the answer directly\u2014you don't even need to find x separately."
   },
   {
-    "id": "MATH-ALG-002b",
+    "id": "MATH-ALG-LE-E-002b",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 5x - 30 = -25, what is the value of x - 6?",
     "imageUrl": null,
-    "choices": ["A) -25", "B) -19", "C) -5", "D) -1"],
+    "choices": [
+      "A) -25",
+      "B) -19",
+      "C) -5",
+      "D) -1"
+    ],
     "answer": "C",
     "explanation": "Notice that 5x - 30 is the same as 5(x - 6). So the equation becomes 5(x - 6) = -25. Divide both sides by 5: x - 6 = -5."
   },
   {
-    "id": "MATH-ALG-003",
+    "id": "MATH-ALG-LE-E-003",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "5(3x - 2) = 45. Which equation has the same solution?",
     "imageUrl": null,
-    "choices": ["A) 3x - 2 = 9", "B) 3x - 2 = 40", "C) 3x - 10 = 45", "D) 3x - 10 = 50"],
+    "choices": [
+      "A) 3x - 2 = 9",
+      "B) 3x - 2 = 40",
+      "C) 3x - 10 = 45",
+      "D) 3x - 10 = 50"
+    ],
     "answer": "A",
     "explanation": "When you have 5 times something equals 45, you can divide both sides by 5 to find what that something equals. Divide both sides by 5: (3x - 2) = 9. This equation has the exact same solution as the original because we did the same operation to both sides."
   },
   {
-    "id": "MATH-ALG-004",
+    "id": "MATH-ALG-LE-E-004",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "What value of p satisfies the equation 7p + 120 = 260?",
     "imageUrl": null,
-    "choices": ["A) 20", "B) 54", "C) 140", "D) 380"],
+    "choices": [
+      "A) 20",
+      "B) 54",
+      "C) 140",
+      "D) 380"
+    ],
     "answer": "A",
     "explanation": "Start with 7p + 120 = 260. Subtract 120 from both sides: 7p = 140. Divide both sides by 7: p = 20."
   },
   {
-    "id": "MATH-ALG-005",
+    "id": "MATH-ALG-LE-E-005",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -67,40 +92,55 @@
     "explanation": "First, combine the x terms: 12x - 11x = 1x, which is just x. So the equation becomes x + 85 = 195. Subtract 85 from both sides: x = 110."
   },
   {
-    "id": "MATH-ALG-006",
+    "id": "MATH-ALG-LE-E-006",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "w + 9 = 428. What value of w is the solution?",
     "imageUrl": null,
-    "choices": ["A) 53", "B) 419", "C) 437", "D) 4,284"],
+    "choices": [
+      "A) 53",
+      "B) 419",
+      "C) 437",
+      "D) 4,284"
+    ],
     "answer": "B",
     "explanation": "Subtract 9 from both sides: w = 428 - 9 = 419."
   },
   {
-    "id": "MATH-ALG-007",
+    "id": "MATH-ALG-LE-E-007",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "(p + 5) + 12 = 15. What is the value of p?",
     "imageUrl": null,
-    "choices": ["A) -2", "B) 3", "C) 8", "D) 22"],
+    "choices": [
+      "A) -2",
+      "B) 3",
+      "C) 8",
+      "D) 22"
+    ],
     "answer": "A",
-    "explanation": "The parentheses don't change anything here—this is just p + 5 + 12 = 15. Combine the numbers: p + 17 = 15. Subtract 17 from both sides: p = 15 - 17 = -2."
+    "explanation": "The parentheses don't change anything here\u2014this is just p + 5 + 12 = 15. Combine the numbers: p + 17 = 15. Subtract 17 from both sides: p = 15 - 17 = -2."
   },
   {
-    "id": "MATH-ALG-008",
+    "id": "MATH-ALG-LE-E-008",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "Sarah paid a total of $215 for a tablet by making a down payment of $45 plus m monthly payments of $17 each. Which equation represents this?",
     "imageUrl": null,
-    "choices": ["A) 17m - 45 = 215", "B) 45m - 17 = 215", "C) 17m + 45 = 215", "D) 45m + 17 = 215"],
+    "choices": [
+      "A) 17m - 45 = 215",
+      "B) 45m - 17 = 215",
+      "C) 17m + 45 = 215",
+      "D) 45m + 17 = 215"
+    ],
     "answer": "C",
     "explanation": "Sarah pays two things: the down payment ($45) and the monthly payments. If each monthly payment is $17 and she makes m payments, that's 17m dollars for monthly payments. Add the down payment: 17m + 45. This equals the total: 17m + 45 = 215."
   },
   {
-    "id": "MATH-ALG-009",
+    "id": "MATH-ALG-LE-E-009",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -112,7 +152,7 @@
     "explanation": "Infinitely many solutions means the equation is true for every possible value of x. That only happens when both sides are exactly the same. Both sides already have 5x. For the sides to be identical, the other parts must match too: 18 = k. So k = 18."
   },
   {
-    "id": "MATH-ALG-010",
+    "id": "MATH-ALG-LE-E-010",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -121,10 +161,10 @@
     "choices": [],
     "answer": "8",
     "answerType": "number",
-    "explanation": "From x/6 = 4, multiply both sides by 6 to get x = 24. Now find x/3: 24/3 = 8. Shortcut: x/3 is twice as big as x/6 (because dividing by 3 gives a bigger result than dividing by 6). So x/3 = 2 × 4 = 8."
+    "explanation": "From x/6 = 4, multiply both sides by 6 to get x = 24. Now find x/3: 24/3 = 8. Shortcut: x/3 is twice as big as x/6 (because dividing by 3 gives a bigger result than dividing by 6). So x/3 = 2 \u00d7 4 = 8."
   },
   {
-    "id": "MATH-ALG-011",
+    "id": "MATH-ALG-LE-E-011",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -133,76 +173,106 @@
     "choices": [],
     "answer": "36",
     "answerType": "number",
-    "explanation": "Perimeter means the total length around the triangle—add up all three sides. Two sides are 28 inches each: 28 + 28 = 56 inches. The perimeter is 92, so the third side is: 92 - 56 = 36 inches."
+    "explanation": "Perimeter means the total length around the triangle\u2014add up all three sides. Two sides are 28 inches each: 28 + 28 = 56 inches. The perimeter is 92, so the third side is: 92 - 56 = 36 inches."
   },
   {
-    "id": "MATH-ALG-012",
+    "id": "MATH-ALG-LE-E-012",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 5x/4 = 30, what is the value of x?",
     "imageUrl": null,
-    "choices": ["A) 24", "B) 26", "C) 28", "D) 30"],
+    "choices": [
+      "A) 24",
+      "B) 26",
+      "C) 28",
+      "D) 30"
+    ],
     "answer": "A",
     "explanation": "5x/4 = 30 means 5x divided by 4 equals 30. Multiply both sides by 4: 5x = 120. Divide both sides by 5: x = 24."
   },
   {
-    "id": "MATH-ALG-013",
+    "id": "MATH-ALG-LE-E-013",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "Which of the following is equivalent to 6x + 9 = 18?",
     "imageUrl": null,
-    "choices": ["A) 3x + 5 = 9", "B) x + 2 = 3", "C) 2x + 3 = 6", "D) 3x + 4 = 9"],
+    "choices": [
+      "A) 3x + 5 = 9",
+      "B) x + 2 = 3",
+      "C) 2x + 3 = 6",
+      "D) 3x + 4 = 9"
+    ],
     "answer": "C",
     "explanation": "Two equations are equivalent if they have the same solution. You can create an equivalent equation by doing the same thing to both sides. Start with 6x + 9 = 18. Divide everything by 3: (6x)/3 + 9/3 = 18/3, which gives 2x + 3 = 6."
   },
   {
-    "id": "MATH-ALG-014",
+    "id": "MATH-ALG-LE-E-014",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "Maria bought a book for $3 and some pens at $2.50 each. She paid $13 total. Which equation finds p, the number of pens?",
     "imageUrl": null,
-    "choices": ["A) 2.50p + 3 = 13", "B) 2.50p - 3 = 13", "C) 2.50 + 3p = 13", "D) 2.50 - 3p = 13"],
+    "choices": [
+      "A) 2.50p + 3 = 13",
+      "B) 2.50p - 3 = 13",
+      "C) 2.50 + 3p = 13",
+      "D) 2.50 - 3p = 13"
+    ],
     "answer": "A",
     "explanation": "Maria bought two things: one book for $3, and p pens at $2.50 each which costs 2.50p dollars. Total cost: 2.50p + 3. This equals $13: 2.50p + 3 = 13."
   },
   {
-    "id": "MATH-ALG-015",
+    "id": "MATH-ALG-LE-E-015",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "A teacher has 32 total red and blue markers. There are 18 red markers. How many blue markers are there?",
     "imageUrl": null,
-    "choices": ["A) 14", "B) 18", "C) 32", "D) 50"],
+    "choices": [
+      "A) 14",
+      "B) 18",
+      "C) 32",
+      "D) 50"
+    ],
     "answer": "A",
     "explanation": "Total markers = red + blue. So 32 = 18 + blue. Subtract 18 from both sides: blue = 32 - 18 = 14."
   },
   {
-    "id": "MATH-ALG-016",
+    "id": "MATH-ALG-LE-E-016",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "If 9x = 108, what is the value of x?",
     "imageUrl": null,
-    "choices": ["A) 12", "B) 99", "C) 117", "D) 972"],
+    "choices": [
+      "A) 12",
+      "B) 99",
+      "C) 117",
+      "D) 972"
+    ],
     "answer": "A",
-    "explanation": "Divide both sides by 9: x = 108 ÷ 9 = 12."
+    "explanation": "Divide both sides by 9: x = 108 \u00f7 9 = 12."
   },
   {
-    "id": "MATH-ALG-017",
+    "id": "MATH-ALG-LE-E-017",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "5 more than 6 times a number x is equal to 77. Which equation represents this?",
     "imageUrl": null,
-    "choices": ["A) 5(6)x = 77", "B) 6x = 77 + 5", "C) 5x + 6 = 77", "D) 6x + 5 = 77"],
+    "choices": [
+      "A) 5(6)x = 77",
+      "B) 6x = 77 + 5",
+      "C) 5x + 6 = 77",
+      "D) 6x + 5 = 77"
+    ],
     "answer": "D",
     "explanation": "Break down the phrase: '6 times a number x' means 6x. '5 more than' means add 5. So '5 more than 6 times x' is 6x + 5. This 'is equal to 77': 6x + 5 = 77."
   },
   {
-    "id": "MATH-ALG-018",
+    "id": "MATH-ALG-LE-E-018",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -214,7 +284,7 @@
     "explanation": "For infinitely many solutions, both sides must be identical for all values of x. Both sides have 4x. For them to be identical, the remaining parts must be equal: 28 = k."
   },
   {
-    "id": "MATH-ALG-019",
+    "id": "MATH-ALG-LE-E-019",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -223,10 +293,10 @@
     "choices": [],
     "answer": "6",
     "answerType": "number",
-    "explanation": "From x/8 = 3, multiply both sides by 8 to get x = 24. Now find x/4: 24/4 = 6. Shortcut: x/4 is twice x/8 (dividing by 4 gives a bigger result than dividing by 8). So x/4 = 2 × 3 = 6."
+    "explanation": "From x/8 = 3, multiply both sides by 8 to get x = 24. Now find x/4: 24/4 = 6. Shortcut: x/4 is twice x/8 (dividing by 4 gives a bigger result than dividing by 8). So x/4 = 2 \u00d7 3 = 6."
   },
   {
-    "id": "MATH-ALG-020",
+    "id": "MATH-ALG-LE-E-020",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -238,7 +308,7 @@
     "explanation": "Two sides are 22 cm each: 22 + 22 = 44 cm. The perimeter is 76 cm, so the third side is: 76 - 44 = 32 cm."
   },
   {
-    "id": "MATH-ALG-021",
+    "id": "MATH-ALG-LE-E-021",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
@@ -250,62 +320,87 @@
     "explanation": "Let x = price per box. Without the coupon, 12 boxes would cost 12x dollars. With $45 off, he paid 12x - 45 dollars. This equals $195: 12x - 45 = 195. Add 45 to both sides: 12x = 240. Divide by 12: x = 20."
   },
   {
-    "id": "MATH-ALG-022",
+    "id": "MATH-ALG-LE-E-022",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "Emma has n books. Jake has 4 more than double the number Emma has. In terms of n, how many books does Jake have?",
     "imageUrl": null,
-    "choices": ["A) 4n - 2", "B) 4n + 2", "C) 2n - 4", "D) 2n + 4"],
+    "choices": [
+      "A) 4n - 2",
+      "B) 4n + 2",
+      "C) 2n - 4",
+      "D) 2n + 4"
+    ],
     "answer": "D",
     "explanation": "Emma has n books. 'Double the number Emma has' means 2n. '4 more than' that means add 4: 2n + 4. Jake has 2n + 4 books."
   },
   {
-    "id": "MATH-ALG-023",
+    "id": "MATH-ALG-LE-E-023",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "A gym charges a $48 signup fee and $22 per month. After how many months will a member have paid $180 total?",
     "imageUrl": null,
-    "choices": ["A) 4", "B) 6", "C) 8", "D) 10"],
+    "choices": [
+      "A) 4",
+      "B) 6",
+      "C) 8",
+      "D) 10"
+    ],
     "answer": "B",
     "explanation": "Let x = number of months. The signup fee is $48. Monthly payments total 22x dollars. Total paid: 48 + 22x = 180. Subtract 48: 22x = 132. Divide by 22: x = 6 months."
   },
   {
-    "id": "MATH-ALG-024",
+    "id": "MATH-ALG-LE-E-024",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "easy",
     "question": "A club starts with 80 members. Each day, 12 new members join. If no one leaves, how many total members after 5 days?",
     "imageUrl": null,
-    "choices": ["A) 440", "B) 140", "C) 92", "D) 80"],
+    "choices": [
+      "A) 440",
+      "B) 140",
+      "C) 92",
+      "D) 80"
+    ],
     "answer": "B",
-    "explanation": "Start with 80 members. In 5 days, 12 × 5 = 60 new members join. Total: 80 + 60 = 140 members."
+    "explanation": "Start with 80 members. In 5 days, 12 \u00d7 5 = 60 new members join. Total: 80 + 60 = 140 members."
   },
   {
-    "id": "MATH-ALG-M-001",
+    "id": "MATH-ALG-LE-M-001",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "A bike shop charges $5 per rental hour. The equation 5h = 45 represents the total cost for h hours. Which interpretation best describes 5h?",
     "imageUrl": null,
-    "choices": ["A) Total revenue from h hours of rentals", "B) Cost per hour", "C) Number of hours rented", "D) Daily maintenance costs"],
+    "choices": [
+      "A) Total revenue from h hours of rentals",
+      "B) Cost per hour",
+      "C) Number of hours rented",
+      "D) Daily maintenance costs"
+    ],
     "answer": "A",
     "explanation": "5h means 5 dollars multiplied by h hours. This gives the total amount of money collected (revenue) for h hours of rentals. It's not the cost per hour (that's just 5), not the number of hours (that's just h), and has nothing to do with maintenance."
   },
   {
-    "id": "MATH-ALG-M-002",
+    "id": "MATH-ALG-LE-M-002",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "A bamboo plant was 10 cm tall when planted. The equation 10 + 4w = 34 finds how many weeks w it took to reach 34 cm. What does 4 represent?",
     "imageUrl": null,
-    "choices": ["A) Weeks to double height", "B) Average cm grown per week", "C) Height at 1 week", "D) Final height"],
+    "choices": [
+      "A) Weeks to double height",
+      "B) Average cm grown per week",
+      "C) Height at 1 week",
+      "D) Final height"
+    ],
     "answer": "B",
-    "explanation": "The equation is: starting height + growth = final height. That's 10 + 4w = 34. The 4w part is how much the plant grew over w weeks. Since 4 is multiplied by w (weeks), 4 must be how many cm it grows each week—the growth rate."
+    "explanation": "The equation is: starting height + growth = final height. That's 10 + 4w = 34. The 4w part is how much the plant grew over w weeks. Since 4 is multiplied by w (weeks), 4 must be how many cm it grows each week\u2014the growth rate."
   },
   {
-    "id": "MATH-ALG-M-003",
+    "id": "MATH-ALG-LE-M-003",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -317,40 +412,55 @@
     "explanation": "For infinitely many solutions, both sides must be identical for any value of x. Both sides have +25, so that part already matches. For the x terms to match, we need 3x = ax, which means a = 3."
   },
   {
-    "id": "MATH-ALG-M-004",
+    "id": "MATH-ALG-LE-M-004",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "In (b - 4)x = 16, where b is constant, the equation has no solution. What is b?",
     "imageUrl": null,
-    "choices": ["A) 0", "B) 4", "C) 8", "D) 16"],
+    "choices": [
+      "A) 0",
+      "B) 4",
+      "C) 8",
+      "D) 16"
+    ],
     "answer": "B",
-    "explanation": "An equation has no solution when you end up with something impossible, like 0 = 16. If b = 4, then (b - 4) = 0, and the equation becomes 0 · x = 16, which simplifies to 0 = 16. That's never true, so there's no solution."
+    "explanation": "An equation has no solution when you end up with something impossible, like 0 = 16. If b = 4, then (b - 4) = 0, and the equation becomes 0 \u00b7 x = 16, which simplifies to 0 = 16. That's never true, so there's no solution."
   },
   {
-    "id": "MATH-ALG-M-005",
+    "id": "MATH-ALG-LE-M-005",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "If 3(t - 4) + 18 = 48, what is the value of 3(t - 4)?",
     "imageUrl": null,
-    "choices": ["A) 24", "B) 30", "C) 36", "D) 42"],
+    "choices": [
+      "A) 24",
+      "B) 30",
+      "C) 36",
+      "D) 42"
+    ],
     "answer": "B",
-    "explanation": "You don't need to find t—you can find 3(t - 4) directly. Start with 3(t - 4) + 18 = 48. Subtract 18 from both sides: 3(t - 4) = 30."
+    "explanation": "You don't need to find t\u2014you can find 3(t - 4) directly. Start with 3(t - 4) + 18 = 48. Subtract 18 from both sides: 3(t - 4) = 30."
   },
   {
-    "id": "MATH-ALG-M-006",
+    "id": "MATH-ALG-LE-M-006",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "In b(4 - y) - c = -2 - 3y, where b and c are constants, the equation has infinitely many solutions. What are b and c?",
     "imageUrl": null,
-    "choices": ["A) b = 3 and c = 2", "B) b = 3 and c = 10", "C) b = -3 and c = 8", "D) b = -3 and c = -10"],
+    "choices": [
+      "A) b = 3 and c = 2",
+      "B) b = 3 and c = 10",
+      "C) b = -3 and c = 8",
+      "D) b = -3 and c = -10"
+    ],
     "answer": "B",
     "explanation": "Expand the left side: 4b - by - c = -2 - 3y. Rearrange: -by + (4b - c) = -3y + (-2). For infinitely many solutions, the y terms must match and the constant terms must match. From -by = -3y, we get b = 3. From 4b - c = -2, substitute b = 3: 12 - c = -2, so c = 14. Note: The given answer B says c = 10, which would require 4b - c = -2 to give 12 - 10 = 2, not -2. The question's answer choices may have an error."
   },
   {
-    "id": "MATH-ALG-M-007",
+    "id": "MATH-ALG-LE-M-007",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -359,10 +469,10 @@
     "choices": [],
     "answer": "15",
     "answerType": "number",
-    "explanation": "The question already tells us the seedling was 15 cm when measured. To verify: growth = 0.8 × 18 = 14.4 cm. Starting height + growth = final height: 15 + 14.4 = 29.4 cm. This matches, so the starting height was 15 cm."
+    "explanation": "The question already tells us the seedling was 15 cm when measured. To verify: growth = 0.8 \u00d7 18 = 14.4 cm. Starting height + growth = final height: 15 + 14.4 = 29.4 cm. This matches, so the starting height was 15 cm."
   },
   {
-    "id": "MATH-ALG-M-008",
+    "id": "MATH-ALG-LE-M-008",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -374,7 +484,7 @@
     "explanation": "Notice that (y + 8) appears in both terms. Factor it out: (y + 8)(1/5 - 1/4) = -6. Find 1/5 - 1/4: common denominator is 20, so 4/20 - 5/20 = -1/20. Now we have (y + 8)(-1/20) = -6. Multiply both sides by -20: y + 8 = 120. Subtract 8: y = 112."
   },
   {
-    "id": "MATH-ALG-M-009",
+    "id": "MATH-ALG-LE-M-009",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -383,21 +493,26 @@
     "choices": [],
     "answer": "33",
     "answerType": "number",
-    "explanation": "Total rope = 98 cm. One piece = 32 cm. Remaining rope = 98 - 32 = 66 cm. This 66 cm is split into two equal pieces: 66 ÷ 2 = 33 cm each."
+    "explanation": "Total rope = 98 cm. One piece = 32 cm. Remaining rope = 98 - 32 = 66 cm. This 66 cm is split into two equal pieces: 66 \u00f7 2 = 33 cm each."
   },
   {
-    "id": "MATH-ALG-M-010",
+    "id": "MATH-ALG-LE-M-010",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "If 5(x + 3) + 2 = 42, what is the value of x + 3?",
     "imageUrl": null,
-    "choices": ["A) 6", "B) 7", "C) 8", "D) 9"],
+    "choices": [
+      "A) 6",
+      "B) 7",
+      "C) 8",
+      "D) 9"
+    ],
     "answer": "C",
     "explanation": "You can find x + 3 directly without finding x first. Start with 5(x + 3) + 2 = 42. Subtract 2 from both sides: 5(x + 3) = 40. Divide both sides by 5: x + 3 = 8."
   },
   {
-    "id": "MATH-ALG-M-011",
+    "id": "MATH-ALG-LE-M-011",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -409,18 +524,23 @@
     "explanation": "Distribute: 3p + 3 + 7p - 7 = 6p. Combine like terms on the left: 10p - 4 = 6p. Subtract 6p from both sides: 4p - 4 = 0. Add 4: 4p = 4. Divide by 4: p = 1."
   },
   {
-    "id": "MATH-ALG-M-012",
+    "id": "MATH-ALG-LE-M-012",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "If 5x - 2 = -7, what is 10x - 4?",
     "imageUrl": null,
-    "choices": ["A) -18", "B) -16", "C) -14", "D) -12"],
+    "choices": [
+      "A) -18",
+      "B) -16",
+      "C) -14",
+      "D) -12"
+    ],
     "answer": "C",
     "explanation": "Notice that 10x - 4 is exactly 2 times (5x - 2). So instead of solving for x, just multiply both sides of the original equation by 2: 2(5x - 2) = 2(-7), which gives 10x - 4 = -14."
   },
   {
-    "id": "MATH-ALG-M-013",
+    "id": "MATH-ALG-LE-M-013",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -432,40 +552,55 @@
     "explanation": "Distribute on the left: 8t - 16 = 56 + 8t. Subtract 8t from both sides: -16 = 56. This is false, meaning there's no solution. Note: The original question may have a typo. If the equation were 2(4t - 8) = 56 + t, then: 8t - 16 = 56 + t, giving 7t = 72, so t = 72/7."
   },
   {
-    "id": "MATH-ALG-M-014",
+    "id": "MATH-ALG-LE-M-014",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "A library charges $18 signup fee plus $9/month. After how many months will total cost be $126?",
     "imageUrl": null,
-    "choices": ["A) 10", "B) 11", "C) 12", "D) 13"],
+    "choices": [
+      "A) 10",
+      "B) 11",
+      "C) 12",
+      "D) 13"
+    ],
     "answer": "C",
     "explanation": "Let m = number of months. Total cost = signup fee + monthly costs = 18 + 9m. Set this equal to 126: 18 + 9m = 126. Subtract 18: 9m = 108. Divide by 9: m = 12 months."
   },
   {
-    "id": "MATH-ALG-M-015",
+    "id": "MATH-ALG-LE-M-015",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "A rental company charges $850 for first 3 hours, then $60/hour after. If total for t hours (t > 3) is $1,210, which equation fits?",
     "imageUrl": null,
-    "choices": ["A) 850 + 60t = 1,210", "B) 850 + 60(t - 3) = 1,210", "C) 850t + 60 = 1,210", "D) 60t + 850 = 1,210"],
+    "choices": [
+      "A) 850 + 60t = 1,210",
+      "B) 850 + 60(t - 3) = 1,210",
+      "C) 850t + 60 = 1,210",
+      "D) 60t + 850 = 1,210"
+    ],
     "answer": "B",
     "explanation": "The first 3 hours cost $850 total (not $850 per hour). After that, each extra hour costs $60. If you rent for t hours total, the extra hours beyond the first 3 are (t - 3) hours. Extra cost = 60(t - 3). Total: 850 + 60(t - 3) = 1,210."
   },
   {
-    "id": "MATH-ALG-M-016",
+    "id": "MATH-ALG-LE-M-016",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "Jake's wage is p dollars/hour for first 8 hours, then 1.5p for extra hours. He worked 10 hours and earned $110. What is his regular wage?",
     "imageUrl": null,
-    "choices": ["A) $10.00", "B) $11.00", "C) $12.00", "D) $13.00"],
+    "choices": [
+      "A) $10.00",
+      "B) $11.00",
+      "C) $12.00",
+      "D) $13.00"
+    ],
     "answer": "A",
     "explanation": "First 8 hours: 8p dollars. Extra 2 hours at 1.5p per hour: 2(1.5p) = 3p dollars. Total: 8p + 3p = 11p = 110. Divide by 11: p = 10 dollars per hour."
   },
   {
-    "id": "MATH-ALG-M-017",
+    "id": "MATH-ALG-LE-M-017",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
@@ -474,43 +609,58 @@
     "choices": [],
     "answer": "486",
     "answerType": "number",
-    "explanation": "Subtract 24 from both sides: (8/9)p = 54. To find 8p, multiply both sides by 9: 8p = 54 × 9 = 486."
+    "explanation": "Subtract 24 from both sides: (8/9)p = 54. To find 8p, multiply both sides by 9: 8p = 54 \u00d7 9 = 486."
   },
   {
-    "id": "MATH-ALG-M-018",
+    "id": "MATH-ALG-LE-M-018",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "A tank has 28 gallons. Uncovered, it loses 2 gallons every 5 days. If 14 gallons remain, how many days uncovered?",
     "imageUrl": null,
-    "choices": ["A) 25", "B) 30", "C) 35", "D) 40"],
+    "choices": [
+      "A) 25",
+      "B) 30",
+      "C) 35",
+      "D) 40"
+    ],
     "answer": "C",
-    "explanation": "Gallons lost = 28 - 14 = 14 gallons. The tank loses 2 gallons every 5 days. To lose 14 gallons: 14 ÷ 2 = 7 periods of 5 days. Total days: 7 × 5 = 35 days."
+    "explanation": "Gallons lost = 28 - 14 = 14 gallons. The tank loses 2 gallons every 5 days. To lose 14 gallons: 14 \u00f7 2 = 7 periods of 5 days. Total days: 7 \u00d7 5 = 35 days."
   },
   {
-    "id": "MATH-ALG-M-019",
+    "id": "MATH-ALG-LE-M-019",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "How many solutions does 45x = 45x have?",
     "imageUrl": null,
-    "choices": ["A) Exactly one", "B) Exactly two", "C) Infinitely many", "D) Zero"],
+    "choices": [
+      "A) Exactly one",
+      "B) Exactly two",
+      "C) Infinitely many",
+      "D) Zero"
+    ],
     "answer": "C",
-    "explanation": "Both sides are exactly the same: 45x = 45x. This is true no matter what x is. Try x = 0: 0 = 0 ✓. Try x = 5: 225 = 225 ✓. Try x = -100: -4500 = -4500 ✓. Every value of x works, so there are infinitely many solutions."
+    "explanation": "Both sides are exactly the same: 45x = 45x. This is true no matter what x is. Try x = 0: 0 = 0 \u2713. Try x = 5: 225 = 225 \u2713. Try x = -100: -4500 = -4500 \u2713. Every value of x works, so there are infinitely many solutions."
   },
   {
-    "id": "MATH-ALG-M-020",
+    "id": "MATH-ALG-LE-M-020",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "medium",
     "question": "In 6x + 18 = (bx + 36)/2, where b is constant, the equation has infinitely many solutions. What is b?",
     "imageUrl": null,
-    "choices": ["A) 0", "B) 4", "C) 6", "D) 12"],
+    "choices": [
+      "A) 0",
+      "B) 4",
+      "C) 6",
+      "D) 12"
+    ],
     "answer": "D",
     "explanation": "Multiply both sides by 2 to clear the fraction: 12x + 36 = bx + 36. For infinitely many solutions, both sides must be identical. The constant terms already match (36 = 36). For the x terms to match: 12x = bx, so b = 12."
   },
   {
-    "id": "MATH-ALG-H-020",
+    "id": "MATH-ALG-LE-H-020",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -521,7 +671,7 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-021",
+    "id": "MATH-ALG-LE-H-021",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -532,17 +682,22 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-022",
+    "id": "MATH-ALG-LE-H-022",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
     "question": "If 3(x - 7) + 2(x + 4) = 5(x - 3) + k has no solution, what is the value of k?",
-    "choices": ["A) -7", "B) -1", "C) 0", "D) Any value except 2"],
+    "choices": [
+      "A) -7",
+      "B) -1",
+      "C) 0",
+      "D) Any value except 2"
+    ],
     "answer": "D",
-    "explanation": "Expand both sides. Left: 3(x−7) + 2(x+4) = 3x − 21 + 2x + 8 = 5x − 13. Right: 5(x−3) + k = 5x − 15 + k. Subtract 5x from both sides to compare constants: −13 = −15 + k. This equation is true only when k=2 (infinitely many solutions). For the equation to have no solution, the constants must NOT match, so k can be any value except 2."
+    "explanation": "Expand both sides. Left: 3(x\u22127) + 2(x+4) = 3x \u2212 21 + 2x + 8 = 5x \u2212 13. Right: 5(x\u22123) + k = 5x \u2212 15 + k. Subtract 5x from both sides to compare constants: \u221213 = \u221215 + k. This equation is true only when k=2 (infinitely many solutions). For the equation to have no solution, the constants must NOT match, so k can be any value except 2."
   },
   {
-    "id": "MATH-ALG-H-023",
+    "id": "MATH-ALG-LE-H-023",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -553,7 +708,7 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-024",
+    "id": "MATH-ALG-LE-H-024",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -564,7 +719,7 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-025",
+    "id": "MATH-ALG-LE-H-025",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -575,18 +730,23 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-026",
+    "id": "MATH-ALG-LE-H-026",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
     "question": "For which value of c does the equation 7x + 21 = c(x + 3) have infinitely many solutions?",
-    "choices": ["A) 3", "B) 7", "C) 21", "D) 24"],
+    "choices": [
+      "A) 3",
+      "B) 7",
+      "C) 21",
+      "D) 24"
+    ],
     "answer": "B",
-    "explanation": "Expand right side: 7x + 21 = cx + 3c. For infinitely many solutions: 7 = c and 21 = 3c. From second equation: c = 7. Check first: 7 = 7 ✓. Therefore c = 7.",
+    "explanation": "Expand right side: 7x + 21 = cx + 3c. For infinitely many solutions: 7 = c and 21 = 3c. From second equation: c = 7. Check first: 7 = 7 \u2713. Therefore c = 7.",
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-027",
+    "id": "MATH-ALG-LE-H-027",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -597,7 +757,7 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-H-028",
+    "id": "MATH-ALG-LE-H-028",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
@@ -609,15 +769,20 @@
       "D) 0"
     ],
     "answer": "B",
-    "explanation": "First expand both sides of the equation. The left side becomes 4x − 20 + 3, which simplifies to 4x − 17. The right side becomes 4x + 2 − 7, which simplifies to 4x − 5. Now compare both sides: 4x − 17 = 4x − 5. Since the variable term 4x appears on both sides, subtracting 4x from both sides eliminates the variable entirely. This leaves −17 = −5, which is false. Because eliminating the variable results in a false statement, the equation has no solution."
+    "explanation": "First expand both sides of the equation. The left side becomes 4x \u2212 20 + 3, which simplifies to 4x \u2212 17. The right side becomes 4x + 2 \u2212 7, which simplifies to 4x \u2212 5. Now compare both sides: 4x \u2212 17 = 4x \u2212 5. Since the variable term 4x appears on both sides, subtracting 4x from both sides eliminates the variable entirely. This leaves \u221217 = \u22125, which is false. Because eliminating the variable results in a false statement, the equation has no solution."
   },
   {
-    "id": "MATH-ALG-H-029",
+    "id": "MATH-ALG-LE-H-029",
     "topic": "algebra",
     "subskill": "linear-equations-one-variable",
     "difficulty": "hard",
     "question": "A store sells small, medium, and large gift baskets. The store sells twice as many medium baskets as small baskets. If s represents the number of small baskets sold, and the store sold 15 large baskets and 135 total baskets, which equation represents this situation?",
-    "choices": ["A) s + 2s + 15 = 135", "B) 3s + 15 = 135", "C) 2s + 15 = 135", "D) s + 15 = 135"],
+    "choices": [
+      "A) s + 2s + 15 = 135",
+      "B) 3s + 15 = 135",
+      "C) 2s + 15 = 135",
+      "D) s + 15 = 135"
+    ],
     "answer": "B",
     "explanation": "Small baskets: s. Medium baskets: 2s (twice as many as small). Large baskets: 15. Total: s + 2s + 15 = 135, which simplifies to 3s + 15 = 135.",
     "type": "practice"
@@ -628,7 +793,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f is defined by f(x) = 3x + 7. What is the value of f(4)?",
-    "choices": ["A) 14", "B) 19", "C) 21", "D) 28"],
+    "choices": [
+      "A) 14",
+      "B) 19",
+      "C) 21",
+      "D) 28"
+    ],
     "answer": "B",
     "explanation": "Substitute 4 for x: f(4) = 3(4) + 7 = 12 + 7 = 19.",
     "type": "practice"
@@ -639,7 +809,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function g is defined by g(x) = 5x - 2. For what value of x does g(x) = 18?",
-    "choices": ["A) 3", "B) 4", "C) 5", "D) 6"],
+    "choices": [
+      "A) 3",
+      "B) 4",
+      "C) 5",
+      "D) 6"
+    ],
     "answer": "B",
     "explanation": "Set g(x) = 18: 5x - 2 = 18. Add 2 to both sides: 5x = 20. Divide by 5: x = 4.",
     "type": "practice"
@@ -650,7 +825,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function h is defined by h(x) = -2x + 10. What is the value of h(0)?",
-    "choices": ["A) -2", "B) 0", "C) 8", "D) 10"],
+    "choices": [
+      "A) -2",
+      "B) 0",
+      "C) 8",
+      "D) 10"
+    ],
     "answer": "D",
     "explanation": "Substitute 0 for x: h(0) = -2(0) + 10 = 0 + 10 = 10.",
     "type": "practice"
@@ -661,9 +841,14 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "Marcus deposits $25 into a savings account at the end of each week. At the beginning of week 1, the account had $150. How much money, in dollars, will be in the account at the end of week 4?",
-    "choices": ["A) $175", "B) $200", "C) $225", "D) $250"],
+    "choices": [
+      "A) $175",
+      "B) $200",
+      "C) $225",
+      "D) $250"
+    ],
     "answer": "D",
-    "explanation": "After 4 weeks, Marcus deposits 4 × $25 = $100. Total: $150 + $100 = $250.",
+    "explanation": "After 4 weeks, Marcus deposits 4 \u00d7 $25 = $100. Total: $150 + $100 = $250.",
     "type": "practice"
   },
   {
@@ -672,7 +857,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "A nutritionist recommends that a dog should eat 30 calories per pound of the dog's weight, plus an additional 100 calories each day. Which equation represents the total calories c the dog should eat if the dog weighs p pounds?",
-    "choices": ["A) c = 100p + 30", "B) c = 30p", "C) c = p + 130", "D) c = 30p + 100"],
+    "choices": [
+      "A) c = 100p + 30",
+      "B) c = 30p",
+      "C) c = p + 130",
+      "D) c = 30p + 100"
+    ],
     "answer": "D",
     "explanation": "The dog eats 30 calories per pound (30p) plus 100 additional calories. Total: c = 30p + 100.",
     "type": "practice"
@@ -683,7 +873,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The total cost C, in dollars, to rent a kayak for h hours is given by C = 15h + 20, where 20 is a deposit fee. What is the total cost to rent the kayak for 3 hours?",
-    "choices": ["A) $45", "B) $55", "C) $65", "D) $75"],
+    "choices": [
+      "A) $45",
+      "B) $55",
+      "C) $65",
+      "D) $75"
+    ],
     "answer": "C",
     "explanation": "Substitute h = 3: C = 15(3) + 20 = 45 + 20 = 65. The total cost is $65.",
     "type": "practice"
@@ -694,7 +889,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The equation d = 250 - 5m gives the estimated amount of water d, in gallons, remaining in a tank after m minutes of draining. What is the estimated amount of water remaining after 20 minutes?",
-    "choices": ["A) 50 gallons", "B) 100 gallons", "C) 150 gallons", "D) 200 gallons"],
+    "choices": [
+      "A) 50 gallons",
+      "B) 100 gallons",
+      "C) 150 gallons",
+      "D) 200 gallons"
+    ],
     "answer": "C",
     "explanation": "Substitute m = 20: d = 250 - 5(20) = 250 - 100 = 150 gallons.",
     "type": "practice"
@@ -705,7 +905,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "A hot air balloon is 50 feet above the ground and rises at a constant rate of 12 feet per second. Which equation gives the height h, in feet, of the balloon t seconds after it starts rising?",
-    "choices": ["A) h = 12t + 50", "B) h = 50t + 12", "C) h = 12t - 50", "D) h = 62t"],
+    "choices": [
+      "A) h = 12t + 50",
+      "B) h = 50t + 12",
+      "C) h = 12t - 50",
+      "D) h = 62t"
+    ],
     "answer": "A",
     "explanation": "The balloon starts at 50 feet (initial height) and rises 12 feet each second. Height: h = 12t + 50.",
     "type": "practice"
@@ -716,7 +921,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f is defined by f(x) = 8x - 5. What is the value of f(3)?",
-    "choices": ["A) 11", "B) 19", "C) 24", "D) 29"],
+    "choices": [
+      "A) 11",
+      "B) 19",
+      "C) 24",
+      "D) 29"
+    ],
     "answer": "B",
     "explanation": "Substitute 3 for x: f(3) = 8(3) - 5 = 24 - 5 = 19.",
     "type": "practice"
@@ -727,9 +937,14 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The given equation d = 18t represents the distance d, in miles, that a cyclist traveled after riding for t hours. What does 18 represent in the equation?",
-    "choices": ["A) The cyclist rode for 18 hours.", "B) The total distance is 18 miles.", "C) The cyclist rides at a speed of 18 miles per hour.", "D) The cyclist took 18 trips."],
+    "choices": [
+      "A) The cyclist rode for 18 hours.",
+      "B) The total distance is 18 miles.",
+      "C) The cyclist rides at a speed of 18 miles per hour.",
+      "D) The cyclist took 18 trips."
+    ],
     "answer": "C",
-    "explanation": "In d = 18t, the coefficient 18 represents the rate of change—the distance traveled per hour, which is the cyclist's speed of 18 miles per hour.",
+    "explanation": "In d = 18t, the coefficient 18 represents the rate of change\u2014the distance traveled per hour, which is the cyclist's speed of 18 miles per hour.",
     "type": "practice"
   },
   {
@@ -738,7 +953,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function p is defined by p(x) = 6x. For what value of x does p(x) = 42?",
-    "choices": ["A) 6", "B) 7", "C) 8", "D) 9"],
+    "choices": [
+      "A) 6",
+      "B) 7",
+      "C) 8",
+      "D) 9"
+    ],
     "answer": "B",
     "explanation": "Set p(x) = 42: 6x = 42. Divide by 6: x = 7.",
     "type": "practice"
@@ -749,7 +969,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The number y is 8 less than the number x. Which equation represents the relationship between x and y?",
-    "choices": ["A) y = x + 8", "B) x = y + 8", "C) y = 8 - x", "D) y = x - 8"],
+    "choices": [
+      "A) y = x + 8",
+      "B) x = y + 8",
+      "C) y = 8 - x",
+      "D) y = x - 8"
+    ],
     "answer": "D",
     "explanation": "If y is 8 less than x, then y equals x minus 8: y = x - 8.",
     "type": "practice"
@@ -760,7 +985,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f is defined by f(x) = 4x + 9. What is the value of f(5)?",
-    "choices": ["A) 18", "B) 25", "C) 29", "D) 34"],
+    "choices": [
+      "A) 18",
+      "B) 25",
+      "C) 29",
+      "D) 34"
+    ],
     "answer": "C",
     "explanation": "Substitute 5 for x: f(5) = 4(5) + 9 = 20 + 9 = 29.",
     "type": "practice"
@@ -771,9 +1001,14 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f(x) = 12 + 2.5x gives the estimated height, in centimeters, of a plant x weeks after it was first measured. What does 12 represent in this context?",
-    "choices": ["A) The plant will be measured for 12 weeks.", "B) The plant grows to a maximum of 12 cm.", "C) The plant grows 12 cm each week.", "D) The plant was 12 cm tall when first measured."],
+    "choices": [
+      "A) The plant will be measured for 12 weeks.",
+      "B) The plant grows to a maximum of 12 cm.",
+      "C) The plant grows 12 cm each week.",
+      "D) The plant was 12 cm tall when first measured."
+    ],
     "answer": "D",
-    "explanation": "In f(x) = 12 + 2.5x, the constant 12 is the y-intercept, representing the initial value when x = 0—the height when the plant was first measured.",
+    "explanation": "In f(x) = 12 + 2.5x, the constant 12 is the y-intercept, representing the initial value when x = 0\u2014the height when the plant was first measured.",
     "type": "practice"
   },
   {
@@ -782,7 +1017,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "For the linear function f, the graph of y = f(x) has a slope of 3 and a y-intercept at (0, -2). Which equation defines f?",
-    "choices": ["A) f(x) = -2x + 3", "B) f(x) = 3x - 2", "C) f(x) = 2x + 3", "D) f(x) = -3x + 2"],
+    "choices": [
+      "A) f(x) = -2x + 3",
+      "B) f(x) = 3x - 2",
+      "C) f(x) = 2x + 3",
+      "D) f(x) = -3x + 2"
+    ],
     "answer": "B",
     "explanation": "A linear function with slope m and y-intercept b is f(x) = mx + b. With slope 3 and y-intercept -2: f(x) = 3x - 2.",
     "type": "practice"
@@ -793,7 +1033,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "A gym membership costs $30 per month plus a one-time sign-up fee of $50. Which equation represents the total cost C, in dollars, for m months of membership?",
-    "choices": ["A) C = 50m + 30", "B) C = 30m + 50", "C) C = 80m", "D) C = 30 + 50m"],
+    "choices": [
+      "A) C = 50m + 30",
+      "B) C = 30m + 50",
+      "C) C = 80m",
+      "D) C = 30 + 50m"
+    ],
     "answer": "B",
     "explanation": "Monthly cost for m months: 30m. Add the one-time fee: C = 30m + 50.",
     "type": "practice"
@@ -804,7 +1049,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f(x) = 2.50x + 8 represents the total cost, in dollars, of attending a fair when x rides are taken. How many rides can be taken for a total cost of $28?",
-    "choices": ["A) 6", "B) 8", "C) 10", "D) 12"],
+    "choices": [
+      "A) 6",
+      "B) 8",
+      "C) 10",
+      "D) 12"
+    ],
     "answer": "B",
     "explanation": "Set f(x) = 28: 2.50x + 8 = 28. Subtract 8: 2.50x = 20. Divide by 2.50: x = 8 rides.",
     "type": "practice"
@@ -815,7 +1065,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "A bus travels at a constant speed along a highway. The equation d = 55t gives the distance d, in miles, the bus travels in t hours. How far will the bus travel in 4 hours?",
-    "choices": ["A) 165 miles", "B) 200 miles", "C) 220 miles", "D) 275 miles"],
+    "choices": [
+      "A) 165 miles",
+      "B) 200 miles",
+      "C) 220 miles",
+      "D) 275 miles"
+    ],
     "answer": "C",
     "explanation": "Substitute t = 4: d = 55(4) = 220 miles.",
     "type": "practice"
@@ -826,7 +1081,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function g is defined by g(x) = -x + 15. What is the value of g(0)?",
-    "choices": ["A) -15", "B) 0", "C) 1", "D) 15"],
+    "choices": [
+      "A) -15",
+      "B) 0",
+      "C) 1",
+      "D) 15"
+    ],
     "answer": "D",
     "explanation": "Substitute 0 for x: g(0) = -(0) + 15 = 0 + 15 = 15.",
     "type": "practice"
@@ -837,7 +1097,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "For the linear function f, f(2) = 10 and f(5) = 19. Which equation defines f?",
-    "choices": ["A) f(x) = 3x + 4", "B) f(x) = 4x + 2", "C) f(x) = 2x + 6", "D) f(x) = 5x"],
+    "choices": [
+      "A) f(x) = 3x + 4",
+      "B) f(x) = 4x + 2",
+      "C) f(x) = 2x + 6",
+      "D) f(x) = 5x"
+    ],
     "answer": "A",
     "explanation": "Find slope: m = (19 - 10)/(5 - 2) = 9/3 = 3. Use point (2, 10): 10 = 3(2) + b, so b = 4. Therefore f(x) = 3x + 4.",
     "type": "practice"
@@ -848,7 +1113,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "Emma rents a bicycle for a flat fee of $12 plus $4 per hour. If she paid $32 total, how many hours did she rent the bicycle?",
-    "choices": ["A) 3 hours", "B) 4 hours", "C) 5 hours", "D) 6 hours"],
+    "choices": [
+      "A) 3 hours",
+      "B) 4 hours",
+      "C) 5 hours",
+      "D) 6 hours"
+    ],
     "answer": "C",
     "explanation": "Total cost: 12 + 4h = 32. Subtract 12: 4h = 20. Divide by 4: h = 5 hours.",
     "type": "practice"
@@ -859,7 +1129,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f is defined by f(x) = (3x + 6)/3. What is the value of f(5)?",
-    "choices": ["A) 5", "B) 7", "C) 9", "D) 11"],
+    "choices": [
+      "A) 5",
+      "B) 7",
+      "C) 9",
+      "D) 11"
+    ],
     "answer": "B",
     "explanation": "Substitute 5 for x: f(5) = (3(5) + 6)/3 = (15 + 6)/3 = 21/3 = 7.",
     "type": "practice"
@@ -870,7 +1145,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The equation s = 8 + 3t gives the speed s, in miles per hour, of a car t seconds after it began to accelerate. What is the speed of the car 6 seconds after it began to accelerate?",
-    "choices": ["A) 17 mph", "B) 20 mph", "C) 26 mph", "D) 32 mph"],
+    "choices": [
+      "A) 17 mph",
+      "B) 20 mph",
+      "C) 26 mph",
+      "D) 32 mph"
+    ],
     "answer": "C",
     "explanation": "Substitute t = 6: s = 8 + 3(6) = 8 + 18 = 26 miles per hour.",
     "type": "practice"
@@ -881,9 +1161,14 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "For a training program, Aisha runs at an average rate of 9 minutes per mile. Which function gives the number of minutes m it will take Aisha to run d miles?",
-    "choices": ["A) m(d) = d/9", "B) m(d) = d + 9", "C) m(d) = d - 9", "D) m(d) = 9d"],
+    "choices": [
+      "A) m(d) = d/9",
+      "B) m(d) = d + 9",
+      "C) m(d) = d - 9",
+      "D) m(d) = 9d"
+    ],
     "answer": "D",
-    "explanation": "At 9 minutes per mile, running d miles takes 9 × d = 9d minutes. So m(d) = 9d.",
+    "explanation": "At 9 minutes per mile, running d miles takes 9 \u00d7 d = 9d minutes. So m(d) = 9d.",
     "type": "practice"
   },
   {
@@ -892,7 +1177,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f is defined by f(x) = 7x - 3. What is the value of f(2)?",
-    "choices": ["A) 4", "B) 11", "C) 14", "D) 17"],
+    "choices": [
+      "A) 4",
+      "B) 11",
+      "C) 14",
+      "D) 17"
+    ],
     "answer": "B",
     "explanation": "Substitute 2 for x: f(2) = 7(2) - 3 = 14 - 3 = 11.",
     "type": "practice"
@@ -903,7 +1193,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The equation T = 500 + 22h represents the total pay T, in dollars, for a worker who receives a $500 signing bonus and earns $22 per hour. If the worker's total pay was $896, how many hours did the worker work?",
-    "choices": ["A) 16 hours", "B) 18 hours", "C) 20 hours", "D) 22 hours"],
+    "choices": [
+      "A) 16 hours",
+      "B) 18 hours",
+      "C) 20 hours",
+      "D) 22 hours"
+    ],
     "answer": "B",
     "explanation": "Set T = 896: 500 + 22h = 896. Subtract 500: 22h = 396. Divide by 22: h = 18 hours.",
     "type": "practice"
@@ -914,9 +1209,14 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function f(x) = 45 + 3x gives the estimated weight, in pounds, of a puppy x months after adoption. What does 3 represent in this context?",
-    "choices": ["A) The puppy weighed 3 pounds at adoption.", "B) The puppy gains 3 pounds each month.", "C) The puppy will weigh 3 pounds maximum.", "D) The puppy was 3 months old at adoption."],
+    "choices": [
+      "A) The puppy weighed 3 pounds at adoption.",
+      "B) The puppy gains 3 pounds each month.",
+      "C) The puppy will weigh 3 pounds maximum.",
+      "D) The puppy was 3 months old at adoption."
+    ],
     "answer": "B",
-    "explanation": "In f(x) = 45 + 3x, the coefficient 3 is the rate of change—the amount the puppy's weight increases each month.",
+    "explanation": "In f(x) = 45 + 3x, the coefficient 3 is the rate of change\u2014the amount the puppy's weight increases each month.",
     "type": "practice"
   },
   {
@@ -925,7 +1225,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "For the linear function g, g(1) = 5 and g(4) = 14. What is the value of g(0)?",
-    "choices": ["A) 2", "B) 3", "C) 4", "D) 5"],
+    "choices": [
+      "A) 2",
+      "B) 3",
+      "C) 4",
+      "D) 5"
+    ],
     "answer": "A",
     "explanation": "Find slope: m = (14 - 5)/(4 - 1) = 9/3 = 3. Use point (1, 5): 5 = 3(1) + b, so b = 2. Therefore g(0) = 2.",
     "type": "practice"
@@ -936,7 +1241,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "A taxi charges a base fare of $3.50 plus $2.25 per mile. Which equation represents the total fare F for a trip of m miles?",
-    "choices": ["A) F = 2.25m", "B) F = 3.50m + 2.25", "C) F = 2.25m + 3.50", "D) F = 5.75m"],
+    "choices": [
+      "A) F = 2.25m",
+      "B) F = 3.50m + 2.25",
+      "C) F = 2.25m + 3.50",
+      "D) F = 5.75m"
+    ],
     "answer": "C",
     "explanation": "The fare is $2.25 per mile (2.25m) plus the base fare of $3.50. Total: F = 2.25m + 3.50.",
     "type": "practice"
@@ -947,7 +1257,12 @@
     "subskill": "linear-functions",
     "difficulty": "easy",
     "question": "The function h is defined by h(x) = 10 - 2x. For what value of x does h(x) = 0?",
-    "choices": ["A) 2", "B) 5", "C) 8", "D) 10"],
+    "choices": [
+      "A) 2",
+      "B) 5",
+      "C) 8",
+      "D) 10"
+    ],
     "answer": "B",
     "explanation": "Set h(x) = 0: 10 - 2x = 0. Subtract 10: -2x = -10. Divide by -2: x = 5.",
     "type": "practice"
@@ -958,7 +1273,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "For the linear function g, g(2) = 8 and g(5) = 17. What is the value of g(10)?",
-    "choices": ["A) 29", "B) 32", "C) 35", "D) 38"],
+    "choices": [
+      "A) 29",
+      "B) 32",
+      "C) 35",
+      "D) 38"
+    ],
     "answer": "B",
     "explanation": "Slope: (17 - 8)/(5 - 2) = 9/3 = 3. Using g(2) = 8: 8 = 3(2) + b, so b = 2. Therefore g(10) = 3(10) + 2 = 32.",
     "type": "practice"
@@ -969,9 +1289,14 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A delivery service charges $4.50 for the first mile and $2.25 for each additional mile. What is the total charge, in dollars, for a delivery of 8 miles?",
-    "choices": ["A) $18.00", "B) $20.25", "C) $22.50", "D) $24.75"],
+    "choices": [
+      "A) $18.00",
+      "B) $20.25",
+      "C) $22.50",
+      "D) $24.75"
+    ],
     "answer": "B",
-    "explanation": "First mile: $4.50. Additional 7 miles: 7 × $2.25 = $15.75. Total: $4.50 + $15.75 = $20.25.",
+    "explanation": "First mile: $4.50. Additional 7 miles: 7 \u00d7 $2.25 = $15.75. Total: $4.50 + $15.75 = $20.25.",
     "type": "practice"
   },
   {
@@ -980,7 +1305,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "An online store charges a $15 shipping fee plus $8 per item. A customer's total charge was $63. How many items did the customer order?",
-    "choices": ["A) 4", "B) 5", "C) 6", "D) 7"],
+    "choices": [
+      "A) 4",
+      "B) 5",
+      "C) 6",
+      "D) 7"
+    ],
     "answer": "C",
     "explanation": "15 + 8n = 63. Subtract 15: 8n = 48. Divide by 8: n = 6.",
     "type": "practice"
@@ -1023,9 +1353,14 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A cyclist travels 2.5 miles in 10 minutes. What is the cyclist's speed in miles per hour?",
-    "choices": ["A) 12 mph", "B) 15 mph", "C) 18 mph", "D) 20 mph"],
+    "choices": [
+      "A) 12 mph",
+      "B) 15 mph",
+      "C) 18 mph",
+      "D) 20 mph"
+    ],
     "answer": "B",
-    "explanation": "Rate: 2.5/10 = 0.25 miles per minute. Convert: 0.25 × 60 = 15 mph.",
+    "explanation": "Rate: 2.5/10 = 0.25 miles per minute. Convert: 0.25 \u00d7 60 = 15 mph.",
     "type": "practice"
   },
   {
@@ -1034,7 +1369,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A subscription costs $12 per month. After 8 months, what is the total cost in dollars?",
-    "choices": ["A) $84", "B) $90", "C) $96", "D) $102"],
+    "choices": [
+      "A) $84",
+      "B) $90",
+      "C) $96",
+      "D) $102"
+    ],
     "answer": "C",
     "explanation": "Cost = 12(8) = 96.",
     "type": "practice"
@@ -1061,7 +1401,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A bakery sells cookies for $0.75 and brownies for $1.25. Yesterday, they sold 60 items total and earned $58. How many cookies were sold?",
-    "choices": ["A) 26", "B) 32", "C) 34", "D) 38"],
+    "choices": [
+      "A) 26",
+      "B) 32",
+      "C) 34",
+      "D) 38"
+    ],
     "answer": "C",
     "explanation": "Let c = cookies, b = brownies. From c + b = 60, we get b = 60 - c. Substitute into 0.75c + 1.25b = 58: 0.75c + 1.25(60 - c) = 58. Simplify: 0.75c + 75 - 1.25c = 58, so -0.5c = -17, thus c = 34.",
     "type": "practice"
@@ -1072,7 +1417,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "For the linear function f, f(1) = 5, f(3) = 13, and f(5) = 21. If f(x) = mx + b, what is the value of m?",
-    "choices": ["A) 2", "B) 3", "C) 4", "D) 5"],
+    "choices": [
+      "A) 2",
+      "B) 3",
+      "C) 4",
+      "D) 5"
+    ],
     "answer": "C",
     "explanation": "Slope: m = (13 - 5)/(3 - 1) = 8/2 = 4.",
     "type": "practice"
@@ -1099,7 +1449,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A theater sold adult tickets for $15 and student tickets for $8. They sold 120 tickets total and collected $1,455. How many adult tickets were sold?",
-    "choices": ["A) 55", "B) 60", "C) 65", "D) 70"],
+    "choices": [
+      "A) 55",
+      "B) 60",
+      "C) 65",
+      "D) 70"
+    ],
     "answer": "C",
     "explanation": "Let a = adult tickets. From a + s = 120, we get s = 120 - a. Substitute into 15a + 8s = 1,455: 15a + 8(120 - a) = 1,455. Simplify: 15a + 960 - 8a = 1,455, so 7a = 495, thus a = 65.",
     "type": "practice"
@@ -1110,7 +1465,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A water tank contains 800 gallons. Water drains at 15 gallons per hour. How many gallons remain after 12 hours?",
-    "choices": ["A) 560", "B) 580", "C) 620", "D) 640"],
+    "choices": [
+      "A) 560",
+      "B) 580",
+      "C) 620",
+      "D) 640"
+    ],
     "answer": "C",
     "explanation": "V(t) = 800 - 15t. After 12 hours: V(12) = 800 - 15(12) = 800 - 180 = 620.",
     "type": "practice"
@@ -1121,7 +1481,12 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A gym membership costs $30 per month. After 5 months, a member has paid $150 total. After 9 months, what is the total paid?",
-    "choices": ["A) $240", "B) $255", "C) $270", "D) $285"],
+    "choices": [
+      "A) $240",
+      "B) $255",
+      "C) $270",
+      "D) $285"
+    ],
     "answer": "C",
     "explanation": "Cost = 30m. After 9 months: 30(9) = 270.",
     "type": "practice"
@@ -1132,9 +1497,174 @@
     "subskill": "linear-functions",
     "difficulty": "medium",
     "question": "A candle is 20 cm tall. It burns at 2.5 cm per hour. How many hours until it burns completely?",
-    "choices": ["A) 6", "B) 7", "C) 8", "D) 10"],
+    "choices": [
+      "A) 6",
+      "B) 7",
+      "C) 8",
+      "D) 10"
+    ],
     "answer": "C",
     "explanation": "h = 20 - 2.5t. When h = 0: 0 = 20 - 2.5t, so 2.5t = 20, thus t = 8.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-036",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "A plumber charges $95 for the first hour of work, then $45 for each additional hour. Which function gives the total cost C, in dollars, for h hours of work, where h is a positive integer and h \u2265 1?",
+    "choices": [
+      "A) C = 45h + 50",
+      "B) C = 95h + 45",
+      "C) C = 45h + 95",
+      "D) C = 50h + 45"
+    ],
+    "answer": "A",
+    "explanation": "The first hour costs $95. After that, each additional hour costs $45. If the plumber works h hours total, there are (h \u2212 1) hours after the first. Cost for those hours: 45(h \u2212 1) = 45h \u2212 45. Add the first hour: 95 + 45h \u2212 45 = 45h + 50. Choice C is the trap \u2014 it treats the $95 as an add-on rather than replacing the first hour's charge.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-037",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "A city modeled its population decline as a linear function of time. The population was 14,000 at the end of year 2 and 10,400 at the end of year 6. Based on this model, what was the population at the end of year 5?",
+    "choices": [
+      "A) 10,800",
+      "B) 11,200",
+      "C) 11,300",
+      "D) 12,500"
+    ],
+    "answer": "C",
+    "explanation": "Find the slope first: (10,400 \u2212 14,000) \u00f7 (6 \u2212 2) = \u22123,600 \u00f7 4 = \u2212900 people per year. Use the point (2, 14,000) to find b: 14,000 = \u2212900(2) + b \u2192 14,000 = \u22121,800 + b \u2192 b = 15,800. The model is P = \u2212900t + 15,800. At year 5: P = \u2212900(5) + 15,800 = \u22124,500 + 15,800 = 11,300.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-038",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "The function F(x) = 18.5 \u2212 0.25(x \u2212 4) gives the temperature, in degrees Celsius, of a drink x minutes after it is placed on a counter. The constant 18.5 in this function best estimates which of the following?",
+    "choices": [
+      "A) The temperature of the drink the moment it is placed on the counter",
+      "B) The temperature of the drink 4 minutes after it is placed on the counter",
+      "C) The rate at which the drink warms up each minute",
+      "D) The temperature of the drink after 18.5 minutes"
+    ],
+    "answer": "B",
+    "explanation": "18.5 is NOT the temperature at x = 0 \u2014 that's the common trap. The equation is in point-slope form. The \u22120.25(x \u2212 4) part equals zero when x = 4. At that moment, F(4) = 18.5 \u2212 0.25(0) = 18.5. So 18.5 is the temperature exactly 4 minutes after the drink is placed down. To confirm: at x = 0, F(0) = 18.5 \u2212 0.25(\u22124) = 18.5 + 1 = 19.5, which is different from 18.5.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-039",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "A fuel converter produces liters of fuel from kiloliters of raw material according to the function L = 340k + 90, where k is the kiloliters of raw material and L is the liters of fuel produced. If the amount of raw material increases by 3 kiloliters, by how many liters does the fuel output increase?",
+    "choices": [
+      "A) 90",
+      "B) 340",
+      "C) 1,020",
+      "D) 1,110"
+    ],
+    "answer": "C",
+    "explanation": "When the input goes up by some amount, only the slope determines how much the output changes \u2014 the constant 90 has nothing to do with it. The slope is 340, so each extra kiloliter adds 340 liters of output. For 3 kiloliters: 340 \u00d7 3 = 1,020. Choice D (1,110) is the trap for students who add the 90 in.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-040",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "The functions f and g are defined by f(x) = 5x \u2212 10 and g(x) = x \u2212 3. The function h is defined by h(x) = f(g(x)). What is the x-coordinate of the x-intercept of the graph of h in the xy-plane?",
+    "choices": [
+      "A) \u22123",
+      "B) 2",
+      "C) 5",
+      "D) 10"
+    ],
+    "answer": "C",
+    "explanation": "Build h(x) by substituting g(x) into f. Wherever f has x, replace it with (x \u2212 3): h(x) = 5(x \u2212 3) \u2212 10 = 5x \u2212 15 \u2212 10 = 5x \u2212 25. The x-intercept is where h(x) = 0: set 5x \u2212 25 = 0, add 25, divide by 5, and you get x = 5. Choice B is a trap from setting just 5x \u2212 10 = 0 (ignoring g).",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-041",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "For the function f, if f(4x) = 2x + 9 for all values of x, what is the value of f(12)?",
+    "choices": [
+      "A) 14",
+      "B) 15",
+      "C) 33",
+      "D) 57"
+    ],
+    "answer": "B",
+    "explanation": "The equation tells you what f does to the input 4x, not x directly. To find f(12), figure out what x makes 4x equal 12. Solve: 4x = 12 \u2192 x = 3. Now plug x = 3 into the right side: f(12) = 2(3) + 9 = 6 + 9 = 15. Choice C (33) is the most common mistake \u2014 it comes from plugging 12 straight into 2x + 9 as if the input were x.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-042",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "A factory produced 8,500 units in January. By June (5 months later), production had fallen to 6,000 units. Assuming production decreased at a constant monthly rate, which linear function best models the monthly production p, in units, t months after January?",
+    "choices": [
+      "A) p = 500t + 8,500",
+      "B) p = \u2212500t + 8,500",
+      "C) p = 500t + 6,000",
+      "D) p = \u2212500t + 6,000"
+    ],
+    "answer": "B",
+    "explanation": "Production is dropping, so the slope is negative \u2014 eliminate A and C. At t = 0 (January), production is 8,500, so the starting value must be 8,500 \u2014 eliminate D. The rate of change: (6,000 \u2212 8,500) \u00f7 5 = \u22122,500 \u00f7 5 = \u2212500 units per month. The function is p = \u2212500t + 8,500.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-043",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "One gallon of sealant covers 75 square feet. A deck has a total area of A square feet and needs to be sealed on both the top and bottom surfaces. Which equation gives the total amount of sealant S, in gallons, needed?",
+    "choices": [
+      "A) S = A \u00f7 75",
+      "B) S = 2A \u00f7 75",
+      "C) S = 75 \u00f7 (2A)",
+      "D) S = A \u00f7 150"
+    ],
+    "answer": "B",
+    "explanation": "Both surfaces must be sealed, so the total area to cover is 2 \u00d7 A = 2A square feet. Each gallon handles 75 square feet. Gallons needed = total area \u00f7 coverage per gallon = 2A \u00f7 75. Choice A only covers one surface. Choice D has the 150 in the wrong place \u2014 it would mean each gallon covers 150 sqft, which isn't given.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-044",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "The equation F = (9/5)C + 32 converts temperature from degrees Celsius (C) to degrees Fahrenheit (F). A liquid has a temperature of 212\u00b0F. What is the temperature of the liquid in degrees Celsius?",
+    "choices": [
+      "A) 80",
+      "B) 100",
+      "C) 134.4",
+      "D) 160"
+    ],
+    "answer": "B",
+    "explanation": "Plug F = 212 into the equation and solve for C. Start: 212 = (9/5)C + 32. Subtract 32 from both sides: 180 = (9/5)C. Multiply both sides by 5: 900 = 9C. Divide by 9: C = 100. Choice A comes from accidentally using 5/9 instead of 9/5. Choice D comes from dividing 180 by the wrong number.",
+    "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LF-H-045",
+    "topic": "algebra",
+    "subskill": "linear-functions",
+    "difficulty": "hard",
+    "question": "A museum charges $18 per person for the first 10 visitors in a group, and $12 per person for each visitor after that. Which function gives the total charge T, in dollars, for a group of n people, where n > 10?",
+    "choices": [
+      "A) T = 12n + 60",
+      "B) T = 18n + 12",
+      "C) T = 12n + 180",
+      "D) T = 18(n \u2212 10) + 120"
+    ],
+    "answer": "A",
+    "explanation": "Break it into two parts. The first 10 people pay $18 each: 18 \u00d7 10 = $180. The remaining (n \u2212 10) people pay $12 each: 12(n \u2212 10) = 12n \u2212 120. Add them: 180 + 12n \u2212 120 = 12n + 60. Quick check with n = 15: first 10 pay $180, next 5 pay $60, total $240. Formula: 12(15) + 60 = 180 + 60 = 240. \u2713 Choice C is the trap \u2014 it keeps the 180 without subtracting the 120.",
     "type": "practice"
   }
 ]

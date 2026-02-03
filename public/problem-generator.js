@@ -10,6 +10,15 @@ class ProblemGenerator {
     // ✅ STATIC POOL REGISTRATION SYSTEM
     // =========================================================
     static poolsBySubskill = {};
+    static templates = {};
+
+    static registerTemplate(templateName, generatorFn) {
+        if (!templateName || typeof generatorFn !== "function") {
+            console.warn("❌ registerTemplate called with invalid args", templateName);
+            return;
+        }
+        ProblemGenerator.templates[templateName] = generatorFn;
+    }
 
     static registerPools(subskillKey, pools) {
         if (!subskillKey || !pools) {
@@ -84,12 +93,13 @@ class ProblemGenerator {
         const shuffled = this.shuffle(pool);
 
         for (const methodName of shuffled) {
-            if (typeof this[methodName] !== "function") {
+            const templateFn = ProblemGenerator.templates[methodName];
+            if (typeof templateFn !== "function") {
                 console.warn(`❌ Template "${methodName}" not found`);
                 continue;
             }
 
-            const result = this[methodName](original);
+            const result = templateFn(original);
             if (result) return result;
         }
 

@@ -1,6 +1,3 @@
-// public/generators/algebra/linearFunctions/register.js
-// Updated with 18 medium templates - tables, graphs, and reasoning
-
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before linearFunctions/register.js");
 } else {
@@ -25,7 +22,7 @@ if (!window.ProblemGenerator) {
         ],
 
         medium: [
-            // ===== TABLE ANALYSIS (9 templates) =====
+            // ===== TABLE ANALYSIS (8 templates) =====
             "tplTableIsFunctionMedium",         // Is this table a function?
             "tplTableRateOfChangeMedium",       // Find rate of change from table
             "tplCompleteTablePatternMedium",    // Fill in missing table value
@@ -42,7 +39,7 @@ if (!window.ProblemGenerator) {
             "tplGraphCrossZeroMedium",          // When does it cross zero?
             "tplGraphInitialValueMedium",       // What's the initial value?
 
-            // ===== MULTI-STEP REASONING (4 templates) =====
+            // ===== MULTI-STEP REASONING (5 templates) =====
             "tplPerpSlopeConvertMedium",        // Convert ax+by=c, find perpendicular
             "tplTwoPointsEvaluateMedium",       // Given f(3)=11, f(5)=17, find f(10)
             "tplFindParameterMedium",           // Given f(x)=mx+b and f(3)=11, find m
@@ -50,10 +47,38 @@ if (!window.ProblemGenerator) {
             "tplDecreasingPatternMedium"        // Decreasing linear patterns
         ],
 
-        hard: []
+        hard: [
+            // ===== TIERED PRICING (first-N-then-rate) =====
+            "tplTieredPricingHard",             // rental/service with threshold pricing
+
+            // ===== TWO-POINT MODEL → EVALUATE =====
+            "tplTwoPointModelHard",             // build model from 2 data points, evaluate at new x
+
+            // ===== INTERPRET A CONSTANT (non-obvious) =====
+            "tplInterpretConstantHard",         // point-slope form — constant is NOT y-intercept
+
+            // ===== RATE-OF-CHANGE ONLY (constant cancels) =====
+            "tplRateOfChangeOnlyHard",          // "if input ↑ by Δ, output ↑ by ?"
+
+            // ===== FUNCTION COMPOSITION =====
+            "tplCompositionHard",               // h(x) = f(g(x)), find x-intercept
+
+            // ===== INDIRECT EVALUATION =====
+            "tplIndirectEvalHard",              // f(kx) = expr, find f(n)
+
+            // ===== REAL-WORLD RATE MODEL =====
+            "tplRealWorldModelHard",            // given 2 data points, which equation models it?
+
+            // ===== COVERAGE / PROPORTION =====
+            "tplCoverageProportionHard",        // area ÷ coverage with coat multiplier
+
+            // ===== INVERSE SOLVE =====
+            "tplInverseSolveHard"               // given output, solve for input (rearrange)
+        ]
     });
 
     console.log("✅ linear-functions pools registered:");
-    console.log("   Easy = 13 templates (graphs + basic interpretation)");
+    console.log("   Easy   = 13 templates (graphs + basic interpretation)");
     console.log("   Medium = 18 templates (tables + graph analysis + reasoning)");
+    console.log("   Hard   =  9 templates (tiered pricing, composition, inverse, interpretation, …)");
 }
