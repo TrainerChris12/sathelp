@@ -93,13 +93,16 @@ class ProblemGenerator {
         const shuffled = this.shuffle(pool);
 
         for (const methodName of shuffled) {
-            const templateFn = ProblemGenerator.templates[methodName];
+            // ✅ CHECK BOTH: static templates registry AND instance methods
+            const templateFn = ProblemGenerator.templates[methodName] || this[methodName];
+
             if (typeof templateFn !== "function") {
                 console.warn(`❌ Template "${methodName}" not found`);
                 continue;
             }
 
-            const result = templateFn(original);
+            // ✅ Call with proper context
+            const result = templateFn.call(this, original);
             if (result) return result;
         }
 

@@ -1,4 +1,5 @@
 // public/generators/algebra/linearEqOneVar/easy.js
+// BALANCED EXPLANATIONS: Clear reasoning + clean formatting
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before easy.js");
@@ -16,11 +17,11 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question = `If ${a}${v} + ${b} = ${c}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Subtract ${b} from both sides: ${a}${v} = ${c - b}.`,
-            `Divide both sides by ${a}.`,
-            `So ${v} = ${solution}.`,
-        ]);
+
+        const explanation = `To isolate ${v}, subtract ${b} from both sides:<br>` +
+            `${a}${v} = ${c - b}<br><br>` +
+            `Then divide both sides by ${a}:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -36,11 +37,11 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question = `If ${a}${v} - ${b} = ${c}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Add ${b} to both sides: ${a}${v} = ${c + b}.`,
-            `Divide both sides by ${a}.`,
-            `So ${v} = ${solution}.`,
-        ]);
+
+        const explanation = `To isolate ${v}, add ${b} to both sides:<br>` +
+            `${a}${v} = ${c + b}<br><br>` +
+            `Then divide both sides by ${a}:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -56,11 +57,11 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question = `If ${a}(${v} - ${shift}) = ${c}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Divide both sides by ${a}: ${v} - ${shift} = ${c / a}.`,
-            `Add ${shift} to both sides.`,
-            `So ${v} = ${solution}.`,
-        ]);
+
+        const explanation = `First, divide both sides by ${a} to remove it:<br>` +
+            `${v} - ${shift} = ${c / a}<br><br>` +
+            `Then add ${shift} to both sides:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -77,12 +78,16 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question = `If ${a}${v} + ${b} = ${c}${v} + ${d}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Subtract ${c}${v} from both sides: (${a - c})${v} + ${b} = ${d}.`,
-            `Subtract ${b}: (${a - c})${v} = ${d - b}.`,
-            `Divide by ${a - c}: ${v} = ${solution}.`,
-        ]);
+
+        const explanation = `Move all ${v} terms to the left by subtracting ${c}${v} from both sides:<br>` +
+            `${a - c}${v} + ${b} = ${d}<br><br>` +
+            `Subtract ${b} from both sides:<br>` +
+            `${a - c}${v} = ${d - b}<br><br>` +
+            `Divide both sides by ${a - c}:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
+
+    console.log("✅ Linear Equations Easy loaded (4 templates)");
 }

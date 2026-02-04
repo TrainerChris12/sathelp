@@ -1,4 +1,5 @@
 // public/generators/algebra/linearEqOneVar/medium.js
+// BALANCED EXPLANATIONS: Clear reasoning + clean formatting
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before medium.js");
@@ -16,11 +17,11 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, solution);
 
         const question = `If (${v} + ${A})/${B} = ${C}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Multiply both sides by ${B}: ${v} + ${A} = ${B * C}.`,
-            `Subtract ${A} from both sides.`,
-            `So ${v} = ${solution}.`,
-        ]);
+
+        const explanation = `To clear the fraction, multiply both sides by ${B}:<br>` +
+            `${v} + ${A} = ${B * C}<br><br>` +
+            `Subtract ${A} from both sides:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -35,12 +36,12 @@ if (!window.ProblemGenerator) {
         const vals = this.generateChoicesNumber(solution, 4, 8);
         const { choices, answer } = this.labelChoices(vals, solution);
 
-        const question = `What value of ${v} is the solution to the equation -${a}(${v} + ${b}) = ${result}?`;
-        const explanation = this.makeSteps([
-            `Divide both sides by -${a}: ${v} + ${b} = ${result / -a}.`,
-            `Subtract ${b}.`,
-            `So ${v} = ${solution}.`,
-        ]);
+        const question = `What value of ${v} is the solution to -${a}(${v} + ${b}) = ${result}?`;
+
+        const explanation = `Divide both sides by -${a}:<br>` +
+            `${v} + ${b} = ${result / -a}<br><br>` +
+            `Subtract ${b} from both sides:<br>` +
+            `${v} = ${solution}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -56,12 +57,13 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, exprValue);
 
         const question = `If (${v} + ${A})/${B} = (${v} + ${A})/${C}, what is the value of ${v} + ${A}?`;
-        const explanation = this.makeSteps([
-            `Multiply both sides by ${B * C} to clear fractions.`,
-            `You get ${C}(${v}+${A}) = ${B}(${v}+${A}).`,
-            `Subtract one side: (${C - B})(${v}+${A}) = 0.`,
-            `Since ${C - B} ≠ 0, the only way this works is ${v}+${A} = 0.`,
-        ]);
+
+        const explanation = `Multiply both sides by ${B * C} to clear fractions:<br>` +
+            `${C}(${v} + ${A}) = ${B}(${v} + ${A})<br><br>` +
+            `Subtract ${B}(${v} + ${A}) from both sides:<br>` +
+            `${C - B}(${v} + ${A}) = 0<br><br>` +
+            `Since ${C - B} ≠ 0, the only solution is:<br>` +
+            `${v} + ${A} = 0`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -78,12 +80,15 @@ if (!window.ProblemGenerator) {
         const { choices, answer } = this.labelChoices(vals, width);
 
         const question = `A rectangle has perimeter ${perimeter}. Its length is ${mult} times its width plus ${k}. If the width is ${v}, what is the value of ${v}?`;
-        const explanation = this.makeSteps([
-            `Perimeter formula: P = 2(width + length).`,
-            `Substitute: ${perimeter} = 2(${v} + (${mult}${v} + ${k})).`,
-            `Simplify and solve for ${v}.`,
-            `You get ${v} = ${width}.`,
-        ]);
+
+        const explanation = `The length is ${mult}${v} + ${k}. Using the perimeter formula:<br>` +
+            `${perimeter} = 2(${v} + ${mult}${v} + ${k})<br>` +
+            `${perimeter} = 2(${mult + 1}${v} + ${k})<br>` +
+            `${perimeter} = ${2 * (mult + 1)}${v} + ${2 * k}<br><br>` +
+            `Subtract ${2 * k} from both sides:<br>` +
+            `${perimeter - 2 * k} = ${2 * (mult + 1)}${v}<br><br>` +
+            `Divide both sides by ${2 * (mult + 1)}:<br>` +
+            `${v} = ${width}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
@@ -101,14 +106,18 @@ if (!window.ProblemGenerator) {
         const vals = this.generateChoicesNumber(originalPrice, 4, 20);
         const { choices, answer } = this.labelChoices(vals, originalPrice);
 
-        const question = `An item’s price changed by ${percent}%. After the change, the price is $${newPrice}. If the change was a ${increase ? "increase" : "decrease"}, what was the original price, ${v}, in dollars?`;
-        const explanation = this.makeSteps([
-            `Write the equation: new price = original × (1 ± percent).`,
-            `${newPrice} = ${v} × (${increase ? `1 + ${percent}/100` : `1 - ${percent}/100`}).`,
-            `Divide both sides by the multiplier.`,
-            `So ${v} = ${originalPrice}.`,
-        ]);
+        const multiplier = increase ? (1 + percent / 100) : (1 - percent / 100);
+        const changeWord = increase ? 'increase' : 'decrease';
+
+        const question = `An item's price changed by ${percent}%. After the change, the price is $${newPrice}. If the change was a ${changeWord}, what was the original price, ${v}, in dollars?`;
+
+        const explanation = `A ${percent}% ${changeWord} means the new price is ${(multiplier * 100).toFixed(0)}% of the original:<br>` +
+            `${newPrice} = ${v} × ${multiplier.toFixed(2)}<br><br>` +
+            `Divide both sides by ${multiplier.toFixed(2)}:<br>` +
+            `${v} = ${originalPrice}`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
+
+    console.log("✅ Linear Equations Medium loaded (5 templates)");
 }

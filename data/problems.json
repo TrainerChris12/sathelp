@@ -1666,5 +1666,197 @@
     "answer": "A",
     "explanation": "Break it into two parts. The first 10 people pay $18 each: 18 \u00d7 10 = $180. The remaining (n \u2212 10) people pay $12 each: 12(n \u2212 10) = 12n \u2212 120. Add them: 180 + 12n \u2212 120 = 12n + 60. Quick check with n = 15: first 10 pay $180, next 5 pay $60, total $240. Formula: 12(15) + 60 = 180 + 60 = 240. \u2713 Choice C is the trap \u2014 it keeps the 180 without subtracting the 120.",
     "type": "practice"
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-001",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A store's bottle sales totaled $672 last month. The equation 3.25x + 4.75y = 672 represents this, where x is the number of small bottles sold and y is the number of large bottles sold. What does 3.25 represent?",
+    "imageUrl": null,
+    "choices": [
+      "A) The price of each small bottle",
+      "B) The price of each large bottle",
+      "C) The total number of bottles sold",
+      "D) The number of small bottles sold"
+    ],
+    "answer": "A",
+    "explanation": "In the equation 3.25x + 4.75y = 672, the term 3.25x represents the total sales from small bottles. Since x is the number of small bottles, 3.25 must be the price per small bottle."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-002",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "Line ℓ is defined by y = (−3/4)x + 5. Line m is perpendicular to line ℓ in the xy-plane. What is the slope of line m?",
+    "imageUrl": null,
+    "choices": [
+      "A) 4/3",
+      "B) −4/3",
+      "C) 3/4",
+      "D) −3/4"
+    ],
+    "answer": "A",
+    "explanation": "Perpendicular lines have slopes that are opposite reciprocals. Line ℓ has slope −3/4. The opposite reciprocal is 4/3."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-003",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A mixture of protein and carbohydrates has a total mass of 540 grams. The mass of protein is 215 grams. What is the mass of carbohydrates in the mixture?",
+    "imageUrl": null,
+    "choices": [
+      "A) 215 grams",
+      "B) 325 grams",
+      "C) 430 grams",
+      "D) 540 grams"
+    ],
+    "answer": "B",
+    "explanation": "Let p + c = 540. If p = 215, then 215 + c = 540. Subtracting 215: c = 325 grams."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-004",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A company charged $87 for an order. The equation 3a + 5b = 87 represents this, where a is notebooks and b is pens. If there are 9 notebooks, how many pens are there?",
+    "imageUrl": null,
+    "choices": [
+      "A) 9",
+      "B) 10",
+      "C) 12",
+      "D) 15"
+    ],
+    "answer": "C",
+    "explanation": "Substitute a = 9: 3(9) + 5b = 87, so 27 + 5b = 87. Subtracting 27: 5b = 60. Dividing by 5: b = 12."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-005",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "The equation x + y = 90 relates the minutes spent working (x) and commuting (y) each day. What does 90 represent?",
+    "imageUrl": null,
+    "choices": [
+      "A) Minutes spent working",
+      "B) Minutes spent commuting",
+      "C) Total minutes spent working and commuting",
+      "D) Minutes spent commuting per minute working"
+    ],
+    "answer": "C",
+    "explanation": "Since x + y equals 90, this represents the sum of working and commuting minutes—the total."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-006",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A printer prints color pages or black pages, taking 7 minutes for a color page and 3 minutes for a black page. It operates 420 minutes daily. Which equation represents the possible number of color pages (C) and black pages (B)?",
+    "imageUrl": null,
+    "choices": [
+      "A) 3C + 7B = 420",
+      "B) 7C + 3B = 420",
+      "C) C + B = 420",
+      "D) 10(C + B) = 420"
+    ],
+    "answer": "B",
+    "explanation": "Color pages take 7 minutes each (7C total time) and black pages take 3 minutes each (3B total time). Combined: 7C + 3B = 420."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-007",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "Line k has slope 4 and passes through (0, −6). Which equation defines line k?",
+    "imageUrl": null,
+    "choices": [
+      "A) y = 4x − 6",
+      "B) y = −6x + 4",
+      "C) y = 4x + 6",
+      "D) y = −4x − 6"
+    ],
+    "answer": "A",
+    "explanation": "Using slope-intercept form y = mx + b with m = 4 and b = −6: y = 4x − 6."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-008",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A total of 135 paper straws were used to make triangles and rectangles with no shared sides. The equation 3t + 4r = 135 represents this, where t is triangles and r is rectangles. What's the best interpretation of 4r = 40?",
+    "imageUrl": null,
+    "choices": [
+      "A) If 10 rectangles were made, then 40 straws were used for rectangles",
+      "B) If 10 triangles were made, then 40 straws were used",
+      "C) If 10 rectangles were made, then 10 triangles were made",
+      "D) If 10 triangles were made, then 10 rectangles were made"
+    ],
+    "answer": "A",
+    "explanation": "From 4r = 40, dividing by 4 gives r = 10. This means 10 rectangles were made using 40 straws total."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-009",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "The equation y = 0.2x models problems completed (y) during an x-minute work session. How many problems were completed in 35 minutes?",
+    "imageUrl": null,
+    "choices": [
+      "A) 3",
+      "B) 5",
+      "C) 7",
+      "D) 35"
+    ],
+    "answer": "C",
+    "explanation": "Substitute x = 35: y = 0.2(35) = 7 problems."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-010",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "A mix of Solution A (25% salt) and Solution B (45% salt) contains 180 pounds of salt total. Which equation models this, where x is pounds of Solution A and y is pounds of Solution B?",
+    "imageUrl": null,
+    "choices": [
+      "A) 0.45x + 0.25y = 180",
+      "B) 0.25x + 0.45y = 180",
+      "C) 25x + 45y = 180",
+      "D) 45x + 25y = 180"
+    ],
+    "answer": "B",
+    "explanation": "Solution A contributes 0.25x pounds of salt and Solution B contributes 0.45y pounds. Total: 0.25x + 0.45y = 180."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-011",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "The equation F = 3.50x + 5.50y gives a cafe's revenue where x is coffees sold and y is pastries sold. What does 5.50 represent?",
+    "imageUrl": null,
+    "choices": [
+      "A) Price of one pastry",
+      "B) Price of one coffee",
+      "C) Number of pastries sold",
+      "D) Number of coffees sold"
+    ],
+    "answer": "A",
+    "explanation": "In F = 3.50x + 5.50y, the term 5.50y represents total revenue from pastries. Since y is quantity, 5.50 is the price per pastry."
+  },
+  {
+    "id": "MATH-ALG-LE2V-E-012",
+    "topic": "algebra",
+    "subskill": "linear-equations-two-variables",
+    "difficulty": "easy",
+    "question": "Line m passes through (−1, 8) and is parallel to y = 3x + 5. Which equation represents line m?",
+    "imageUrl": null,
+    "choices": [
+      "A) y = 3x + 11",
+      "B) y = 3x + 8",
+      "C) y = −1/3x + 8",
+      "D) y = 3x + 5"
+    ],
+    "answer": "A",
+    "explanation": "Parallel lines have equal slopes. Line m has slope 3. Using (−1, 8): 8 = 3(−1) + b, so b = 11. Equation: y = 3x + 11."
   }
 ]

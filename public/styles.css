@@ -1,8 +1,8 @@
 /* =========================================================
-   styles.css (UPDATED VERSION)
-   - Added Select All button styling
-   - Enhanced generated problem ID styling
-   - All previous features maintained
+   styles.css (PROFESSIONAL VERSION)
+   - Professional blue/gray color scheme
+   - Consistent button styling
+   - Removed flag emoji from report button
    ========================================================= */
 
 /* =========================
@@ -30,8 +30,10 @@
     --shadow: rgba(0, 0, 0, 0.1);
     --shadow-hover: rgba(0, 0, 0, 0.15);
 
-    --accent: #161e8a;
-    --accent-dark: #003d7c;
+    /* ✅ PROFESSIONAL ACCENT COLORS - Blue/Slate instead of purple/green */
+    --accent: #0284c7;        /* Sky blue */
+    --accent-dark: #0369a1;   /* Darker sky blue */
+    --accent-light: #38bdf8;  /* Light sky blue */
 
     --card: #ffffff;
 
@@ -41,8 +43,8 @@
 
 /* Dark mode */
 [data-theme="dark"] {
-    --primary: #3363b9;
-    --primary-dark: #1f2a66;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
     --secondary: #1e293b;
 
     --bg: #0f172a;
@@ -60,8 +62,10 @@
     --shadow: rgba(0, 0, 0, 0.3);
     --shadow-hover: rgba(0, 0, 0, 0.5);
 
-    --accent: #3363b9;
-    --accent-dark: #2563eb;
+    /* ✅ PROFESSIONAL DARK MODE ACCENTS */
+    --accent: #38bdf8;
+    --accent-dark: #0ea5e9;
+    --accent-light: #7dd3fc;
 
     --card: #1e293b;
 }
@@ -309,12 +313,14 @@ h1 {
     row-gap: 0.4rem;
 }
 
-/* ✅ Theme Toggle in Stats Banner */
-.stats-theme-toggle {
+/* ✅ CONSISTENT ICON BUTTON STYLE - Professional Blue */
+.stats-theme-toggle,
+.calc-mode-btn,
+.stats-calc-btn {
     width: 40px;
     height: 40px;
-    background: rgba(124, 58, 237, 0.1);
-    border: 2px solid rgba(124, 58, 237, 0.3);
+    background: rgba(2, 132, 199, 0.1);
+    border: 2px solid rgba(2, 132, 199, 0.3);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -323,15 +329,36 @@ h1 {
     justify-content: center;
     padding: 0;
     flex-shrink: 0;
-    font-size: 1.3rem;
     color: var(--text);
 }
 
-.stats-theme-toggle:hover {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: rgba(124, 58, 237, 0.5);
+.stats-theme-toggle:hover,
+.calc-mode-btn:hover,
+.stats-calc-btn:hover {
+    background: rgba(2, 132, 199, 0.2);
+    border-color: rgba(2, 132, 199, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.stats-theme-toggle {
+    font-size: 1.3rem;
+}
+
+.calc-mode-btn {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stats-calc-btn {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.calc-mode-btn.popup-mode,
+.stats-calc-btn.active {
+    background: rgba(2, 132, 199, 0.2);
+    border-color: var(--accent);
 }
 
 .theme-icon {
@@ -340,37 +367,6 @@ h1 {
 
 [data-theme="dark"] .theme-icon {
     transform: rotate(180deg);
-}
-
-/* ✅ Calculator Mode Toggle Button */
-.calc-mode-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 2px solid rgba(16, 185, 129, 0.3);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.2rem;
-    color: var(--text);
-    font-weight: bold;
-}
-
-.calc-mode-btn:hover {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
-.calc-mode-btn.popup-mode {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: var(--success);
 }
 
 .calc-mode-icon {
@@ -412,37 +408,6 @@ h1 {
 
 .reset-btn:hover .reset-icon {
     transform: rotate(180deg);
-}
-
-/* ✅ Calculator Toggle Button (in stats banner) */
-.stats-calc-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(124, 58, 237, 0.1);
-    border: 2px solid rgba(124, 58, 237, 0.3);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.8rem;  /* ✅ Bigger emoji */
-    color: var(--text);
-    line-height: 1;
-}
-
-.stats-calc-btn:hover {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: rgba(124, 58, 237, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-}
-
-.stats-calc-btn.active {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: #7c3aed;
 }
 
 /* =========================
@@ -512,7 +477,7 @@ h1 {
 .filter-btn:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 4px 8px rgba(2, 132, 199, 0.2);
 }
 
 .filter-btn.active {
@@ -538,7 +503,7 @@ h1 {
 .search-input:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
 }
 
 .search-input::placeholder {
@@ -642,7 +607,7 @@ h1 {
 }
 
 .problem-card.practice-problem {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.02) 0%, rgba(251, 191, 36, 0.02) 100%);
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.02) 0%, rgba(3, 105, 161, 0.02) 100%);
 }
 
 .problem-card::before {
@@ -706,9 +671,9 @@ h1 {
 }
 
 .badge-practice {
-    background: rgba(245, 158, 11, 0.15);
+    background: rgba(2, 132, 199, 0.15);
     color: var(--accent-dark);
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    border: 1px solid rgba(2, 132, 199, 0.3);
 }
 
 .badge-difficulty { color: white; }
@@ -756,13 +721,13 @@ h1 {
 }
 
 .choice:hover {
-    background: rgba(245, 158, 11, 0.05);
+    background: rgba(2, 132, 199, 0.05);
     border-color: var(--accent);
 }
 
 .choice.selected {
     border-color: var(--accent);
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(2, 132, 199, 0.1);
 }
 
 .choice.incorrect {
@@ -777,7 +742,7 @@ h1 {
     font-weight: 600;
 }
 
-/* Footer + buttons */
+/* ✅ CONSISTENT BUTTON STYLES */
 .problem-footer {
     display: flex;
     justify-content: center;
@@ -792,7 +757,7 @@ h1 {
     padding: 0.7rem 1.6rem;
     background: var(--accent);
     color: white;
-    border: none;
+    border: 2px solid var(--accent);
     border-radius: 8px;
     cursor: pointer;
     font-family: 'IBM Plex Mono', monospace;
@@ -807,12 +772,14 @@ h1 {
 
 .action-btn:hover {
     background: var(--accent-dark);
+    border-color: var(--accent-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
+    box-shadow: 0 6px 12px rgba(2, 132, 199, 0.3);
 }
 
 .action-btn.secondary {
-    color: white;
+    background: transparent;
+    color: var(--accent);
     border: 2px solid var(--accent);
 }
 
@@ -826,8 +793,14 @@ h1 {
     border-color: var(--success);
 }
 
+.action-btn.answered:hover {
+    background: #059669;
+    border-color: #059669;
+}
+
+/* ✅ CONSISTENT REPORT BUTTON - No emoji, professional style */
 .action-btn.report-issue {
-    background: rgba(239, 68, 68, 0.1);
+    background: transparent;
     color: var(--error);
     border: 2px solid var(--error);
 }
@@ -835,6 +808,7 @@ h1 {
 .action-btn.report-issue:hover {
     background: var(--error);
     color: white;
+    border-color: var(--error);
 }
 
 .no-results {
@@ -895,12 +869,12 @@ h1 {
 
 .problem-card.generated-problem {
     border: 2px dashed var(--accent);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(251, 191, 36, 0.03) 100%);
-    border-left: 4px solid #8b5cf6;
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.03) 0%, rgba(3, 105, 161, 0.03) 100%);
+    border-left: 4px solid var(--accent);
 }
 
 .badge-generated {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
     color: white;
     font-weight: 600;
     text-transform: uppercase;
@@ -909,7 +883,7 @@ h1 {
 
 /* ✅ Enhanced Generated Problem ID Styling */
 .generated-problem .problem-id {
-    color: #8b5cf6;
+    color: var(--accent);
     font-weight: 700;
     font-family: 'IBM Plex Mono', monospace;
     letter-spacing: 0.5px;
@@ -917,7 +891,7 @@ h1 {
 }
 
 [data-theme="dark"] .generated-problem .problem-id {
-    color: #a78bfa;
+    color: var(--accent-light);
 }
 
 .remove-generated {
@@ -936,7 +910,7 @@ h1 {
 .explanation-section {
     margin-top: 1.5rem;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(0, 160, 223, 0.05) 0%, rgba(0, 102, 179, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.05) 0%, rgba(3, 105, 161, 0.05) 100%);
     border-left: 4px solid var(--accent);
     border-radius: 8px;
     animation: slideDown 0.3s ease;
@@ -971,7 +945,7 @@ h1 {
 }
 
 .explanation-content code {
-    background: rgba(0, 82, 140, 0.1);
+    background: rgba(2, 132, 199, 0.1);
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
     font-family: 'IBM Plex Mono', monospace;
@@ -983,7 +957,7 @@ h1 {
    ========================= */
 
 .active-filters-section {
-    background: rgba(0, 102, 179, 0.05);
+    background: rgba(2, 132, 199, 0.05);
     border-radius: 8px;
     margin-bottom: 1.5rem;
     border: 1px solid var(--border);
@@ -1003,7 +977,7 @@ h1 {
 }
 
 .active-filters-header:hover {
-    background: rgba(0, 102, 179, 0.08);
+    background: rgba(2, 132, 199, 0.08);
 }
 
 .active-filters-header .accordion-title {
@@ -1142,7 +1116,7 @@ h1 {
 }
 
 .filter-tag.progress {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
 }
 
 .no-filters-message {
@@ -1233,7 +1207,7 @@ h1 {
 }
 
 .subskill-checkbox:hover {
-    background: rgba(0, 102, 179, 0.05);
+    background: rgba(2, 132, 199, 0.05);
 }
 
 .subskill-checkbox input[type="checkbox"] {
@@ -1271,7 +1245,7 @@ h1 {
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
-    z-index: 1000; /* ✅ Higher than problem cards */
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
@@ -1359,12 +1333,13 @@ body.calculator-open .stats-banner {
     opacity: 1;
 }
 
+/* ✅ PROFESSIONAL CALCULATOR HEADER - Blue instead of purple */
 .calculator-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 14px;
-    background: #7c3aed;
+    background: var(--accent);
     color: white;
     flex-shrink: 0;
     user-select: none;
@@ -1438,8 +1413,8 @@ body.calculator-open .stats-banner {
 
 .calculator-tab.active {
     background: var(--bg-card);
-    color: #7c3aed;
-    box-shadow: inset 0 -2px 0 #7c3aed;
+    color: var(--accent);
+    box-shadow: inset 0 -2px 0 var(--accent);
 }
 
 .calculator-content {
@@ -1577,7 +1552,7 @@ body.calculator-resizing .problems-grid {
 }
 
 .report-problem-info {
-    background: rgba(0, 102, 179, 0.05);
+    background: rgba(2, 132, 199, 0.05);
     border-left: 4px solid var(--primary);
     padding: 1rem;
     border-radius: 6px;
@@ -1710,9 +1685,9 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .filter-btn.active {
-    background: #3363b9;
+    background: var(--accent);
     color: white;
-    border-color: #3b82f6;
+    border-color: var(--accent);
 }
 
 [data-theme="dark"] .accordion-header {
@@ -1741,7 +1716,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .subskill-checkbox:hover {
-    background: rgba(59, 130, 246, 0.1);
+    background: rgba(56, 189, 248, 0.1);
 }
 
 [data-theme="dark"] input[type="text"],
@@ -1772,7 +1747,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .calculator-header {
-    background: #6d28d9;
+    background: var(--accent-dark);
 }
 
 [data-theme="dark"] .calculator-tab {
@@ -1786,8 +1761,8 @@ textarea.form-control {
 
 [data-theme="dark"] .calculator-tab.active {
     background: #1e293b;
-    color: #a78bfa;
-    box-shadow: inset 0 -2px 0 #a78bfa;
+    color: var(--accent-light);
+    box-shadow: inset 0 -2px 0 var(--accent-light);
 }
 
 [data-theme="dark"] .calculator-note {
