@@ -1852,9 +1852,9 @@
     "imageUrl": null,
     "choices": [
       "A) y = 3x + 11",
-      "B) y = 3x + 8",
-      "C) y = −1/3x + 8",
-      "D) y = 3x + 5"
+      "B) y = −3x + 5",
+      "C) y = 2x + 10",
+      "D) y = 4x + 12"
     ],
     "answer": "A",
     "explanation": "Parallel lines have equal slopes. Line m has slope 3. Using (−1, 8): 8 = 3(−1) + b, so b = 11. Equation: y = 3x + 11."
