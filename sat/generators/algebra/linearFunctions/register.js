@@ -1,4 +1,4 @@
-// public/generators/algebra/linearFunctions/register.js
+// sat/generators/algebra/linearFunctions/register.js
 // Updated with 18 medium templates - tables, graphs, and reasoning
 
 if (!window.ProblemGenerator) {

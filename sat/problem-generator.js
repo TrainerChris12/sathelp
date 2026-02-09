@@ -1,4 +1,4 @@
-// public/problem-generator.js
+// sat/problem-generator.js
 
 class ProblemGenerator {
     constructor() {

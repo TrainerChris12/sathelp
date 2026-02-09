@@ -1,4 +1,4 @@
-// public/storage-manager.js - VERIFIED
+// sat/storage-manager.js - VERIFIED
 
 class StorageManager {
     constructor() {

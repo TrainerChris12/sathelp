@@ -1,4 +1,4 @@
-// public/app.js - UPDATED WITH ALL FEATURES
+// sat/app.js - UPDATED WITH ALL FEATURES
 // ✅ Better generated problem IDs (MATH-ALG-LF-M-G001)
 // ✅ Report buttons on generated problems
 // ✅ Select All filters button

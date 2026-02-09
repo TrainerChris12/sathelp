@@ -1,4 +1,4 @@
-// /public/generators/algebra/linearEqOneVar/register.js
+// /sat/generators/algebra/linearEqOneVar/register.js
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before linearEqOneVar/register.js");

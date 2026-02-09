@@ -1,4 +1,4 @@
-// public/generators/algebra/linearEqOneVar/hard.js
+// sat/generators/algebra/linearEqOneVar/hard.js
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before hard.js");

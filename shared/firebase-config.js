@@ -1,4 +1,4 @@
-// public/firebase-config.js
+// sat/firebase-config.js
 
 // Your Firebase configuration
 const firebaseConfig = {

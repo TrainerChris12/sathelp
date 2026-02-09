@@ -1,4 +1,4 @@
-// public/generators/algebra/linearFunctions/easy.js
+// sat/generators/algebra/linearFunctions/easy.js
 // Linear Functions - Easy - WITH DYNAMIC GRAPH SUPPORT
 // Clean grid-aligned values, no answer giveaways
 

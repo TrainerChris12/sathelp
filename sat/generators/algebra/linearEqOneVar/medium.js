@@ -1,4 +1,4 @@
-// public/generators/algebra/linearEqOneVar/medium.js
+// sat/generators/algebra/linearEqOneVar/medium.js
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before medium.js");

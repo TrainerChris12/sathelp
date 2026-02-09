@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathForge - Comprehensive Math Practice Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sat/styles.css">
+    <style>
+        /* Landing page specific styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        <style>
+             /* Landing page specific styles */
+         body {
+             font-family: 'Inter', sans-serif;
+         }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.15s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .theme-toggle-nav {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 102, 179, 0.15);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 102, 179, 0.15);
+        }
+
+        .theme-toggle-nav:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 179, 0.3);
+        }
+
+        /* Dark mode nav theme toggle */
+        [data-theme="dark"] .theme-toggle-nav {
+            background: rgba(0, 102, 179, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        [data-theme="dark"] .theme-toggle-nav:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 102, 179, 0.3);
+        }
+
+        /* Navigation button */
+        .btn-nav {
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 179, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary-light) 50%, var(--accent) 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease 0.15s backwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s backwards;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--primary);
+            border: 2px solid white;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Practice Areas Grid */
+        .practice-areas {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .area-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .area-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: transform 0.15s ease;
+        }
+
+        .area-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .area-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .area-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .area-card h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .area-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .area-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .badge-popular {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .badge-free {
+            background: linear-gradient(135deg, #3363b9 0%, #1f2a66 100%);
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--secondary);
+            padding: 6rem 2rem;
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px rgba(0, 102, 179, 0.15);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-8px) scale(1.05);
+        }
+
+        .pricing-header {
+            margin-bottom: 2rem;
+        }
+
+        .pricing-header h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--text);
+            margin: 1.5rem 0;
+        }
+
+        .pricing-price span {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .pricing-features li.disabled {
+            color: var(--text-light);
+            opacity: 0.5;
+        }
+
+        .pricing-features li.disabled::before {
+            content: '✗';
+            color: var(--text-light);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .areas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px) scale(1);
+            }
+        }
+    </style>
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <div class="nav-content">
+        <a href="/" class="logo">MathForge</a>
+        <div class="nav-links">
+            <a href="#practice" class="nav-link">Practice Areas</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
+            <button class="theme-toggle-nav" id="themeToggle">
+                <span class="theme-icon">☾</span>
+            </button>
+            <a href="sat/index.html" class="btn-nav">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Master Math at Every Level</h1>
+        <p>Comprehensive practice platform for SAT prep, competition math, and skill building</p>
+        <div class="hero-cta">
+            <a href="#practice" class="btn-primary">Start Practicing Free</a>
+            <a href="#pricing" class="btn-secondary">View Premium</a>
+        </div>
+    </div>
+</section>
+
+<!-- Practice Areas -->
+<section class="practice-areas" id="practice">
+    <div class="section-header">
+        <h2>Choose Your Practice Path</h2>
+        <p>Whether you're prepping for the SAT, training for competitions, or building foundational skills, we've got you covered.</p>
+    </div>
+
+    <div class="areas-grid">
+        <!-- SAT Math Practice -->
+        <a href="sat/index.html" class="area-card">
+            <span class="area-icon">🎯</span>
+            <div>
+                <span class="badge badge-popular">Most Popular</span>
+            </div>
+            <h3>SAT Math Practice</h3>
+            <p>Authentic SAT-style problems organized by topic and difficulty. Perfect for test preparation with instant feedback and detailed explanations.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">500+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Topics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Algebra Mastery -->
+        <a href="algebra/index.html" class="area-card">
+            <span class="area-icon">📐</span>
+            <div>
+                <span class="badge badge-new">New</span>
+            </div>
+            <h3>Algebra Mastery</h3>
+            <p>From basic equations to advanced techniques. Build a rock-solid foundation in algebraic thinking and problem-solving.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">300+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">8</span>
+                    <span class="stat-label">Subtopics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Geometry & Trigonometry -->
+        <a href="geometry/index.html" class="area-card">
+            <span class="area-icon">📏</span>
+            <div>
+                <span class="badge badge-new">New</span>
+            </div>
+            <h3>Geometry & Trig</h3>
+            <p>Visual problem-solving with shapes, angles, and spatial reasoning. Includes coordinate geometry and trigonometric applications.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">250+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">6</span>
+                    <span class="stat-label">Subtopics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Competition Math -->
+        <a href="competitions/index.html" class="area-card">
+            <span class="area-icon">🏆</span>
+            <div>
+                <span class="badge badge-new">New</span>
+            </div>
+            <h3>Competition Math</h3>
+            <p>Challenge yourself with AMC, AIME, and USAMO-style problems. Develop creative problem-solving strategies and mathematical elegance.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">200+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">10</span>
+                    <span class="stat-label">Topics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">5</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Statistics & Probability -->
+        <a href="statistics/index.html" class="area-card">
+            <span class="area-icon">📊</span>
+            <div>
+                <span class="badge badge-free">Coming Soon</span>
+            </div>
+            <h3>Statistics & Data</h3>
+            <p>Master data analysis, probability, and statistical inference. Essential for AP Statistics and college-level courses.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">150+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">7</span>
+                    <span class="stat-label">Subtopics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+
+        <!-- Calculus Foundations -->
+        <a href="calculus/index.html" class="area-card">
+            <span class="area-icon">∫</span>
+            <div>
+                <span class="badge badge-free">Coming Soon</span>
+            </div>
+            <h3>Calculus</h3>
+            <p>Build intuition for limits, derivatives, and integrals. Prepare for AP Calculus AB/BC with comprehensive practice.</p>
+            <div class="area-stats">
+                <div class="stat">
+                    <span class="stat-value">180+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">6</span>
+                    <span class="stat-label">Topics</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">4</span>
+                    <span class="stat-label">Levels</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+    <div class="section-header">
+        <h2>Why Choose MathForge?</h2>
+        <p>Everything you need to excel in mathematics, all in one place.</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature">
+            <div class="feature-icon">🎯</div>
+            <h3>Targeted Practice</h3>
+            <p>Problems organized by topic, subtopic, and difficulty level. Focus on exactly what you need to improve.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">💡</div>
+            <h3>Detailed Explanations</h3>
+            <p>Every problem includes step-by-step solutions that teach you the concepts and strategies.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">📈</div>
+            <h3>Progress Tracking</h3>
+            <p>Watch your skills grow with comprehensive analytics and performance insights.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🎲</div>
+            <h3>Dynamic Generation</h3>
+            <p>Practice similar problems with different numbers for unlimited practice on any concept.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🖩</div>
+            <h3>Built-in Calculator</h3>
+            <p>Use Desmos graphing, scientific, or basic calculator right in the practice interface.</p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">☁️</div>
+            <h3>Cloud Sync</h3>
+            <p>Your progress automatically syncs across all devices. Pick up right where you left off.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing" id="pricing">
+    <div class="section-header">
+        <h2>Simple, Transparent Pricing</h2>
+        <p>Start free and upgrade when you're ready for more.</p>
+    </div>
+
+    <div class="pricing-grid">
+        <!-- Free Tier -->
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Free</h3>
+                <p>Perfect for getting started</p>
+            </div>
+            <div class="pricing-price">
+                $0<span>/month</span>
+            </div>
+            <ul class="pricing-features">
+                <li>75 problems per day</li>
+                <li>All practice areas</li>
+                <li>Basic explanations</li>
+                <li>Progress tracking</li>
+                <li>Built-in calculator</li>
+                <li class="disabled">Unlimited problems</li>
+                <li class="disabled">Video explanations</li>
+                <li class="disabled">Custom problem sets</li>
+                <li class="disabled">Export progress</li>
+            </ul>
+            <a href="auth.html" class="btn-secondary" style="width: 100%;">Start Free</a>
+        </div>
+
+        <!-- Premium Tier -->
+        <div class="pricing-card featured">
+            <div class="pricing-header">
+                <span class="badge badge-popular">Most Popular</span>
+                <h3>Premium</h3>
+                <p>For serious students</p>
+            </div>
+            <div class="pricing-price">
+                $9.99<span>/month</span>
+            </div>
+            <ul class="pricing-features">
+                <li>Unlimited problems</li>
+                <li>All practice areas</li>
+                <li>Detailed explanations</li>
+                <li>Video walkthroughs</li>
+                <li>Custom problem sets</li>
+                <li>Advanced analytics</li>
+                <li>Competition prep</li>
+                <li>Export progress reports</li>
+                <li>Priority support</li>
+            </ul>
+            <a href="auth.html" class="btn-primary" style="width: 100%; font-size: 1.1rem;">Get Premium</a>
+        </div>
+
+        <!-- Annual Tier -->
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <span class="badge badge-new">Best Value</span>
+                <h3>Annual</h3>
+                <p>Save 40% with yearly billing</p>
+            </div>
+            <div class="pricing-price">
+                $5.99<span>/month</span>
+            </div>
+            <ul class="pricing-features">
+                <li>All Premium features</li>
+                <li>Save $48/year</li>
+                <li>Priority feature access</li>
+                <li>Exclusive content</li>
+                <li>1-on-1 strategy sessions</li>
+                <li>Lifetime archive access</li>
+                <li>Community access</li>
+                <li>Referral bonuses</li>
+                <li>Cancel anytime</li>
+            </ul>
+            <a href="auth.html" class="btn-primary" style="width: 100%; font-size: 1.1rem;">Get Annual</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>MathForge</h4>
+            <p style="color: var(--text-light); margin-top: 1rem;">
+                Comprehensive math practice for students at every level.
+            </p>
+        </div>
+
+        <div class="footer-section">
+            <h4>Practice Areas</h4>
+            <ul class="footer-links">
+                <li><a href="sat/index.html">SAT Math</a></li>
+                <li><a href="algebra/index.html">Algebra</a></li>
+                <li><a href="geometry/index.html">Geometry</a></li>
+                <li><a href="competitions/index.html">Competitions</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Resources</h4>
+            <ul class="footer-links">
+                <li><a href="#">Study Guides</a></li>
+                <li><a href="#">Video Tutorials</a></li>
+                <li><a href="#">Formula Sheets</a></li>
+                <li><a href="#">Blog</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>Company</h4>
+            <ul class="footer-links">
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 MathForge. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.querySelector('.theme-icon');
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀' : '☾';
+
+    themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeIcon.textContent = next === 'dark' ? '☀' : '☾';
+    });
+</script>
+
+</body>
+</html>

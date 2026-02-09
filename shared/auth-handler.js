@@ -1,4 +1,4 @@
-// public/auth-handler.js
+// sat/auth-handler.js
 
 // Tab switching
 document.querySelectorAll('.auth-tab').forEach(tab => {

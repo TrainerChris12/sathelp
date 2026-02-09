@@ -1,4 +1,4 @@
-// public/problem-generator-bootstrap.js
+// sat/problem-generator-bootstrap.js
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator class missing. Load problem-generator.js first.");

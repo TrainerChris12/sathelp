@@ -1,4 +1,4 @@
-// public/generators/algebra/linearFunctions/medium.js
+// sat/generators/algebra/linearFunctions/medium.js
 // Linear Functions - Medium - HUMAN-READABLE EXPLANATIONS + MORE VARIETY
 // Easy = basic graphs + simple interpretation
 // Medium = tables, analysis, graph interpretation, multi-step reasoning

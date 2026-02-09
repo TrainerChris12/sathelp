@@ -1,8 +1,8 @@
 /* =========================================================
-   styles.css (UPDATED VERSION)
-   - Added Select All button styling
-   - Enhanced generated problem ID styling
-   - All previous features maintained
+   styles.css (IMPROVED VERSION)
+   - Unified color scheme for utility buttons (primary blue)
+   - Faster transitions (0.15s)
+   - Better visual consistency
    ========================================================= */
 
 /* =========================
@@ -13,6 +13,7 @@
 :root {
     --primary: #0066b3;
     --primary-dark: #004d8c;
+    --primary-light: #3388cc;
     --secondary: #f0f4f8;
 
     --bg: #f8fafc;
@@ -30,10 +31,17 @@
     --shadow: rgba(0, 0, 0, 0.1);
     --shadow-hover: rgba(0, 0, 0, 0.15);
 
-    --accent: #161e8a;
-    --accent-dark: #003d7c;
+    --accent: #0066b3;
+    --accent-dark: #004d8c;
 
     --card: #ffffff;
+
+    /* ✅ Unified utility button color */
+    --utility-btn-bg: rgba(0, 102, 179, 0.1);
+    --utility-btn-border: rgba(0, 102, 179, 0.3);
+    --utility-btn-hover-bg: rgba(0, 102, 179, 0.2);
+    --utility-btn-hover-border: rgba(0, 102, 179, 0.5);
+    --utility-btn-active-bg: rgba(0, 102, 179, 0.25);
 
     /* calculator width controlled by JS */
     --calculator-width: 500px;
@@ -43,6 +51,7 @@
 [data-theme="dark"] {
     --primary: #3363b9;
     --primary-dark: #1f2a66;
+    --primary-light: #5c8dd9;
     --secondary: #1e293b;
 
     --bg: #0f172a;
@@ -60,10 +69,17 @@
     --shadow: rgba(0, 0, 0, 0.3);
     --shadow-hover: rgba(0, 0, 0, 0.5);
 
-    --accent: #3363b9;
-    --accent-dark: #2563eb;
+    --accent: #3388cc;
+    --accent-dark: #0066b3;
 
     --card: #1e293b;
+
+    /* ✅ Unified utility button color for dark mode */
+    --utility-btn-bg: rgba(51, 99, 185, 0.15);
+    --utility-btn-border: rgba(51, 99, 185, 0.4);
+    --utility-btn-hover-bg: rgba(51, 99, 185, 0.25);
+    --utility-btn-hover-border: rgba(51, 99, 185, 0.6);
+    --utility-btn-active-bg: rgba(51, 99, 185, 0.35);
 }
 
 /* =========================
@@ -83,7 +99,7 @@ body {
     line-height: 1.7;
 }
 
-/* Smooth transitions - FAST */
+/* ✅ FASTER transitions - 0.15s instead of 0.3s */
 body,
 .problem-card,
 .stats-banner,
@@ -93,7 +109,15 @@ body,
 .accordion-header,
 .search-input,
 .answer-input {
-    transition: background-color 0.05s ease, color 0.05s ease, border-color 0.05s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+/* ✅ Snappier hover effects */
+.filter-btn,
+.action-btn,
+.auth-btn,
+.logout-btn {
+    transition: all 0.15s ease;
 }
 
 /* =========================
@@ -161,12 +185,13 @@ body,
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
 }
 
 .auth-btn:hover {
     background: white;
     color: var(--primary);
+    transform: translateY(-1px);
 }
 
 .logout-btn {
@@ -177,11 +202,12 @@ body,
     border-radius: 6px;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
 }
 
 .logout-btn:hover {
     background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
 }
 
 /* =========================
@@ -228,19 +254,19 @@ h1 {
     font-weight: 900;
     margin-bottom: 0.5rem;
     letter-spacing: -0.03em;
-    animation: fadeInUp 0.8s ease;
+    animation: fadeInUp 0.6s ease;
 }
 
 .subtitle {
     font-size: 1.1rem;
     opacity: 0.85;
     font-weight: 400;
-    animation: fadeInUp 0.8s ease 0.2s backwards;
+    animation: fadeInUp 0.6s ease 0.15s backwards;
     letter-spacing: 0.02em;
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -299,7 +325,7 @@ h1 {
     white-space: nowrap;
 }
 
-/* Right side: actions (theme + reset + calc mode + calculator) */
+/* Right side: actions */
 .stats-actions {
     display: flex;
     align-items: center;
@@ -309,29 +335,54 @@ h1 {
     row-gap: 0.4rem;
 }
 
-/* ✅ Theme Toggle in Stats Banner */
-.stats-theme-toggle {
+/* ✅ UNIFIED UTILITY BUTTON STYLES - Better visibility with transparency */
+.stats-theme-toggle,
+.calc-mode-btn,
+.stats-calc-btn {
     width: 40px;
     height: 40px;
-    background: rgba(124, 58, 237, 0.1);
-    border: 2px solid rgba(124, 58, 237, 0.3);
+    background: rgba(0, 102, 179, 0.15);
+    border: 2px solid var(--primary);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     flex-shrink: 0;
-    font-size: 1.3rem;
-    color: var(--text);
+    color: var(--primary);
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 102, 179, 0.15);
 }
 
-.stats-theme-toggle:hover {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: rgba(124, 58, 237, 0.5);
+.stats-theme-toggle:hover,
+.calc-mode-btn:hover,
+.stats-calc-btn:hover {
+    background: var(--primary);
+    color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 102, 179, 0.3);
+}
+
+.stats-theme-toggle:active,
+.calc-mode-btn:active,
+.stats-calc-btn:active {
+    transform: translateY(0);
+    background: var(--primary-dark);
+    color: white;
+}
+
+.stats-theme-toggle {
+    font-size: 1.3rem;
+}
+
+.calc-mode-btn {
+    font-size: 1.2rem;
+}
+
+.stats-calc-btn {
+    font-size: 1.8rem;
 }
 
 .theme-icon {
@@ -342,35 +393,10 @@ h1 {
     transform: rotate(180deg);
 }
 
-/* ✅ Calculator Mode Toggle Button */
-.calc-mode-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 2px solid rgba(16, 185, 129, 0.3);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.2rem;
-    color: var(--text);
-    font-weight: bold;
-}
-
-.calc-mode-btn:hover {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-}
-
 .calc-mode-btn.popup-mode {
-    background: rgba(16, 185, 129, 0.2);
+    background: var(--success);
     border-color: var(--success);
+    color: white;
 }
 
 .calc-mode-icon {
@@ -378,7 +404,13 @@ h1 {
     line-height: 1;
 }
 
-/* Reset Button */
+.stats-calc-btn.active {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+}
+
+/* Reset Button - Keep red as it's destructive */
 .reset-btn {
     padding: 0.6rem 1.2rem;
     background: rgba(220, 38, 38, 0.1);
@@ -388,7 +420,7 @@ h1 {
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -414,37 +446,6 @@ h1 {
     transform: rotate(180deg);
 }
 
-/* ✅ Calculator Toggle Button (in stats banner) */
-.stats-calc-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(124, 58, 237, 0.1);
-    border: 2px solid rgba(124, 58, 237, 0.3);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.8rem;  /* ✅ Bigger emoji */
-    color: var(--text);
-    line-height: 1;
-}
-
-.stats-calc-btn:hover {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: rgba(124, 58, 237, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-}
-
-.stats-calc-btn.active {
-    background: rgba(124, 58, 237, 0.2);
-    border-color: #7c3aed;
-}
-
 /* =========================
    MAIN LAYOUT
    ========================= */
@@ -460,7 +461,7 @@ h1 {
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
     margin-bottom: 2.5rem;
-    animation: fadeInUp 0.8s ease 0.4s backwards;
+    animation: fadeInUp 0.6s ease 0.3s backwards;
 }
 
 /* Your HTML uses filters-container + filter-section */
@@ -503,7 +504,7 @@ h1 {
     color: var(--text);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.15s ease;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.9rem;
     font-weight: 500;
@@ -530,7 +531,7 @@ h1 {
     border-radius: 8px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.95rem;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     background: var(--bg-card);
     color: var(--text);
 }
@@ -554,7 +555,7 @@ h1 {
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-    animation: fadeInUp 0.8s ease 0.6s backwards;
+    animation: fadeInUp 0.6s ease 0.45s backwards;
 }
 
 .stat-card {
@@ -563,7 +564,7 @@ h1 {
     padding: 1.5rem;
     border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    transition: transform 0.3s ease;
+    transition: transform 0.15s ease;
 }
 
 .stat-card:hover {
@@ -590,7 +591,7 @@ h1 {
    ========================= */
 
 .problems-container {
-    animation: fadeInUp 0.8s ease 0.8s backwards;
+    animation: fadeInUp 0.6s ease 0.6s backwards;
 }
 
 .loading {
@@ -634,7 +635,7 @@ h1 {
     border: 2px solid var(--border);
     border-radius: 12px;
     padding: 2rem;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     position: relative;
     width: 100%;
     max-width: 100%;
@@ -655,7 +656,7 @@ h1 {
     background: var(--accent);
     border-radius: 12px 0 0 12px;
     transform: scaleY(0);
-    transition: transform 0.3s ease;
+    transition: transform 0.15s ease;
 }
 
 .problem-card:hover {
@@ -750,7 +751,7 @@ h1 {
     border: 2px solid var(--border);
     border-radius: 8px;
     font-size: 0.95rem;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     cursor: pointer;
     color: var(--text);
 }
@@ -798,7 +799,7 @@ h1 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.9rem;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
     text-transform: uppercase;
     letter-spacing: 0.03em;
     flex: 0 1 220px;
@@ -895,21 +896,20 @@ h1 {
 
 .problem-card.generated-problem {
     border: 2px dashed var(--accent);
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, rgba(251, 191, 36, 0.03) 100%);
-    border-left: 4px solid #8b5cf6;
+    background: linear-gradient(135deg, rgba(0, 102, 179, 0.03) 0%, rgba(51, 136, 204, 0.03) 100%);
+    border-left: 4px solid var(--primary);
 }
 
 .badge-generated {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* ✅ Enhanced Generated Problem ID Styling */
 .generated-problem .problem-id {
-    color: #8b5cf6;
+    color: var(--primary);
     font-weight: 700;
     font-family: 'IBM Plex Mono', monospace;
     letter-spacing: 0.5px;
@@ -917,7 +917,7 @@ h1 {
 }
 
 [data-theme="dark"] .generated-problem .problem-id {
-    color: #a78bfa;
+    color: var(--primary-light);
 }
 
 .remove-generated {
@@ -939,7 +939,7 @@ h1 {
     background: linear-gradient(135deg, rgba(0, 160, 223, 0.05) 0%, rgba(0, 102, 179, 0.05) 100%);
     border-left: 4px solid var(--accent);
     border-radius: 8px;
-    animation: slideDown 0.3s ease;
+    animation: slideDown 0.2s ease;
 }
 
 @keyframes slideDown {
@@ -999,7 +999,7 @@ h1 {
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.15s ease;
 }
 
 .active-filters-header:hover {
@@ -1016,7 +1016,7 @@ h1 {
 }
 
 .active-filters-header .accordion-icon {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
     font-size: 0.8rem;
     color: var(--primary);
 }
@@ -1035,7 +1035,7 @@ h1 {
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     margin-right: 0.5rem;
     display: inline-flex;
     align-items: center;
@@ -1069,7 +1069,7 @@ h1 {
     color: var(--error);
     cursor: pointer;
     font-weight: 600;
-    transition: opacity 0.2s;
+    transition: opacity 0.15s ease;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
 }
@@ -1082,7 +1082,7 @@ h1 {
 .active-filters-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.2s ease;
 }
 
 .active-filters-content.active {
@@ -1122,7 +1122,7 @@ h1 {
     font-weight: bold;
     font-size: 1.1rem;
     line-height: 1;
-    transition: transform 0.2s;
+    transition: transform 0.15s ease;
 }
 
 .filter-tag-remove:hover {
@@ -1142,7 +1142,7 @@ h1 {
 }
 
 .filter-tag.progress {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
 }
 
 .no-filters-message {
@@ -1171,7 +1171,7 @@ h1 {
     background: var(--bg-card);
     border: none;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.15s ease;
     text-align: left;
 }
 
@@ -1188,7 +1188,7 @@ h1 {
 }
 
 .accordion-icon {
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
     font-size: 0.8rem;
     color: var(--primary);
 }
@@ -1206,7 +1206,7 @@ h1 {
 .accordion-content {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.2s ease;
     background: var(--bg);
 }
 
@@ -1229,7 +1229,7 @@ h1 {
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 6px;
-    transition: background 0.2s;
+    transition: background 0.15s ease;
 }
 
 .subskill-checkbox:hover {
@@ -1270,8 +1270,8 @@ h1 {
     font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    z-index: 1000; /* ✅ Higher than problem cards */
+    transition: all 0.15s ease;
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
@@ -1297,7 +1297,7 @@ h1 {
 }
 
 /* =========================
-   CALCULATOR PANEL (inline mode only)
+   CALCULATOR PANEL
    ========================= */
 
 .calculator-panel {
@@ -1315,20 +1315,19 @@ h1 {
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .calculator-panel.open {
     transform: translateX(0);
 }
 
-/* Inline mode shifts content */
 body.calculator-open .container,
 body.calculator-open .auth-bar-content,
 body.calculator-open .stats-banner {
     margin-right: var(--calculator-width, 500px);
     max-width: none;
-    transition: margin-right 0.3s ease;
+    transition: margin-right 0.2s ease;
 }
 
 .calculator-resize-handle {
@@ -1364,7 +1363,7 @@ body.calculator-open .stats-banner {
     align-items: center;
     justify-content: space-between;
     padding: 10px 14px;
-    background: #7c3aed;
+    background: var(--primary);
     color: white;
     flex-shrink: 0;
     user-select: none;
@@ -1406,7 +1405,7 @@ body.calculator-open .stats-banner {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: background 0.15s ease;
 }
 
 .calculator-close:hover {
@@ -1428,7 +1427,7 @@ body.calculator-open .stats-banner {
     font-size: 12px;
     font-weight: 500;
     color: var(--text-light);
-    transition: all 0.2s;
+    transition: all 0.15s ease;
     font-family: 'IBM Plex Mono', monospace;
 }
 
@@ -1438,8 +1437,8 @@ body.calculator-open .stats-banner {
 
 .calculator-tab.active {
     background: var(--bg-card);
-    color: #7c3aed;
-    box-shadow: inset 0 -2px 0 #7c3aed;
+    color: var(--primary);
+    box-shadow: inset 0 -2px 0 var(--primary);
 }
 
 .calculator-content {
@@ -1513,7 +1512,7 @@ body.calculator-resizing .problems-grid {
     justify-content: center;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .modal-overlay.active {
@@ -1530,7 +1529,7 @@ body.calculator-resizing .problems-grid {
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     transform: scale(0.9) translateY(20px);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .modal-overlay.active .modal-content {
@@ -1564,7 +1563,7 @@ body.calculator-resizing .problems-grid {
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 }
 
 .modal-close:hover {
@@ -1616,7 +1615,7 @@ body.calculator-resizing .problems-grid {
     font-size: 0.95rem;
     background: var(--bg-card);
     color: var(--text);
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
 }
 
 .form-control:focus {
@@ -1653,7 +1652,7 @@ textarea.form-control {
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     border: none;
 }
 
@@ -1693,10 +1692,6 @@ textarea.form-control {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
-
-/* =========================
-   DARK MODE FIXES
-   ========================= */
 
 [data-theme="dark"] .filter-btn {
     background: #1e293b;
@@ -1772,7 +1767,7 @@ textarea.form-control {
 }
 
 [data-theme="dark"] .calculator-header {
-    background: #6d28d9;
+    background: var(--primary-dark);
 }
 
 [data-theme="dark"] .calculator-tab {
@@ -1786,8 +1781,8 @@ textarea.form-control {
 
 [data-theme="dark"] .calculator-tab.active {
     background: #1e293b;
-    color: #a78bfa;
-    box-shadow: inset 0 -2px 0 #a78bfa;
+    color: var(--primary-light);
+    box-shadow: inset 0 -2px 0 var(--primary-light);
 }
 
 [data-theme="dark"] .calculator-note {

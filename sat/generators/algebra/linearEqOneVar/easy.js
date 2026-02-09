@@ -1,4 +1,4 @@
-// public/generators/algebra/linearEqOneVar/easy.js
+// sat/generators/algebra/linearEqOneVar/easy.js
 
 if (!window.ProblemGenerator) {
     console.error("❌ ProblemGenerator not loaded before easy.js");
