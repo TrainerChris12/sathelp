@@ -266,11 +266,16 @@ function organizeByTopicAndSubskill(problemsList) {
     return organized;
 }
 
+// =====================================================
+// COMPLETE renderProblems() FUNCTION - COPY THIS
+// Replace your current renderProblems() in app.js
+// =====================================================
+
 function renderProblems() {
     console.log('Rendering problems...');
-    const container = document.getElementById('problemsContainer');
-    if (!container) {
-        console.error('problemsContainer not found!');
+    const grid = document.getElementById('problemsGrid');
+    if (!grid) {
+        console.error('problemsGrid not found!');
         return;
     }
 
@@ -278,7 +283,7 @@ function renderProblems() {
     console.log('Filtered to', filteredProblems.length, 'problems');
 
     if (filteredProblems.length === 0) {
-        container.innerHTML = '<div class="no-results">No problems match your filters. Try adjusting your selection.</div>';
+        grid.innerHTML = '<div class="no-results">No problems match your filters. Try adjusting your selection.</div>';
         const visibleElem = document.getElementById('visibleProblems');
         if (visibleElem) visibleElem.textContent = '0';
         return;
@@ -344,7 +349,7 @@ function renderProblems() {
         `;
     });
 
-    container.innerHTML = html;
+    grid.innerHTML = html;
 
     const visibleElem = document.getElementById('visibleProblems');
     if (visibleElem) visibleElem.textContent = filteredProblems.length;
