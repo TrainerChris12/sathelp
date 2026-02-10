@@ -291,7 +291,26 @@
     </div>
 
     <div class="problems-container" id="problemsContainer">
-        <div class="loading">Loading problems...</div>
+        <!-- Left: Problems -->
+        <div class="problems-grid" id="problemsGrid">
+            <div class="loading">Loading problems...</div>
+        </div>
+
+        <!-- Right: Videos -->
+        <aside class="video-sidebar" id="videoSidebar">
+            <div class="video-sidebar-header">
+                <h3 class="video-sidebar-title">📹 Video Help</h3>
+                <p class="video-sidebar-subtitle">Watch videos for current topic</p>
+                <div class="current-filter-display">
+                    <span class="filter-display-topic" id="displayTopic">Linear Equations</span>
+                    <span class="filter-display-difficulty easy" id="displayDifficulty">Easy</span>
+                </div>
+            </div>
+            <div class="video-sidebar-content" id="videoSidebarContent"></div>
+            <div class="video-sidebar-footer">
+                <a href="videos.html" class="video-sidebar-link">View All Videos →</a>
+            </div>
+        </aside>
     </div>
 </div>
 
@@ -363,8 +382,14 @@
 <!-- Linear Functions templates -->
 <script defer src="./generators/algebra/linearFunctions/easy.js"></script>
 <script defer src="./generators/algebra/linearFunctions/medium.js"></script>
+<script defer src="./generators/algebra/linearFunctions/hard.js"></script>
 <script defer src="./generators/algebra/linearFunctions/register.js"></script>
 
+<!-- Linear Eq Two Var templates -->
+<script defer src="./generators/algebra/linearEqTwoVar/easy.js"></script>
+<script defer src="./generators/algebra/linearEqTwoVar/medium.js"></script>
+<script defer src="./generators/algebra/linearEqTwoVar/hard.js"></script>
+<script defer src="./generators/algebra/linearEqTwoVar/register.js"></script>
 <!-- Create instance LAST -->
 <script defer src="./problem-generator-bootstrap.js"></script>
 
