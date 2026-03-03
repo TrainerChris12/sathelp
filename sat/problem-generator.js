@@ -9,7 +9,7 @@ class ProblemGenerator {
     // =========================================================
     // ✅ STATIC POOL REGISTRATION SYSTEM
     // =========================================================
-    static poolsBySubskill = {};
+    static _pools = {};
     static templates = {};
 
     static registerTemplate(templateName, generatorFn) {
@@ -25,7 +25,7 @@ class ProblemGenerator {
             console.warn("❌ registerPools called with invalid args", subskillKey, pools);
             return;
         }
-        ProblemGenerator.poolsBySubskill[subskillKey] = pools;
+        ProblemGenerator._pools[subskillKey] = pools;
     }
 
     // =========================================================
@@ -60,10 +60,9 @@ class ProblemGenerator {
     // ✅ AUTO GENERATOR: uses registered pools
     // =========================================================
     getGenerator(subskill) {
-        const pools = ProblemGenerator.poolsBySubskill[subskill];
+        const pools = ProblemGenerator._pools[subskill];
 
         if (!pools) {
-            // This is what causes "Coming soon"
             return null;
         }
 
@@ -71,7 +70,7 @@ class ProblemGenerator {
     }
 
     generateFromPools(subskillKey, original) {
-        const pools = ProblemGenerator.poolsBySubskill[subskillKey];
+        const pools = ProblemGenerator._pools[subskillKey];
         if (!pools) {
             console.warn(`❌ Pools missing for subskill "${subskillKey}"`);
             return null;
@@ -89,19 +88,16 @@ class ProblemGenerator {
             return null;
         }
 
-        // ✅ KEY FIX: try ALL templates, not just one
         const shuffled = this.shuffle(pool);
 
         for (const methodName of shuffled) {
-            // ✅ CHECK BOTH: static templates registry AND instance methods
-            const templateFn = ProblemGenerator.templates[methodName] || this[methodName];
+            const templateFn = this[methodName] || ProblemGenerator.templates[methodName];
 
             if (typeof templateFn !== "function") {
                 console.warn(`❌ Template "${methodName}" not found`);
                 continue;
             }
 
-            // ✅ Call with proper context
             const result = templateFn.call(this, original);
             if (result) return result;
         }
@@ -248,14 +244,12 @@ class ProblemGenerator {
     makeTable(headers, rows) {
         let html = `<table style="border-collapse: collapse; margin: 15px auto; max-width: 400px;">`;
 
-        // Headers
         html += `<tr>`;
         headers.forEach(h => {
             html += `<th style="border: 2px solid var(--border); padding: 10px; background: var(--secondary); font-weight: 600;">${h}</th>`;
         });
         html += `</tr>`;
 
-        // Rows
         rows.forEach(row => {
             html += `<tr>`;
             row.forEach(cell => {
@@ -269,7 +263,7 @@ class ProblemGenerator {
     }
 
     // =========================================================
-    // LINEAR FUNCTION GRAPH GENERATION
+    // LINEAR FUNCTION GRAPH GENERATION (✅ WITH AXIS LABELS)
     // =========================================================
     makeLinearGraph(m, b, options = {}) {
         const {
@@ -282,6 +276,9 @@ class ProblemGenerator {
             showGrid = true,
             showAxes = true,
             showLine = true,
+            showAxisLabels = false,
+            xLabel = 'x',
+            yLabel = 'y',
             highlightPoints = []
         } = options;
 
@@ -289,7 +286,6 @@ class ProblemGenerator {
         const graphWidth = width - 2 * padding;
         const graphHeight = height - 2 * padding;
 
-        // Scale functions
         const scaleX = (x) => padding + ((x - xMin) / (xMax - xMin)) * graphWidth;
         const scaleY = (y) => height - padding - ((y - yMin) / (yMax - yMin)) * graphHeight;
 
@@ -318,14 +314,15 @@ class ProblemGenerator {
             svg += `<line x1="${padding}" y1="${xAxisY}" x2="${width - padding}" y2="${xAxisY}"/>`;
             svg += `<line x1="${yAxisX}" y1="${padding}" x2="${yAxisX}" y2="${height - padding}"/>`;
 
-            // Arrows
             svg += `<polygon points="${width - padding},${xAxisY} ${width - padding - 8},${xAxisY - 4} ${width - padding - 8},${xAxisY + 4}" fill="var(--text)"/>`;
             svg += `<polygon points="${yAxisX},${padding} ${yAxisX - 4},${padding + 8} ${yAxisX + 4},${padding + 8}" fill="var(--text)"/>`;
             svg += `</g>`;
 
-            // Axis labels
-            svg += `<text x="${width - padding + 15}" y="${xAxisY + 5}" fill="var(--text)" font-size="14" font-weight="600">x</text>`;
-            svg += `<text x="${yAxisX + 5}" y="${padding - 10}" fill="var(--text)" font-size="14" font-weight="600">y</text>`;
+            // ✅ Axis labels (only if enabled)
+            if (showAxisLabels) {
+                svg += `<text x="${width - padding + 15}" y="${xAxisY + 5}" fill="var(--text)" font-size="14" font-weight="600">${xLabel}</text>`;
+                svg += `<text x="${yAxisX + 5}" y="${padding - 10}" fill="var(--text)" font-size="14" font-weight="600">${yLabel}</text>`;
+            }
         }
 
         // Line
@@ -365,7 +362,6 @@ class ProblemGenerator {
             b = null
         } = options;
 
-        // Find ranges from data
         const xValues = points.map(p => p[0]);
         const yValues = points.map(p => p[1]);
         const xMin = Math.min(...xValues) - 1;
@@ -382,27 +378,20 @@ class ProblemGenerator {
 
         let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" style="border: 2px solid var(--border); border-radius: 8px; background: var(--bg-card); margin: 15px auto; display: block;">`;
 
-        // Axes
-        const xAxisY = scaleY(0);
-        const yAxisX = scaleX(0);
-
         svg += `<g stroke="var(--text)" stroke-width="2">`;
         svg += `<line x1="${padding}" y1="${height - padding}" x2="${width - padding}" y2="${height - padding}"/>`;
         svg += `<line x1="${padding}" y1="${padding}" x2="${padding}" y2="${height - padding}"/>`;
         svg += `</g>`;
 
-        // Axis labels
         svg += `<text x="${width / 2}" y="${height - 10}" fill="var(--text)" font-size="14" font-weight="600" text-anchor="middle">${xLabel}</text>`;
         svg += `<text x="${15}" y="${height / 2}" fill="var(--text)" font-size="14" font-weight="600" text-anchor="middle" transform="rotate(-90, 15, ${height / 2})">${yLabel}</text>`;
 
-        // Line of best fit
         if (showLine && m !== null && b !== null) {
             const y1 = m * xMin + b;
             const y2 = m * xMax + b;
             svg += `<line x1="${scaleX(xMin)}" y1="${scaleY(y1)}" x2="${scaleX(xMax)}" y2="${scaleY(y2)}" stroke="#0066b3" stroke-width="2" opacity="0.7"/>`;
         }
 
-        // Points
         points.forEach(([x, y]) => {
             const cx = scaleX(x);
             const cy = scaleY(y);
@@ -414,8 +403,5 @@ class ProblemGenerator {
     }
 }
 
-// ✅ Expose class to other generator files
 window.ProblemGenerator = ProblemGenerator;
-
-// ✅ Single global instance
 window.problemGenerator = new ProblemGenerator();

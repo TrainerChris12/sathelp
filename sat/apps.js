@@ -1,8 +1,10 @@
-// sat/app.js - UPDATED WITH ALL FEATURES
+// sat/app.js - COMPLETE WITH AUTO-GENERATION + JUMP BUTTONS + AUTO-SELECT EASY
 // ✅ Better generated problem IDs (MATH-ALG-LF-M-G001)
 // ✅ Report buttons on generated problems
 // ✅ Select All filters button
-// ✅ Fixed graph clarity (handled in medium.js)
+// ✅ Auto-generation when filters are empty
+// ✅ Auto-select Easy only on first load
+// ✅ Jump-to-topic buttons
 
 let problems = [];
 let activeSubskills = new Set();
@@ -115,6 +117,81 @@ function generateProblemId(subskill, difficulty) {
 }
 
 // =========================================================
+// AUTO-GENERATION WHEN FILTERS ARE EMPTY
+// =========================================================
+
+function autoGenerateProblems() {
+    // Get current filters
+    const firstSubskill = Array.from(activeSubskills)[0];
+    const firstDiff = Array.from(activeDifficulties)[0];
+
+    // Need both to generate
+    if (!firstSubskill || !firstDiff) {
+        console.log('⚠️ No filters selected for auto-generation');
+        return null;
+    }
+
+    // Check if generator exists
+    if (!window.problemGenerator) {
+        console.log('⚠️ Problem generator not loaded yet');
+        return null;
+    }
+
+    console.log(`🎲 Auto-generating problems for ${firstSubskill} - ${firstDiff}`);
+
+    const generated = [];
+    const COUNT = 15; // Generate 15 problems
+
+    // Get topic from subskill
+    const subskillToTopic = {
+        'linear-equations-one-variable': 'algebra',
+        'linear-functions': 'algebra',
+        'linear-equations-two-variables': 'algebra',
+        'systems-linear-equations': 'algebra',
+        'linear-inequalities': 'algebra',
+        'nonlinear-functions': 'advanced-math',
+        'nonlinear-equations': 'advanced-math',
+        'equivalent-expressions': 'advanced-math',
+        'ratios-rates': 'problem-solving',
+        'percentages': 'problem-solving',
+        'one-variable-data': 'problem-solving',
+        'two-variable-data': 'problem-solving',
+        'probability': 'problem-solving',
+        'inference': 'problem-solving',
+        'statistical-claims': 'problem-solving',
+        'area-volume': 'geometry',
+        'lines-angles-triangles': 'geometry',
+        'right-triangles': 'geometry',
+        'circles': 'geometry'
+    };
+
+    const topic = subskillToTopic[firstSubskill] || 'algebra';
+
+    // Generate problems
+    for (let i = 0; i < COUNT; i++) {
+        try {
+            const problem = problemGenerator.generate({
+                subskill: firstSubskill,
+                difficulty: firstDiff,
+                topic: topic
+            });
+
+            if (problem) {
+                // Add unique ID
+                problem.id = generateProblemId(firstSubskill, firstDiff);
+                generated.push(problem);
+            }
+        } catch (error) {
+            console.error('Generation error:', error);
+        }
+    }
+
+    console.log(`✅ Generated ${generated.length} problems`);
+
+    return generated.length > 0 ? generated : null;
+}
+
+// =========================================================
 // FILTER PERSISTENCE
 // =========================================================
 
@@ -210,9 +287,9 @@ async function loadProblems() {
         renderProblems();
     } catch (error) {
         console.error('Error loading problems:', error);
-        const container = document.getElementById('problemsContainer');
-        if (container) {
-            container.innerHTML = `
+        const grid = document.getElementById('problemsGrid');
+        if (grid) {
+            grid.innerHTML = `
                 <div style="text-align: center; padding: 2rem; color: #dc2626;">
                     <p>Error loading problems. Make sure you're running a local server.</p>
                     <p style="margin-top: 1rem; font-family: monospace;">python -m http.server 8000</p>
@@ -266,11 +343,6 @@ function organizeByTopicAndSubskill(problemsList) {
     return organized;
 }
 
-// =====================================================
-// COMPLETE renderProblems() FUNCTION - COPY THIS
-// Replace your current renderProblems() in app.js
-// =====================================================
-
 function renderProblems() {
     console.log('Rendering problems...');
     const grid = document.getElementById('problemsGrid');
@@ -283,7 +355,26 @@ function renderProblems() {
     console.log('Filtered to', filteredProblems.length, 'problems');
 
     if (filteredProblems.length === 0) {
-        grid.innerHTML = '<div class="no-results">No problems match your filters. Try adjusting your selection.</div>';
+        // ✅ NEW: Try auto-generation
+        console.log('🎲 No problems found, attempting auto-generation...');
+
+        const generated = autoGenerateProblems();
+
+        if (generated && generated.length > 0) {
+            // Add generated problems to main array
+            problems.push(...generated);
+
+            // Add to UI queue
+            generatedUIQueue.unshift(...generated.map(p => p.id));
+
+            // Re-run render with new problems
+            console.log('✅ Auto-generated problems added, re-rendering...');
+            renderProblems();
+            return;
+        }
+
+        // No generator available - show empty state
+        grid.innerHTML = '<div class="no-results">No problems available for this topic yet. Try selecting a different topic or difficulty level.</div>';
         const visibleElem = document.getElementById('visibleProblems');
         if (visibleElem) visibleElem.textContent = '0';
         return;
@@ -353,6 +444,9 @@ function renderProblems() {
 
     const visibleElem = document.getElementById('visibleProblems');
     if (visibleElem) visibleElem.textContent = filteredProblems.length;
+
+    // Update jump button states after render
+    updateJumpButtonStates();
 }
 
 function updateStatsDisplay() {
@@ -522,6 +616,60 @@ function setShowAnswerButtonState(card, show) {
     }
 }
 
+// =========================================================
+// JUMP TO TOPIC BUTTONS
+// =========================================================
+
+function scrollToTopicSection(subskill) {
+    // Find topic section header that contains this subskill
+    const headers = document.querySelectorAll('.topic-header');
+
+    for (const header of headers) {
+        const headerText = header.textContent.toLowerCase();
+        const subskillName = subskillDisplayNames[subskill]?.toLowerCase() || subskill.replace(/-/g, ' ');
+
+        if (headerText.includes(subskillName)) {
+            // Scroll with offset for fixed header
+            const yOffset = -100;
+            const element = header.closest('.topic-section');
+            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+            window.scrollTo({
+                top: y,
+                behavior: 'smooth'
+            });
+
+            // Flash the section briefly
+            element.classList.add('flash-highlight');
+            setTimeout(() => {
+                element.classList.remove('flash-highlight');
+            }, 1000);
+
+            return;
+        }
+    }
+
+    // If not found, topic might not have problems yet
+    console.log(`No problems found for ${subskill}`);
+}
+
+function updateJumpButtonStates() {
+    document.querySelectorAll('.jump-to-topic-btn').forEach(btn => {
+        const subskill = btn.dataset.jumpTo;
+        const checkbox = btn.closest('.subskill-checkbox').querySelector('input[type="checkbox"]');
+
+        // Disable if not checked
+        btn.disabled = !checkbox.checked;
+
+        // Update title
+        if (checkbox.checked) {
+            btn.title = 'Jump to problems';
+        } else {
+            btn.title = 'Check this topic first';
+        }
+    });
+}
+
 /* =========================
    DOM Content Loaded
    ========================= */
@@ -665,17 +813,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateActiveFilterTags();
             renderProblems();
             saveFiltersToStorage();
+            updateJumpButtonStates(); // ✅ Update jump button states
         });
     });
 
+    // ✅ MODIFIED: Auto-select Easy only on first load
     const loadedFilters = loadFiltersFromStorage();
     if (!loadedFilters) {
+        // Select all subskills
         document.querySelectorAll('[data-subskill]').forEach(checkbox => {
             checkbox.checked = true;
             activeSubskills.add(checkbox.dataset.subskill);
         });
+
+        // ✅ NEW: Only select Easy difficulty by default
+        activeDifficulties.clear();
+        activeDifficulties.add('easy');
+
         document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
-            btn.classList.add('active');
+            if (btn.dataset.difficulty === 'easy') {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
     }
 
@@ -778,6 +938,39 @@ document.addEventListener('DOMContentLoaded', async () => {
             saveFiltersToStorage();
         });
     }
+
+    // =========================================================
+    // ✅ JUMP TO TOPIC BUTTONS EVENT LISTENERS
+    // =========================================================
+
+    document.querySelectorAll('.jump-to-topic-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const subskill = btn.dataset.jumpTo;
+            const checkbox = btn.closest('.subskill-checkbox').querySelector('input[type="checkbox"]');
+
+            // If topic not checked, check it first
+            if (!checkbox.checked) {
+                checkbox.checked = true;
+                activeSubskills.add(subskill);
+                updateSelectedCounts();
+                updateActiveFilterTags();
+                renderProblems();
+                saveFiltersToStorage();
+
+                // Wait for render, then scroll
+                setTimeout(() => scrollToTopicSection(subskill), 300);
+            } else {
+                // Already checked, just scroll
+                scrollToTopicSection(subskill);
+            }
+        });
+    });
+
+    // Initialize jump button states
+    updateJumpButtonStates();
 
     // Initialize
     updateSelectedCounts();

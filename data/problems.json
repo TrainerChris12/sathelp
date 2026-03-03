@@ -1668,195 +1668,273 @@
     "type": "practice"
   },
   {
-    "id": "MATH-ALG-LE2V-E-001",
+    "id": "MATH-ALG-SYS-E-001",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "A store's bottle sales totaled $672 last month. The equation 3.25x + 4.75y = 672 represents this, where x is the number of small bottles sold and y is the number of large bottles sold. What does 3.25 represent?",
-    "imageUrl": null,
+    "question": "A bakery sells muffins for $3 each and cookies for $2 each. On Monday, the bakery sold a total of 45 muffins and cookies for $110. If m represents the number of muffins sold and c represents the number of cookies sold, which system of equations represents this situation?",
     "choices": [
-      "A) The price of each small bottle",
-      "B) The price of each large bottle",
-      "C) The total number of bottles sold",
-      "D) The number of small bottles sold"
+      "A. m + c = 45\n   3m + 2c = 110",
+      "B. m + c = 110\n   3m + 2c = 45",
+      "C. m + c = 45\n   2m + 3c = 110",
+      "D. 3m + 2c = 45\n   m + c = 110"
     ],
     "answer": "A",
-    "explanation": "In the equation 3.25x + 4.75y = 672, the term 3.25x represents the total sales from small bottles. Since x is the number of small bottles, 3.25 must be the price per small bottle."
+    "explanation": "The total number of items is m + c = 45. Each muffin costs $3 and each cookie costs $2, so the total revenue is 3m + 2c = 110."
   },
   {
-    "id": "MATH-ALG-LE2V-E-002",
+    "id": "MATH-ALG-SYS-E-002",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "Line ℓ is defined by y = (−3/4)x + 5. Line m is perpendicular to line ℓ in the xy-plane. What is the slope of line m?",
-    "imageUrl": null,
+    "question": "What is the solution (x, y) to the given system of equations?\n\n2x + 3y = 16\nx = 2",
     "choices": [
-      "A) 4/3",
-      "B) −4/3",
-      "C) 3/4",
-      "D) −3/4"
-    ],
-    "answer": "A",
-    "explanation": "Perpendicular lines have slopes that are opposite reciprocals. Line ℓ has slope −3/4. The opposite reciprocal is 4/3."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-003",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "A mixture of protein and carbohydrates has a total mass of 540 grams. The mass of protein is 215 grams. What is the mass of carbohydrates in the mixture?",
-    "imageUrl": null,
-    "choices": [
-      "A) 215 grams",
-      "B) 325 grams",
-      "C) 430 grams",
-      "D) 540 grams"
+      "A. (2, 3)",
+      "B. (2, 4)",
+      "C. (3, 2)",
+      "D. (4, 2)"
     ],
     "answer": "B",
-    "explanation": "Let p + c = 540. If p = 215, then 215 + c = 540. Subtracting 215: c = 325 grams."
+    "explanation": "Substitute x = 2 into the first equation: 2(2) + 3y = 16, which gives 4 + 3y = 16, so 3y = 12 and y = 4."
   },
   {
-    "id": "MATH-ALG-LE2V-E-004",
+    "id": "MATH-ALG-SYS-E-003",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "A company charged $87 for an order. The equation 3a + 5b = 87 represents this, where a is notebooks and b is pens. If there are 9 notebooks, how many pens are there?",
-    "imageUrl": null,
+    "question": "The solution to the given system of equations is (x, y). What is the value of x?\n\n3x + y = 14\ny = 5",
     "choices": [
-      "A) 9",
-      "B) 10",
-      "C) 12",
-      "D) 15"
-    ],
-    "answer": "C",
-    "explanation": "Substitute a = 9: 3(9) + 5b = 87, so 27 + 5b = 87. Subtracting 27: 5b = 60. Dividing by 5: b = 12."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-005",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "The equation x + y = 90 relates the minutes spent working (x) and commuting (y) each day. What does 90 represent?",
-    "imageUrl": null,
-    "choices": [
-      "A) Minutes spent working",
-      "B) Minutes spent commuting",
-      "C) Total minutes spent working and commuting",
-      "D) Minutes spent commuting per minute working"
-    ],
-    "answer": "C",
-    "explanation": "Since x + y equals 90, this represents the sum of working and commuting minutes—the total."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-006",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "A printer prints color pages or black pages, taking 7 minutes for a color page and 3 minutes for a black page. It operates 420 minutes daily. Which equation represents the possible number of color pages (C) and black pages (B)?",
-    "imageUrl": null,
-    "choices": [
-      "A) 3C + 7B = 420",
-      "B) 7C + 3B = 420",
-      "C) C + B = 420",
-      "D) 10(C + B) = 420"
+      "A. 2",
+      "B. 3",
+      "C. 4",
+      "D. 5"
     ],
     "answer": "B",
-    "explanation": "Color pages take 7 minutes each (7C total time) and black pages take 3 minutes each (3B total time). Combined: 7C + 3B = 420."
+    "explanation": "Substitute y = 5 into the first equation: 3x + 5 = 14, which gives 3x = 9, so x = 3."
   },
   {
-    "id": "MATH-ALG-LE2V-E-007",
+    "id": "MATH-ALG-SYS-E-004",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "Line k has slope 4 and passes through (0, −6). Which equation defines line k?",
-    "imageUrl": null,
+    "question": "The solution to the given system of equations is (x, y). What is the value of x + y?\n\nx + 2y = 11\n3x + y = 13",
     "choices": [
-      "A) y = 4x − 6",
-      "B) y = −6x + 4",
-      "C) y = 4x + 6",
-      "D) y = −4x − 6"
-    ],
-    "answer": "A",
-    "explanation": "Using slope-intercept form y = mx + b with m = 4 and b = −6: y = 4x − 6."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-008",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "A total of 135 paper straws were used to make triangles and rectangles with no shared sides. The equation 3t + 4r = 135 represents this, where t is triangles and r is rectangles. What's the best interpretation of 4r = 40?",
-    "imageUrl": null,
-    "choices": [
-      "A) If 10 rectangles were made, then 40 straws were used for rectangles",
-      "B) If 10 triangles were made, then 40 straws were used",
-      "C) If 10 rectangles were made, then 10 triangles were made",
-      "D) If 10 triangles were made, then 10 rectangles were made"
-    ],
-    "answer": "A",
-    "explanation": "From 4r = 40, dividing by 4 gives r = 10. This means 10 rectangles were made using 40 straws total."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-009",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "The equation y = 0.2x models problems completed (y) during an x-minute work session. How many problems were completed in 35 minutes?",
-    "imageUrl": null,
-    "choices": [
-      "A) 3",
-      "B) 5",
-      "C) 7",
-      "D) 35"
-    ],
-    "answer": "C",
-    "explanation": "Substitute x = 35: y = 0.2(35) = 7 problems."
-  },
-  {
-    "id": "MATH-ALG-LE2V-E-010",
-    "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
-    "difficulty": "easy",
-    "question": "A mix of Solution A (25% salt) and Solution B (45% salt) contains 180 pounds of salt total. Which equation models this, where x is pounds of Solution A and y is pounds of Solution B?",
-    "imageUrl": null,
-    "choices": [
-      "A) 0.45x + 0.25y = 180",
-      "B) 0.25x + 0.45y = 180",
-      "C) 25x + 45y = 180",
-      "D) 45x + 25y = 180"
+      "A. 6",
+      "B. 7",
+      "C. 8",
+      "D. 9"
     ],
     "answer": "B",
-    "explanation": "Solution A contributes 0.25x pounds of salt and Solution B contributes 0.45y pounds. Total: 0.25x + 0.45y = 180."
+    "explanation": "Adding the two equations: (x + 2y) + (3x + y) = 11 + 13, which gives 4x + 3y = 24. Solving the system: from the first equation x = 11 - 2y. Substituting into the second: 3(11 - 2y) + y = 13, so 33 - 6y + y = 13, giving -5y = -20, thus y = 4. Then x = 11 - 8 = 3. Therefore x + y = 7."
   },
   {
-    "id": "MATH-ALG-LE2V-E-011",
+    "id": "MATH-ALG-SYS-E-005",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "The equation F = 3.50x + 5.50y gives a cafe's revenue where x is coffees sold and y is pastries sold. What does 5.50 represent?",
-    "imageUrl": null,
+    "question": "A gym offers two membership types. The basic membership costs $25 per month and the premium membership costs $40 per month. In January, the gym sold 80 total memberships and collected $2,450. If b represents basic memberships and p represents premium memberships, which system can be used to find b and p?",
     "choices": [
-      "A) Price of one pastry",
-      "B) Price of one coffee",
-      "C) Number of pastries sold",
-      "D) Number of coffees sold"
+      "A. b + p = 80\n   25b + 40p = 2,450",
+      "B. b + p = 2,450\n   25b + 40p = 80",
+      "C. 25b + 40p = 80\n   b + p = 2,450",
+      "D. b + p = 80\n   40b + 25p = 2,450"
     ],
     "answer": "A",
-    "explanation": "In F = 3.50x + 5.50y, the term 5.50y represents total revenue from pastries. Since y is quantity, 5.50 is the price per pastry."
+    "explanation": "The total memberships is b + p = 80. The revenue is 25b + 40p = 2,450."
   },
   {
-    "id": "MATH-ALG-LE2V-E-012",
+    "id": "MATH-ALG-SYS-E-006",
     "topic": "algebra",
-    "subskill": "linear-equations-two-variables",
+    "subskill": "systems-linear-equations",
     "difficulty": "easy",
-    "question": "Line m passes through (−1, 8) and is parallel to y = 3x + 5. Which equation represents line m?",
-    "imageUrl": null,
+    "question": "What is the solution (x, y) to the given system of equations?\n\n4x - y = 10\ny = 2",
     "choices": [
-      "A) y = 3x + 11",
-      "B) y = −3x + 5",
-      "C) y = 2x + 10",
-      "D) y = 4x + 12"
+      "A. (2, 2)",
+      "B. (3, 2)",
+      "C. (2, 3)",
+      "D. (4, 2)"
+    ],
+    "answer": "B",
+    "explanation": "Substitute y = 2: 4x - 2 = 10, so 4x = 12 and x = 3."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-007",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "Marcus and Lisa bought fruit at a market. Marcus bought 5 apples and 3 oranges for $8.50. Lisa bought 3 apples and 4 oranges for $7.50. If a represents the price of one apple and r represents the price of one orange, which system represents this situation?",
+    "choices": [
+      "A. 5a + 3r = 8.50\n   3a + 4r = 7.50",
+      "B. 3a + 5r = 8.50\n   4a + 3r = 7.50",
+      "C. 5a + 3r = 7.50\n   3a + 4r = 8.50",
+      "D. 8a + 7r = 8.50\n   a + r = 16"
     ],
     "answer": "A",
-    "explanation": "Parallel lines have equal slopes. Line m has slope 3. Using (−1, 8): 8 = 3(−1) + b, so b = 11. Equation: y = 3x + 11."
+    "explanation": "Marcus: 5 apples and 3 oranges = $8.50, so 5a + 3r = 8.50. Lisa: 3 apples and 4 oranges = $7.50, so 3a + 4r = 7.50."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-008",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "The solution to the given system of equations is (x, y). What is the value of y?\n\nx + y = 12\nx = 7",
+    "choices": [
+      "A. 3",
+      "B. 4",
+      "C. 5",
+      "D. 6"
+    ],
+    "answer": "C",
+    "explanation": "Substitute x = 7 into x + y = 12: 7 + y = 12, so y = 5."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-009",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "Sarah has $20 bills and $10 bills in her wallet. She has a total of 15 bills worth $220. If t represents the number of twenty-dollar bills and d represents the number of ten-dollar bills, which system can determine t and d?",
+    "choices": [
+      "A. t + d = 15\n   20t + 10d = 220",
+      "B. t + d = 220\n   20t + 10d = 15",
+      "C. 20t + 10d = 15\n   t + d = 220",
+      "D. t + d = 15\n   10t + 20d = 220"
+    ],
+    "answer": "A",
+    "explanation": "Total bills: t + d = 15. Total value: 20t + 10d = 220."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-010",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "What is the solution (x, y) to the given system of equations?\n\n2x + y = 9\nx - y = 3",
+    "choices": [
+      "A. (3, 2)",
+      "B. (4, 1)",
+      "C. (2, 5)",
+      "D. (5, -1)"
+    ],
+    "answer": "B",
+    "explanation": "Add the equations: (2x + y) + (x - y) = 9 + 3, giving 3x = 12, so x = 4. Substitute into x - y = 3: 4 - y = 3, so y = 1."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-011",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "The solution to the given system of equations is (x, y). What is the value of 2x + y?\n\nx + y = 7\nx - y = 1",
+    "choices": [
+      "A. 10",
+      "B. 11",
+      "C. 12",
+      "D. 13"
+    ],
+    "answer": "B",
+    "explanation": "Add equations: 2x = 8, so x = 4. From x + y = 7: y = 3. Therefore 2x + y = 2(4) + 3 = 11."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-012",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "A parking garage charges $5 for cars and $3 for motorcycles. On Saturday, 40 vehicles entered and the garage collected $156. If c represents cars and m represents motorcycles, which system represents this?",
+    "choices": [
+      "A. c + m = 40\n   5c + 3m = 156",
+      "B. c + m = 156\n   5c + 3m = 40",
+      "C. 5c + 3m = 40\n   c + m = 156",
+      "D. c + m = 40\n   3c + 5m = 156"
+    ],
+    "answer": "A",
+    "explanation": "Total vehicles: c + m = 40. Total revenue: 5c + 3m = 156."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-013",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "In the given system of equations, k is a constant. If the system has infinitely many solutions, what is the value of k?\n\n3x + 6y = 12\nx + 2y = k",
+    "choices": [
+      "A. 3",
+      "B. 4",
+      "C. 6",
+      "D. 12"
+    ],
+    "answer": "B",
+    "explanation": "For infinitely many solutions, the second equation must be a multiple of the first. Dividing the first equation by 3: x + 2y = 4. So k = 4."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-014",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "What is the solution (x, y) to the given system of equations?\n\n5x + 2y = 19\ny = 2",
+    "choices": [
+      "A. (2, 2)",
+      "B. (3, 2)",
+      "C. (2, 3)",
+      "D. (4, 2)"
+    ],
+    "answer": "B",
+    "explanation": "Substitute y = 2: 5x + 4 = 19, so 5x = 15 and x = 3."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-015",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "A café sells small coffees for $2 and large coffees for $4. Yesterday, the café sold 60 coffees total and made $180. If s represents small coffees and l represents large coffees, which system can be used to find s and l?",
+    "choices": [
+      "A. s + l = 60\n   2s + 4l = 180",
+      "B. s + l = 180\n   2s + 4l = 60",
+      "C. 2s + 4l = 60\n   s + l = 180",
+      "D. s + l = 60\n   4s + 2l = 180"
+    ],
+    "answer": "A",
+    "explanation": "Total coffees: s + l = 60. Total revenue: 2s + 4l = 180."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-016",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "What is the solution (x, y) to the given system of equations?\n\n3x + 2y = 5\nx + y = 1",
+    "choices": [
+      "A. (1, 0)",
+      "B. (3, -2)",
+      "C. (2, -1)",
+      "D. (0, 1)"
+    ],
+    "answer": "B",
+    "explanation": "From the second equation, y = 1 - x. Substitute into the first: 3x + 2(1 - x) = 5, so 3x + 2 - 2x = 5, giving x = 3. Then y = 1 - 3 = -2. Note: This problem includes a negative solution."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-017",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "A theater sells adult tickets for $12.50 and child tickets for $7.50. For one showing, they sold 84 tickets and made $892.50. If a represents adult tickets and c represents child tickets, which system represents this?",
+    "choices": [
+      "A. a + c = 84\n   12.50a + 7.50c = 892.50",
+      "B. a + c = 892.50\n   12.50a + 7.50c = 84",
+      "C. 12.50a + 7.50c = 84\n   a + c = 892.50",
+      "D. a + c = 84\n   7.50a + 12.50c = 892.50"
+    ],
+    "answer": "A",
+    "explanation": "Total tickets: a + c = 84. Total revenue with decimal prices: 12.50a + 7.50c = 892.50. Note: This includes decimal coefficients."
+  },
+  {
+    "id": "MATH-ALG-SYS-E-018",
+    "topic": "algebra",
+    "subskill": "systems-linear-equations",
+    "difficulty": "easy",
+    "question": "The solution to the given system of equations is (x, y). What is the value of x - y?\n\n3x + y = 11\n2x - y = 4",
+    "choices": [
+      "A. 1",
+      "B. 2",
+      "C. 3",
+      "D. 4"
+    ],
+    "answer": "A",
+    "explanation": "Add the equations: (3x + y) + (2x - y) = 11 + 4, giving 5x = 15, so x = 3. Substitute into 2x - y = 4: 6 - y = 4, so y = 2. Therefore x - y = 3 - 2 = 1."
   }
 ]

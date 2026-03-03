@@ -3,453 +3,331 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Practice Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="video-sidebar.css">
+    <title>SAT Math Practice Hub</title>
+    <link rel="stylesheet" href="styles-redesign.css">
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 <body>
 
-<!-- User Auth Bar -->
-<div class="auth-bar">
-    <div class="auth-bar-content">
-        <div class="app-title">
-            <h2>SAT Math Practice</h2>
+<div class="app-container">
+    <!-- ========================================
+         LEFT SIDEBAR NAVIGATION
+         ======================================== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                📐 SAT Math Practice
+            </div>
         </div>
 
-        <div class="user-section" id="userSection">
-            <!-- Will be populated by JavaScript -->
+        <div class="sidebar-content">
+            <!-- Topics Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Algebra</div>
+
+                <div class="nav-item active" data-subskill="linear-equations-one-variable">
+                    <div class="nav-item-content">
+                        <span>Linear Equations (1 Var)</span>
+                    </div>
+                    <span class="nav-item-badge">45</span>
+                </div>
+
+                <div class="nav-item" data-subskill="linear-functions">
+                    <div class="nav-item-content">
+                        <span>Linear Functions</span>
+                    </div>
+                    <span class="nav-item-badge">38</span>
+                </div>
+
+                <div class="nav-item" data-subskill="linear-equations-two-variables">
+                    <div class="nav-item-content">
+                        <span>Linear Equations (2 Vars)</span>
+                    </div>
+                    <span class="nav-item-badge">42</span>
+                </div>
+
+                <div class="nav-item" data-subskill="systems-linear-equations">
+                    <div class="nav-item-content">
+                        <span>Systems of Linear Equations</span>
+                    </div>
+                    <span class="nav-item-badge">52</span>
+                </div>
+
+                <div class="nav-item" data-subskill="linear-inequalities">
+                    <div class="nav-item-content">
+                        <span>Linear Inequalities</span>
+                    </div>
+                    <span class="nav-item-badge">36</span>
+                </div>
+            </div>
+
+            <!-- Advanced Math Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Advanced Math</div>
+
+                <div class="nav-item" data-subskill="nonlinear-functions">
+                    <div class="nav-item-content">
+                        <span>Nonlinear Functions</span>
+                    </div>
+                    <span class="nav-item-badge">48</span>
+                </div>
+
+                <div class="nav-item" data-subskill="nonlinear-equations">
+                    <div class="nav-item-content">
+                        <span>Nonlinear Equations</span>
+                    </div>
+                    <span class="nav-item-badge">41</span>
+                </div>
+
+                <div class="nav-item" data-subskill="equivalent-expressions">
+                    <div class="nav-item-content">
+                        <span>Equivalent Expressions</span>
+                    </div>
+                    <span class="nav-item-badge">35</span>
+                </div>
+            </div>
+
+            <!-- Problem Solving Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Problem Solving & Data</div>
+
+                <div class="nav-item" data-subskill="ratios-rates">
+                    <div class="nav-item-content">
+                        <span>Ratios, Rates & Proportions</span>
+                    </div>
+                    <span class="nav-item-badge">44</span>
+                </div>
+
+                <div class="nav-item" data-subskill="percentages">
+                    <div class="nav-item-content">
+                        <span>Percentages</span>
+                    </div>
+                    <span class="nav-item-badge">39</span>
+                </div>
+
+                <div class="nav-item" data-subskill="one-variable-data">
+                    <div class="nav-item-content">
+                        <span>One-Variable Data</span>
+                    </div>
+                    <span class="nav-item-badge">33</span>
+                </div>
+
+                <div class="nav-item" data-subskill="two-variable-data">
+                    <div class="nav-item-content">
+                        <span>Two-Variable Data</span>
+                    </div>
+                    <span class="nav-item-badge">37</span>
+                </div>
+
+                <div class="nav-item" data-subskill="probability">
+                    <div class="nav-item-content">
+                        <span>Probability</span>
+                    </div>
+                    <span class="nav-item-badge">29</span>
+                </div>
+
+                <div class="nav-item" data-subskill="inference">
+                    <div class="nav-item-content">
+                        <span>Inference & Margin of Error</span>
+                    </div>
+                    <span class="nav-item-badge">31</span>
+                </div>
+
+                <div class="nav-item" data-subskill="statistical-claims">
+                    <div class="nav-item-content">
+                        <span>Statistical Claims</span>
+                    </div>
+                    <span class="nav-item-badge">26</span>
+                </div>
+            </div>
+
+            <!-- Geometry Section -->
+            <div class="nav-section">
+                <div class="nav-section-title">Geometry & Trigonometry</div>
+
+                <div class="nav-item" data-subskill="area-volume">
+                    <div class="nav-item-content">
+                        <span>Area & Volume</span>
+                    </div>
+                    <span class="nav-item-badge">40</span>
+                </div>
+
+                <div class="nav-item" data-subskill="lines-angles-triangles">
+                    <div class="nav-item-content">
+                        <span>Lines, Angles & Triangles</span>
+                    </div>
+                    <span class="nav-item-badge">43</span>
+                </div>
+
+                <div class="nav-item" data-subskill="right-triangles">
+                    <div class="nav-item-content">
+                        <span>Right Triangles & Trig</span>
+                    </div>
+                    <span class="nav-item-badge">38</span>
+                </div>
+
+                <div class="nav-item" data-subskill="circles">
+                    <div class="nav-item-content">
+                        <span>Circles</span>
+                    </div>
+                    <span class="nav-item-badge">34</span>
+                </div>
+            </div>
+
+            <!-- Difficulty Filters -->
+            <div class="nav-section">
+                <div class="nav-section-title">Difficulty</div>
+                <div class="difficulty-filters">
+                    <button class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
+                    <button class="difficulty-btn medium active" data-difficulty="medium">Med</button>
+                    <button class="difficulty-btn hard active" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<div class="header">
-    <div class="header-content">
-        <h1>Math Practice Hub</h1>
-        <p class="subtitle">Comprehensive collection of SAT-style math questions organized by topic</p>
-    </div>
-</div>
-
-<!-- Stats Banner -->
-<div class="stats-banner">
-    <div class="stats-left">
-        <div class="stat-item">
-            <span class="stat-value" id="statAttempts">0/0</span>
-            <span class="stat-label">Correct / Total</span>
+        <div class="sidebar-footer">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+                <div id="userEmail" style="margin-bottom: 0.5rem;"></div>
+                <button id="logoutBtn" class="header-btn" style="width: 100%; justify-content: center;">
+                    Sign Out
+                </button>
+            </div>
         </div>
+    </aside>
 
-        <div class="stat-item">
-            <span class="stat-value" id="statAccuracy">0%</span>
-            <span class="stat-label">Accuracy</span>
-        </div>
-
-        <div class="stat-item">
-            <span class="stat-value" id="statStreak">0</span>
-            <span class="stat-label">Current Streak</span>
-        </div>
-
-        <div class="stat-item">
-            <span class="stat-value" id="statTime">0</span>
-            <span class="stat-label">Minutes Practiced</span>
-        </div>
-    </div>
-
-    <!-- ✅ Actions on the right -->
-    <div class="stats-actions">
-        <!-- ✅ Theme toggle moved here so it's always accessible -->
-        <button class="stats-theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
-            <span class="theme-icon">☾</span>
-        </button>
-
-        <button id="resetProgress" class="reset-btn" title="Reset all progress">
-            <span class="reset-icon">↻</span>
-            <span class="reset-text">Reset</span>
-        </button>
-
-        <!-- ✅ Calculator mode toggle: inline (⊟) vs popup window (⧉) -->
-        <button class="calc-mode-btn" id="calcModeToggle" title="Switch to popup window">
-            <span class="calc-mode-icon">⊟</span>
-        </button>
-
-        <!-- ✅ Calculator button with emoji icon -->
-        <button class="stats-calc-btn" id="calculatorToggle" title="Open Calculator">
-            🖩
-        </button>
-    </div>
-</div>
-
-<div class="container">
-    <div class="controls">
-
-        <!-- Filters Container -->
-        <div class="filters-container">
-
-            <!-- Active Filters Display -->
-            <div class="active-filters-section">
-                <button class="active-filters-header" id="activeFiltersToggle">
-                    <span class="accordion-title">
-                        <span class="accordion-icon">▼</span>
-                        Active Filters
-                    </span>
-                    <span class="clear-all-btn" id="clearAllFilters">Clear All</span>
+    <!-- ========================================
+         MAIN CONTENT AREA
+         ======================================== -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="header-btn icon-only" id="sidebarToggle" style="display: none;">
+                    ☰
                 </button>
 
-                <div class="active-filters-content active" id="activeFiltersContent">
-                    <div class="active-filters-tags" id="activeFiltersTags">
-                        <!-- Tags will be dynamically inserted here -->
+                <div class="header-stats">
+                    <div class="header-stat">
+                        <span class="header-stat-value" id="statCorrect">0</span>
+                        <span class="header-stat-label">/ <span id="statTotal">0</span> Correct</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-value" id="statAccuracy">0%</span>
+                        <span class="header-stat-label">Accuracy</span>
+                    </div>
+                    <div class="header-stat">
+                        <span class="header-stat-value" id="statStreak">0</span>
+                        <span class="header-stat-label">Streak</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Topic & Subskill Accordion -->
-            <div class="filter-section">
-                <h3>Topics & Skills</h3>
+            <div class="header-right">
+                <button class="header-btn icon-only" id="themeToggle" title="Toggle theme">
+                    ☾
+                </button>
 
-                <!-- Algebra Accordion -->
-                <div class="accordion-item">
-                    <button class="accordion-header" data-topic="algebra">
-                        <span class="accordion-title">
-                            <span class="accordion-icon">▼</span>
-                            Algebra
-                        </span>
-                        <span class="selected-count" data-topic-count="algebra">0 selected</span>
-                    </button>
+                <button class="header-btn icon-only" id="calculatorBtn" title="Open calculator">
+                    🖩
+                </button>
 
-                    <div class="accordion-content">
-                        <div class="subskill-checkboxes">
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="linear-equations-one-variable" checked>
-                                <span>Linear Equations in One Variable</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="linear-functions" checked>
-                                <span>Linear Functions</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="linear-equations-two-variables" checked>
-                                <span>Linear Equations in Two Variables</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="systems-linear-equations" checked>
-                                <span>Systems of Two Linear Equations</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="linear-inequalities" checked>
-                                <span>Linear Inequalities</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Advanced Math Accordion -->
-                <div class="accordion-item">
-                    <button class="accordion-header" data-topic="advanced-math">
-                        <span class="accordion-title">
-                            <span class="accordion-icon">▼</span>
-                            Advanced Math
-                        </span>
-                        <span class="selected-count" data-topic-count="advanced-math">0 selected</span>
-                    </button>
-
-                    <div class="accordion-content">
-                        <div class="subskill-checkboxes">
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="nonlinear-functions" checked>
-                                <span>Nonlinear Functions</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="nonlinear-equations" checked>
-                                <span>Nonlinear Equations & Systems</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="equivalent-expressions" checked>
-                                <span>Equivalent Expressions</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Problem Solving & Data Accordion -->
-                <div class="accordion-item">
-                    <button class="accordion-header" data-topic="problem-solving">
-                        <span class="accordion-title">
-                            <span class="accordion-icon">▼</span>
-                            Problem Solving & Data Analysis
-                        </span>
-                        <span class="selected-count" data-topic-count="problem-solving">0 selected</span>
-                    </button>
-
-                    <div class="accordion-content">
-                        <div class="subskill-checkboxes">
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="ratios-rates" checked>
-                                <span>Ratios, Rates & Proportions</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="percentages" checked>
-                                <span>Percentages</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="one-variable-data" checked>
-                                <span>One-Variable Data</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="two-variable-data" checked>
-                                <span>Two-Variable Data & Scatterplots</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="probability" checked>
-                                <span>Probability & Conditional Probability</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="inference" checked>
-                                <span>Inference & Margin of Error</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="statistical-claims" checked>
-                                <span>Statistical Claims & Experiments</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Geometry & Trig Accordion -->
-                <div class="accordion-item">
-                    <button class="accordion-header" data-topic="geometry">
-                        <span class="accordion-title">
-                            <span class="accordion-icon">▼</span>
-                            Geometry & Trigonometry
-                        </span>
-                        <span class="selected-count" data-topic-count="geometry">0 selected</span>
-                    </button>
-
-                    <div class="accordion-content">
-                        <div class="subskill-checkboxes">
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="area-volume" checked>
-                                <span>Area & Volume</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="lines-angles-triangles" checked>
-                                <span>Lines, Angles & Triangles</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="right-triangles" checked>
-                                <span>Right Triangles & Trigonometry</span>
-                            </label>
-                            <label class="subskill-checkbox">
-                                <input type="checkbox" data-subskill="circles" checked>
-                                <span>Circles</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                <button class="header-btn" id="resetProgress" title="Reset progress">
+                    ↻ Reset
+                </button>
             </div>
+        </header>
 
-            <!-- Difficulty Filter -->
-            <div class="filter-section">
-                <h3>Difficulty</h3>
-                <div class="filter-buttons" id="difficultyFilters">
-                    <button class="filter-btn active" data-difficulty="easy">Easy</button>
-                    <button class="filter-btn active" data-difficulty="medium">Medium</button>
-                    <button class="filter-btn active" data-difficulty="hard">Hard</button>
-                </div>
+        <!-- Problems Area -->
+        <div class="problems-area" id="problemsArea">
+            <div class="problems-list" id="problemsList">
+                <div class="loading">Loading problems...</div>
             </div>
-
-            <!-- Progress Filter -->
-            <div class="filter-section">
-                <h3>Progress</h3>
-                <div class="filter-buttons" id="progressFilters">
-                    <button class="filter-btn active" data-progress="all">All Problems</button>
-                    <button class="filter-btn" data-progress="unsolved">Unsolved Only</button>
-                    <button class="filter-btn" data-progress="solved">Solved Only</button>
-                </div>
-            </div>
-
-            <!-- Search -->
-            <div class="filter-section">
-                <h3>Search</h3>
-                <input type="text" id="searchInput" placeholder="Search problems..." class="search-input">
-            </div>
-
         </div>
-    </div>
+    </main>
+</div>
 
-    <div class="stats">
-        <div class="stat-card">
-            <div class="stat-number" id="totalProblems">0</div>
-            <div class="stat-label">Total Problems</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="visibleProblems">0</div>
-            <div class="stat-label">Showing</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number" id="topicCount">0</div>
-            <div class="stat-label">Topics</div>
-        </div>
-    </div>
-
-    <div class="problems-container" id="problemsContainer">
-        <!-- Left: Problems -->
-        <div class="problems-grid" id="problemsGrid">
-            <div class="loading">Loading problems...</div>
+<!-- ========================================
+     CALCULATOR OVERLAY
+     ======================================== -->
+<div class="calculator-overlay" id="calculatorOverlay">
+    <div class="calculator-modal">
+        <div class="calculator-header">
+            <div class="calculator-title">Calculator</div>
+            <button class="calculator-close" id="calculatorClose">×</button>
         </div>
 
-        <!-- Right: Videos -->
-        <aside class="video-sidebar" id="videoSidebar">
-            <div class="video-sidebar-header">
-                <h3 class="video-sidebar-title">📹 Video Help</h3>
-                <p class="video-sidebar-subtitle">Watch videos for current topic</p>
-                <div class="current-filter-display">
-                    <span class="filter-display-topic" id="displayTopic">Linear Equations</span>
-                    <span class="filter-display-difficulty easy" id="displayDifficulty">Easy</span>
-                </div>
-            </div>
-            <div class="video-sidebar-content" id="videoSidebarContent"></div>
-            <div class="video-sidebar-footer">
-                <a href="videos.html" class="video-sidebar-link">View All Videos →</a>
-            </div>
-        </aside>
+        <div class="calculator-tabs">
+            <button class="calculator-tab active" data-calc="graphing">📈 Graphing</button>
+            <button class="calculator-tab" data-calc="scientific">🔬 Scientific</button>
+            <button class="calculator-tab" data-calc="basic">🔢 Basic</button>
+        </div>
+
+        <div class="calculator-content">
+            <iframe
+                    id="calcGraphing"
+                    class="calculator-frame active"
+                    src="https://www.desmos.com/calculator"
+                    title="Desmos Graphing Calculator">
+            </iframe>
+
+            <iframe
+                    id="calcScientific"
+                    class="calculator-frame"
+                    src="about:blank"
+                    data-src="https://www.desmos.com/scientific"
+                    title="Desmos Scientific Calculator">
+            </iframe>
+
+            <iframe
+                    id="calcBasic"
+                    class="calculator-frame"
+                    src="about:blank"
+                    data-src="https://www.desmos.com/fourfunction"
+                    title="Basic Calculator">
+            </iframe>
+        </div>
     </div>
 </div>
 
 <!-- Back to Top Button -->
 <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <span>↑</span>
+    ↑
 </button>
-
-<!-- Report Issue Modal -->
-<div class="modal-overlay" id="reportModalOverlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>🚩 Report Problem Issue</h3>
-            <button class="modal-close" id="closeReportModal">×</button>
-        </div>
-        <div class="modal-body">
-            <div class="report-problem-info">
-                <p><strong>Problem ID:</strong> <span id="reportProblemId"></span></p>
-                <p><strong>Topic:</strong> <span id="reportTopic"></span></p>
-                <p><strong>Difficulty:</strong> <span id="reportDifficulty"></span></p>
-            </div>
-
-            <div class="form-group">
-                <label for="issueType">Issue Type:</label>
-                <select id="issueType" class="form-control">
-                    <option value="">Select issue type...</option>
-                    <option value="wrong-answer">Wrong Answer</option>
-                    <option value="typo">Typo/Grammar Error</option>
-                    <option value="unclear">Unclear Question</option>
-                    <option value="wrong-difficulty">Wrong Difficulty Level</option>
-                    <option value="broken-image">Broken/Missing Image</option>
-                    <option value="wrong-explanation">Wrong Explanation</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="issueDescription">Description:</label>
-                <textarea id="issueDescription" class="form-control" rows="5" placeholder="Please describe the issue in detail..."></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="reporterEmail">Your Email (optional):</label>
-                <input type="email" id="reporterEmail" class="form-control" placeholder="your.email@example.com">
-                <small>We'll only use this to follow up if needed</small>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn-cancel" id="cancelReport">Cancel</button>
-            <button class="btn-submit" id="submitReport">Submit Report</button>
-        </div>
-    </div>
-</div>
 
 <!-- Firebase SDK -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-<!-- Core generator FIRST -->
+<!-- Problem Generator -->
 <script defer src="./problem-generator.js"></script>
 
-<!-- Linear Eq One Var templates -->
+<!-- All generator files -->
 <script defer src="./generators/algebra/linearEqOneVar/easy.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/medium.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/hard.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/register.js"></script>
 
-<!-- Linear Functions templates -->
 <script defer src="./generators/algebra/linearFunctions/easy.js"></script>
 <script defer src="./generators/algebra/linearFunctions/medium.js"></script>
-<script defer src="./generators/algebra/linearFunctions/hard.js"></script>
 <script defer src="./generators/algebra/linearFunctions/register.js"></script>
 
-<!-- Linear Eq Two Var templates -->
 <script defer src="./generators/algebra/linearEqTwoVar/easy.js"></script>
 <script defer src="./generators/algebra/linearEqTwoVar/medium.js"></script>
-<script defer src="./generators/algebra/linearEqTwoVar/hard.js"></script>
 <script defer src="./generators/algebra/linearEqTwoVar/register.js"></script>
-<!-- Create instance LAST -->
+
+<script defer src="./generators/algebra/systemsOfTwoLinEq/easy.js"></script>
+<script defer src="./generators/algebra/systemsOfTwoLinEq/medium.js"></script>
+<script defer src="./generators/algebra/systemsOfTwoLinEq/hard.js"></script>
+<script defer src="./generators/algebra/systemsOfTwoLinEq/register.js"></script>
+
+<!-- Bootstrap -->
 <script defer src="./problem-generator-bootstrap.js"></script>
 
-<!-- Your app scripts -->
+<!-- App scripts -->
 <script defer src="../shared/firebase-config.js"></script>
 <script defer src="../shared/storage-manager.js"></script>
-<script defer src="./apps.js"></script>
+<script defer src="./apps-redesign.js"></script>
 
-<!-- Calculator Panel -->
-<div class="calculator-panel" id="calculatorPanel">
-    <!-- Resize Handle (drag to adjust width) -->
-    <div class="calculator-resize-handle" id="calculatorResizeHandle"></div>
-
-    <div class="calculator-header">
-        <h3>📐 Calculator</h3>
-        <div class="calculator-header-actions">
-            <span class="calculator-width-display" id="calculatorWidthDisplay">500px</span>
-            <button class="calculator-close" id="calculatorClose" title="Close">×</button>
-        </div>
-    </div>
-
-    <div class="calculator-tabs">
-        <button class="calculator-tab active" data-calc="graphing">📈 Graphing</button>
-        <button class="calculator-tab" data-calc="scientific">🔬 Scientific</button>
-        <button class="calculator-tab" data-calc="basic">🔢 Basic</button>
-    </div>
-
-    <div class="calculator-content">
-        <!-- Desmos Graphing Calculator -->
-        <iframe
-                id="calcGraphing"
-                class="calculator-frame active"
-                src="https://www.desmos.com/calculator"
-                title="Desmos Graphing Calculator">
-        </iframe>
-
-        <!-- Desmos Scientific Calculator -->
-        <iframe
-                id="calcScientific"
-                class="calculator-frame"
-                src="about:blank"
-                data-src="https://www.desmos.com/scientific"
-                title="Desmos Scientific Calculator">
-        </iframe>
-
-        <!-- Basic Calculator -->
-        <iframe
-                id="calcBasic"
-                class="calculator-frame"
-                src="about:blank"
-                data-src="https://www.desmos.com/fourfunction"
-                title="Basic Calculator">
-        </iframe>
-    </div>
-
-    <div class="calculator-note">
-        <strong>💡 SAT Tip:</strong> Desmos graphing calculator is built into the digital SAT!
-    </div>
-</div>
-<script defer src="./video-sidebar.js"></script>
 </body>
 </html>
