@@ -4,246 +4,222 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAT Math Practice Hub</title>
-    <link rel="stylesheet" href="styles-redesign.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="adaptive-styles.css">
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 <body>
 
 <div class="app-container">
     <!-- ========================================
-         LEFT SIDEBAR NAVIGATION
+         SIDEBAR (No Scroll Wheel)
          ======================================== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">
-                📐 SAT Math Practice
-            </div>
+            <div class="sidebar-logo">📐 SAT Math</div>
         </div>
 
         <div class="sidebar-content">
-            <!-- Topics Section -->
+            <!-- Algebra -->
             <div class="nav-section">
                 <div class="nav-section-title">Algebra</div>
 
                 <div class="nav-item active" data-subskill="linear-equations-one-variable">
-                    <div class="nav-item-content">
-                        <span>Linear Equations (1 Var)</span>
-                    </div>
+                    <span>Linear Equations (1 Var)</span>
                     <span class="nav-item-badge">45</span>
                 </div>
 
                 <div class="nav-item" data-subskill="linear-functions">
-                    <div class="nav-item-content">
-                        <span>Linear Functions</span>
-                    </div>
+                    <span>Linear Functions</span>
                     <span class="nav-item-badge">38</span>
                 </div>
 
                 <div class="nav-item" data-subskill="linear-equations-two-variables">
-                    <div class="nav-item-content">
-                        <span>Linear Equations (2 Vars)</span>
-                    </div>
+                    <span>Linear Equations (2 Vars)</span>
                     <span class="nav-item-badge">42</span>
                 </div>
 
                 <div class="nav-item" data-subskill="systems-linear-equations">
-                    <div class="nav-item-content">
-                        <span>Systems of Linear Equations</span>
-                    </div>
+                    <span>Systems of Linear Equations</span>
                     <span class="nav-item-badge">52</span>
                 </div>
 
                 <div class="nav-item" data-subskill="linear-inequalities">
-                    <div class="nav-item-content">
-                        <span>Linear Inequalities</span>
-                    </div>
+                    <span>Linear Inequalities</span>
                     <span class="nav-item-badge">36</span>
                 </div>
             </div>
 
-            <!-- Advanced Math Section -->
+            <!-- Advanced Math -->
             <div class="nav-section">
                 <div class="nav-section-title">Advanced Math</div>
 
                 <div class="nav-item" data-subskill="nonlinear-functions">
-                    <div class="nav-item-content">
-                        <span>Nonlinear Functions</span>
-                    </div>
+                    <span>Nonlinear Functions</span>
                     <span class="nav-item-badge">48</span>
                 </div>
 
                 <div class="nav-item" data-subskill="nonlinear-equations">
-                    <div class="nav-item-content">
-                        <span>Nonlinear Equations</span>
-                    </div>
+                    <span>Nonlinear Equations</span>
                     <span class="nav-item-badge">41</span>
                 </div>
 
                 <div class="nav-item" data-subskill="equivalent-expressions">
-                    <div class="nav-item-content">
-                        <span>Equivalent Expressions</span>
-                    </div>
+                    <span>Equivalent Expressions</span>
                     <span class="nav-item-badge">35</span>
                 </div>
             </div>
 
-            <!-- Problem Solving Section -->
+            <!-- Problem Solving -->
             <div class="nav-section">
                 <div class="nav-section-title">Problem Solving & Data</div>
 
                 <div class="nav-item" data-subskill="ratios-rates">
-                    <div class="nav-item-content">
-                        <span>Ratios, Rates & Proportions</span>
-                    </div>
+                    <span>Ratios & Rates</span>
                     <span class="nav-item-badge">44</span>
                 </div>
 
                 <div class="nav-item" data-subskill="percentages">
-                    <div class="nav-item-content">
-                        <span>Percentages</span>
-                    </div>
+                    <span>Percentages</span>
                     <span class="nav-item-badge">39</span>
                 </div>
 
                 <div class="nav-item" data-subskill="one-variable-data">
-                    <div class="nav-item-content">
-                        <span>One-Variable Data</span>
-                    </div>
+                    <span>One-Variable Data</span>
                     <span class="nav-item-badge">33</span>
                 </div>
 
                 <div class="nav-item" data-subskill="two-variable-data">
-                    <div class="nav-item-content">
-                        <span>Two-Variable Data</span>
-                    </div>
+                    <span>Two-Variable Data</span>
                     <span class="nav-item-badge">37</span>
                 </div>
 
                 <div class="nav-item" data-subskill="probability">
-                    <div class="nav-item-content">
-                        <span>Probability</span>
-                    </div>
+                    <span>Probability</span>
                     <span class="nav-item-badge">29</span>
                 </div>
 
                 <div class="nav-item" data-subskill="inference">
-                    <div class="nav-item-content">
-                        <span>Inference & Margin of Error</span>
-                    </div>
+                    <span>Inference</span>
                     <span class="nav-item-badge">31</span>
                 </div>
 
                 <div class="nav-item" data-subskill="statistical-claims">
-                    <div class="nav-item-content">
-                        <span>Statistical Claims</span>
-                    </div>
+                    <span>Statistical Claims</span>
                     <span class="nav-item-badge">26</span>
                 </div>
             </div>
 
-            <!-- Geometry Section -->
+            <!-- Geometry -->
             <div class="nav-section">
                 <div class="nav-section-title">Geometry & Trigonometry</div>
 
                 <div class="nav-item" data-subskill="area-volume">
-                    <div class="nav-item-content">
-                        <span>Area & Volume</span>
-                    </div>
+                    <span>Area & Volume</span>
                     <span class="nav-item-badge">40</span>
                 </div>
 
                 <div class="nav-item" data-subskill="lines-angles-triangles">
-                    <div class="nav-item-content">
-                        <span>Lines, Angles & Triangles</span>
-                    </div>
+                    <span>Lines & Angles</span>
                     <span class="nav-item-badge">43</span>
                 </div>
 
                 <div class="nav-item" data-subskill="right-triangles">
-                    <div class="nav-item-content">
-                        <span>Right Triangles & Trig</span>
-                    </div>
+                    <span>Right Triangles & Trig</span>
                     <span class="nav-item-badge">38</span>
                 </div>
 
                 <div class="nav-item" data-subskill="circles">
-                    <div class="nav-item-content">
-                        <span>Circles</span>
-                    </div>
+                    <span>Circles</span>
                     <span class="nav-item-badge">34</span>
-                </div>
-            </div>
-
-            <!-- Difficulty Filters -->
-            <div class="nav-section">
-                <div class="nav-section-title">Difficulty</div>
-                <div class="difficulty-filters">
-                    <button class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
-                    <button class="difficulty-btn medium active" data-difficulty="medium">Med</button>
-                    <button class="difficulty-btn hard active" data-difficulty="hard">Hard</button>
                 </div>
             </div>
         </div>
 
-        <div class="sidebar-footer">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center;">
-                <div id="userEmail" style="margin-bottom: 0.5rem;"></div>
-                <button id="logoutBtn" class="header-btn" style="width: 100%; justify-content: center;">
-                    Sign Out
-                </button>
-            </div>
+        <!-- Adaptive Dashboard in Sidebar -->
+        <div class="sidebar-adaptive" id="sidebarAdaptiveDashboard">
+            <!-- Will be populated by JavaScript -->
         </div>
     </aside>
 
     <!-- ========================================
-         MAIN CONTENT AREA
+         TOP BAR (Difficulty Tabs + Stats)
          ======================================== -->
-    <main class="main-content">
-        <!-- Top Header -->
-        <header class="top-header">
-            <div class="header-left">
-                <button class="header-btn icon-only" id="sidebarToggle" style="display: none;">
-                    ☰
-                </button>
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <button class="icon-btn" id="menuToggle" style="display: none;">
+                ☰
+            </button>
 
-                <div class="header-stats">
-                    <div class="header-stat">
-                        <span class="header-stat-value" id="statCorrect">0</span>
-                        <span class="header-stat-label">/ <span id="statTotal">0</span> Correct</span>
-                    </div>
-                    <div class="header-stat">
-                        <span class="header-stat-value" id="statAccuracy">0%</span>
-                        <span class="header-stat-label">Accuracy</span>
-                    </div>
-                    <div class="header-stat">
-                        <span class="header-stat-value" id="statStreak">0</span>
-                        <span class="header-stat-label">Streak</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="header-right">
-                <button class="header-btn icon-only" id="themeToggle" title="Toggle theme">
-                    ☾
-                </button>
-
-                <button class="header-btn icon-only" id="calculatorBtn" title="Open calculator">
-                    🖩
-                </button>
-
-                <button class="header-btn" id="resetProgress" title="Reset progress">
-                    ↻ Reset
-                </button>
-            </div>
-        </header>
-
-        <!-- Problems Area -->
-        <div class="problems-area" id="problemsArea">
-            <div class="problems-list" id="problemsList">
-                <div class="loading">Loading problems...</div>
+            <div class="difficulty-tabs">
+                <button class="difficulty-tab easy active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-tab medium active" data-difficulty="medium">Medium</button>
+                <button class="difficulty-tab hard active" data-difficulty="hard">Hard</button>
             </div>
         </div>
-    </main>
+
+        <div class="top-bar-right">
+            <div class="top-bar-stat">
+                <span class="stat-value" id="statCorrect">0</span>
+                <span class="stat-label">/ <span id="statTotal">0</span></span>
+            </div>
+
+            <div class="top-bar-stat">
+                <span class="stat-value" id="statAccuracy">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+
+            <!-- User Auth Section -->
+            <div id="userAuthSection">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <button class="icon-btn" id="themeToggle" title="Toggle theme">
+                ☾
+            </button>
+
+            <button class="icon-btn" id="calculatorBtn" title="Open calculator">
+                🖩
+            </button>
+
+            <button class="icon-btn" id="resetProgress" title="Reset progress">
+                ↻
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         PROBLEM AREA (One Problem at a Time)
+         ======================================== -->
+    <div class="problem-area">
+        <div class="problem-container" id="problemContainer">
+            <!-- Problem will be rendered here -->
+            <div style="text-align: center; padding: 4rem; color: var(--text-light);">
+                Loading problems...
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         BOTTOM BAR (Actions + Navigation)
+         ======================================== -->
+    <div class="bottom-bar">
+        <div class="bottom-bar-left">
+            <button class="action-btn" id="showAnswerBtn">Show Answer</button>
+            <button class="action-btn" id="showExplanationBtn" style="display: none;">Show Explanation</button>
+            <button class="action-btn primary" id="generateSimilarBtn">Practice Similar</button>
+        </div>
+
+        <div class="bottom-bar-right">
+            <span class="progress-indicator" id="progressIndicator">1 / 45</span>
+            <button class="nav-btn" id="prevBtn">
+                ← Previous
+            </button>
+            <button class="nav-btn" id="nextBtn">
+                Next →
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- ========================================
@@ -252,47 +228,20 @@
 <div class="calculator-overlay" id="calculatorOverlay">
     <div class="calculator-modal">
         <div class="calculator-header">
-            <div class="calculator-title">Calculator</div>
+            <div class="calculator-title">📐 Desmos Calculator</div>
             <button class="calculator-close" id="calculatorClose">×</button>
-        </div>
-
-        <div class="calculator-tabs">
-            <button class="calculator-tab active" data-calc="graphing">📈 Graphing</button>
-            <button class="calculator-tab" data-calc="scientific">🔬 Scientific</button>
-            <button class="calculator-tab" data-calc="basic">🔢 Basic</button>
         </div>
 
         <div class="calculator-content">
             <iframe
-                    id="calcGraphing"
-                    class="calculator-frame active"
+                    id="calculatorFrame"
+                    class="calculator-frame"
                     src="https://www.desmos.com/calculator"
-                    title="Desmos Graphing Calculator">
-            </iframe>
-
-            <iframe
-                    id="calcScientific"
-                    class="calculator-frame"
-                    src="about:blank"
-                    data-src="https://www.desmos.com/scientific"
-                    title="Desmos Scientific Calculator">
-            </iframe>
-
-            <iframe
-                    id="calcBasic"
-                    class="calculator-frame"
-                    src="about:blank"
-                    data-src="https://www.desmos.com/fourfunction"
-                    title="Basic Calculator">
+                    title="Desmos Calculator">
             </iframe>
         </div>
     </div>
 </div>
-
-<!-- Back to Top Button -->
-<button class="back-to-top" id="backToTop" aria-label="Back to top">
-    ↑
-</button>
 
 <!-- Firebase SDK -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -301,6 +250,9 @@
 
 <!-- Problem Generator -->
 <script defer src="./problem-generator.js"></script>
+
+<!-- Adaptive Learning Engine -->
+<script defer src="./adaptive-learning.js"></script>
 
 <!-- All generator files -->
 <script defer src="./generators/algebra/linearEqOneVar/easy.js"></script>
@@ -327,7 +279,7 @@
 <!-- App scripts -->
 <script defer src="../shared/firebase-config.js"></script>
 <script defer src="../shared/storage-manager.js"></script>
-<script defer src="./apps-redesign.js"></script>
+<script defer src="./apps.js"></script>
 
 </body>
 </html>

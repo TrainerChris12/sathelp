@@ -1,282 +1,18 @@
-// sat/app.js - COMPLETE WITH AUTO-GENERATION + JUMP BUTTONS + AUTO-SELECT EASY
-// ✅ Better generated problem IDs (MATH-ALG-LF-M-G001)
-// ✅ Report buttons on generated problems
-// ✅ Select All filters button
-// ✅ Auto-generation when filters are empty
-// ✅ Auto-select Easy only on first load
-// ✅ Jump-to-topic buttons
+// apps-single-problem.js - Delta Math Style Single Problem View
+
+/* =========================================================
+   STATE
+   ========================================================= */
 
 let problems = [];
-let activeSubskills = new Set();
-let activeDifficulties = new Set(['easy', 'medium', 'hard']);
-let activeProgress = 'all';
-let searchQuery = '';
-const problemTimers = {};
+let filteredProblems = [];
+let currentIndex = 0;
+let selectedSubskill = 'linear-equations-one-variable';
+let selectedDifficulties = new Set(['easy', 'medium', 'hard']);
 
-const MAX_GENERATED_UI = 150;
-let generatedUIQueue = [];
-
-// ✅ NEW: Track generated problem counts for proper IDs
-const generatedProblemCounters = {};
-
-const topicDisplayNames = {
-    'algebra': 'Algebra',
-    'advanced-math': 'Advanced Math',
-    'problem-solving': 'Problem Solving & Data Analysis',
-    'geometry': 'Geometry & Trigonometry'
-};
-
-const subskillDisplayNames = {
-    'linear-equations-one-variable': 'Linear Equations (1 var)',
-    'linear-functions': 'Linear Functions',
-    'linear-equations-two-variables': 'Linear Equations (2 vars)',
-    'systems-linear-equations': 'Systems of Equations',
-    'linear-inequalities': 'Linear Inequalities',
-    'nonlinear-functions': 'Nonlinear Functions',
-    'nonlinear-equations': 'Nonlinear Equations',
-    'equivalent-expressions': 'Equivalent Expressions',
-    'ratios-rates': 'Ratios & Rates',
-    'percentages': 'Percentages',
-    'one-variable-data': 'One-Variable Data',
-    'two-variable-data': 'Two-Variable Data',
-    'probability': 'Probability',
-    'inference': 'Inference',
-    'statistical-claims': 'Statistical Claims',
-    'area-volume': 'Area & Volume',
-    'lines-angles-triangles': 'Lines & Angles',
-    'right-triangles': 'Right Triangles & Trig',
-    'circles': 'Circles'
-};
-
-// ✅ NEW: Generate formatted problem IDs for generated problems
-function generateProblemId(subskill, difficulty) {
-    const subskillCodes = {
-        'linear-equations-one-variable': 'LEQ1',
-        'linear-functions': 'LF',
-        'linear-equations-two-variables': 'LEQ2',
-        'systems-linear-equations': 'SYS',
-        'linear-inequalities': 'LNEQ',
-        'nonlinear-functions': 'NLF',
-        'nonlinear-equations': 'NLEQ',
-        'equivalent-expressions': 'EQV',
-        'ratios-rates': 'RAT',
-        'percentages': 'PCT',
-        'one-variable-data': 'DAT1',
-        'two-variable-data': 'DAT2',
-        'probability': 'PROB',
-        'inference': 'INF',
-        'statistical-claims': 'STAT',
-        'area-volume': 'AVOL',
-        'lines-angles-triangles': 'GEOM',
-        'right-triangles': 'TRIG',
-        'circles': 'CIRC'
-    };
-
-    const topicCodes = {
-        'algebra': 'ALG',
-        'advanced-math': 'ADV',
-        'problem-solving': 'PSA',
-        'geometry': 'GEO'
-    };
-
-    const subskillToTopic = {
-        'linear-equations-one-variable': 'algebra',
-        'linear-functions': 'algebra',
-        'linear-equations-two-variables': 'algebra',
-        'systems-linear-equations': 'algebra',
-        'linear-inequalities': 'algebra',
-        'nonlinear-functions': 'advanced-math',
-        'nonlinear-equations': 'advanced-math',
-        'equivalent-expressions': 'advanced-math',
-        'ratios-rates': 'problem-solving',
-        'percentages': 'problem-solving',
-        'one-variable-data': 'problem-solving',
-        'two-variable-data': 'problem-solving',
-        'probability': 'problem-solving',
-        'inference': 'problem-solving',
-        'statistical-claims': 'problem-solving',
-        'area-volume': 'geometry',
-        'lines-angles-triangles': 'geometry',
-        'right-triangles': 'geometry',
-        'circles': 'geometry'
-    };
-
-    const topic = subskillToTopic[subskill] || 'algebra';
-    const topicCode = topicCodes[topic];
-    const subskillCode = subskillCodes[subskill] || 'GEN';
-    const diffCode = difficulty.charAt(0).toUpperCase();
-
-    if (!generatedProblemCounters[subskill]) {
-        generatedProblemCounters[subskill] = 0;
-    }
-    generatedProblemCounters[subskill]++;
-
-    const count = String(generatedProblemCounters[subskill]).padStart(3, '0');
-
-    return `MATH-${topicCode}-${subskillCode}-${diffCode}-G${count}`;
-}
-
-// =========================================================
-// AUTO-GENERATION WHEN FILTERS ARE EMPTY
-// =========================================================
-
-function autoGenerateProblems() {
-    // Get current filters
-    const firstSubskill = Array.from(activeSubskills)[0];
-    const firstDiff = Array.from(activeDifficulties)[0];
-
-    // Need both to generate
-    if (!firstSubskill || !firstDiff) {
-        console.log('⚠️ No filters selected for auto-generation');
-        return null;
-    }
-
-    // Check if generator exists
-    if (!window.problemGenerator) {
-        console.log('⚠️ Problem generator not loaded yet');
-        return null;
-    }
-
-    console.log(`🎲 Auto-generating problems for ${firstSubskill} - ${firstDiff}`);
-
-    const generated = [];
-    const COUNT = 15; // Generate 15 problems
-
-    // Get topic from subskill
-    const subskillToTopic = {
-        'linear-equations-one-variable': 'algebra',
-        'linear-functions': 'algebra',
-        'linear-equations-two-variables': 'algebra',
-        'systems-linear-equations': 'algebra',
-        'linear-inequalities': 'algebra',
-        'nonlinear-functions': 'advanced-math',
-        'nonlinear-equations': 'advanced-math',
-        'equivalent-expressions': 'advanced-math',
-        'ratios-rates': 'problem-solving',
-        'percentages': 'problem-solving',
-        'one-variable-data': 'problem-solving',
-        'two-variable-data': 'problem-solving',
-        'probability': 'problem-solving',
-        'inference': 'problem-solving',
-        'statistical-claims': 'problem-solving',
-        'area-volume': 'geometry',
-        'lines-angles-triangles': 'geometry',
-        'right-triangles': 'geometry',
-        'circles': 'geometry'
-    };
-
-    const topic = subskillToTopic[firstSubskill] || 'algebra';
-
-    // Generate problems
-    for (let i = 0; i < COUNT; i++) {
-        try {
-            const problem = problemGenerator.generate({
-                subskill: firstSubskill,
-                difficulty: firstDiff,
-                topic: topic
-            });
-
-            if (problem) {
-                // Add unique ID
-                problem.id = generateProblemId(firstSubskill, firstDiff);
-                generated.push(problem);
-            }
-        } catch (error) {
-            console.error('Generation error:', error);
-        }
-    }
-
-    console.log(`✅ Generated ${generated.length} problems`);
-
-    return generated.length > 0 ? generated : null;
-}
-
-// =========================================================
-// FILTER PERSISTENCE
-// =========================================================
-
-function saveFiltersToStorage() {
-    const filterState = {
-        subskills: Array.from(activeSubskills),
-        difficulties: Array.from(activeDifficulties),
-        progress: activeProgress,
-        search: searchQuery
-    };
-    localStorage.setItem('satPracticeFilters', JSON.stringify(filterState));
-}
-
-function loadFiltersFromStorage() {
-    const saved = localStorage.getItem('satPracticeFilters');
-    if (!saved) return false;
-
-    try {
-        const filterState = JSON.parse(saved);
-
-        if (filterState.subskills && Array.isArray(filterState.subskills)) {
-            activeSubskills = new Set(filterState.subskills);
-            document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-                checkbox.checked = activeSubskills.has(checkbox.dataset.subskill);
-            });
-        }
-
-        if (filterState.difficulties && Array.isArray(filterState.difficulties)) {
-            activeDifficulties = new Set(filterState.difficulties);
-            document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
-                btn.classList.toggle('active', activeDifficulties.has(btn.dataset.difficulty));
-            });
-        }
-
-        if (filterState.progress) {
-            activeProgress = filterState.progress;
-            document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.progress === activeProgress);
-            });
-        }
-
-        if (filterState.search) {
-            searchQuery = filterState.search;
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.value = searchQuery;
-        }
-
-        return true;
-    } catch (e) {
-        console.error('Error loading saved filters:', e);
-        return false;
-    }
-}
-
-// =========================================================
-// UTILITY FUNCTIONS
-// =========================================================
-
-function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-}
-
-function getProgressBadge(problemId) {
-    if (!window.storage) return '';
-
-    const progress = storage.getProgress();
-    if (!progress || !progress.problems) return '';
-
-    const problem = progress.problems[problemId];
-
-    if (!problem) {
-        return '';
-    }
-
-    if (problem.correct) {
-        return '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>';
-    }
-
-    return '<span class="badge badge-attempted" title="Attempted but not solved">Attempted</span>';
-}
+/* =========================================================
+   LOAD PROBLEMS
+   ========================================================= */
 
 async function loadProblems() {
     console.log('Loading problems...');
@@ -284,14 +20,15 @@ async function loadProblems() {
         const response = await fetch('../data/problems.json');
         problems = await response.json();
         console.log('Loaded', problems.length, 'problems');
-        renderProblems();
+        filterProblems();
+        showCurrentProblem();
     } catch (error) {
         console.error('Error loading problems:', error);
-        const grid = document.getElementById('problemsGrid');
-        if (grid) {
-            grid.innerHTML = `
-                <div style="text-align: center; padding: 2rem; color: #dc2626;">
-                    <p>Error loading problems. Make sure you're running a local server.</p>
+        const container = document.getElementById('problemContainer');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: var(--error);">
+                    <p>Error loading problems.</p>
                     <p style="margin-top: 1rem; font-family: monospace;">python -m http.server 8000</p>
                 </div>
             `;
@@ -302,1173 +39,1014 @@ async function loadProblems() {
 function filterProblems() {
     const progress = storage ? storage.getProgress() : { problems: {} };
 
-    return problems.filter(p => {
-        let subskillMatch = true;
-        if (activeSubskills.size > 0) {
-            subskillMatch = activeSubskills.has(p.subskill);
-        }
+    filteredProblems = problems.filter(p => {
+        const matchesSubskill = p.subskill === selectedSubskill;
+        const matchesDifficulty = selectedDifficulties.has(p.difficulty.toLowerCase());
 
-        const difficultyMatch = activeDifficulties.has(p.difficulty);
+        // Hide completed STATIC problems (keep generated ones always)
+        const isCompleted = progress.problems && progress.problems[p.id]?.correct === true;
+        const isStatic = p.type !== 'generated';
+        const shouldHide = isStatic && isCompleted;
 
-        let progressMatch = true;
-        if (activeProgress === 'solved') {
-            progressMatch = progress.problems[p.id]?.correct === true;
-        } else if (activeProgress === 'unsolved') {
-            progressMatch = !progress.problems[p.id]?.correct;
-        }
-
-        const searchMatch = searchQuery === '' ||
-            (p.question || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (p.id || '').toLowerCase().includes(searchQuery.toLowerCase());
-
-        return subskillMatch && difficultyMatch && progressMatch && searchMatch;
-    });
-}
-
-function organizeByTopicAndSubskill(problemsList) {
-    const organized = {};
-
-    problemsList.forEach(p => {
-        const key = `${p.topic}|||${p.subskill}`;
-        if (!organized[key]) {
-            organized[key] = [];
-        }
-        organized[key].push(p);
+        return matchesSubskill && matchesDifficulty && !shouldHide;
     });
 
-    Object.keys(organized).forEach(key => {
-        organized[key] = shuffleArray(organized[key]);
-    });
+    // RANDOMIZE problems if multiple difficulties selected
+    if (selectedDifficulties.size > 1) {
+        // Fisher-Yates shuffle
+        for (let i = filteredProblems.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredProblems[i], filteredProblems[j]] = [filteredProblems[j], filteredProblems[i]];
+        }
+    } else {
+        // Single difficulty - keep order but shuffle within same difficulty
+        const shuffled = [];
+        const byDifficulty = {};
 
-    return organized;
-}
+        filteredProblems.forEach(p => {
+            const diff = p.difficulty.toLowerCase();
+            if (!byDifficulty[diff]) byDifficulty[diff] = [];
+            byDifficulty[diff].push(p);
+        });
 
-function renderProblems() {
-    console.log('Rendering problems...');
-    const grid = document.getElementById('problemsGrid');
-    if (!grid) {
-        console.error('problemsGrid not found!');
-        return;
+        // Shuffle each difficulty group
+        Object.values(byDifficulty).forEach(group => {
+            for (let i = group.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [group[i], group[j]] = [group[j], group[i]];
+            }
+            shuffled.push(...group);
+        });
+
+        filteredProblems = shuffled;
     }
 
-    const filteredProblems = filterProblems();
-    console.log('Filtered to', filteredProblems.length, 'problems');
+    currentIndex = Math.min(currentIndex, filteredProblems.length - 1);
+    if (currentIndex < 0) currentIndex = 0;
+
+    updateProgressIndicator();
+    updateNavigationButtons();
+    updateSidebarCounts(); // Update accurate counts
+}
+
+/* =========================================================
+   DISPLAY PROBLEM
+   ========================================================= */
+
+function showCurrentProblem() {
+    const container = document.getElementById('problemContainer');
+    if (!container) return;
 
     if (filteredProblems.length === 0) {
-        // ✅ NEW: Try auto-generation
-        console.log('🎲 No problems found, attempting auto-generation...');
-
-        const generated = autoGenerateProblems();
-
-        if (generated && generated.length > 0) {
-            // Add generated problems to main array
-            problems.push(...generated);
-
-            // Add to UI queue
-            generatedUIQueue.unshift(...generated.map(p => p.id));
-
-            // Re-run render with new problems
-            console.log('✅ Auto-generated problems added, re-rendering...');
-            renderProblems();
-            return;
-        }
-
-        // No generator available - show empty state
-        grid.innerHTML = '<div class="no-results">No problems available for this topic yet. Try selecting a different topic or difficulty level.</div>';
-        const visibleElem = document.getElementById('visibleProblems');
-        if (visibleElem) visibleElem.textContent = '0';
+        container.innerHTML = `
+            <div style="text-align: center; padding: 4rem;">
+                <p style="color: var(--text-light);">No problems available.</p>
+                <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+                    Try selecting different difficulty levels.
+                </p>
+            </div>
+        `;
         return;
     }
 
-    const organized = organizeByTopicAndSubskill(filteredProblems);
-    let html = '';
+    const problem = filteredProblems[currentIndex];
+    const progress = storage ? storage.getProgress() : { problems: {} };
+    const problemProgress = progress.problems ? progress.problems[problem.id] : null;
 
-    Object.keys(organized).sort().forEach(key => {
-        const [topic, subskill] = key.split('|||');
-        const topicProblems = organized[key];
+    // Determine difficulty badge color
+    const difficultyClass = problem.difficulty.toLowerCase();
+    const difficultyDisplay = problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1);
 
-        html += `
-            <div class="topic-section">
-                <h2 class="topic-header">
-                    ${topicDisplayNames[topic] || topic} › ${subskillDisplayNames[subskill] || subskill}
-                    <span class="topic-count">(${topicProblems.length})</span>
-                </h2>
-                <div class="problems-grid">
-                    ${topicProblems.map(problem => `
-                        <div class="problem-card" data-id="${problem.id}" data-answer-shown="false" data-answer-source="">
-                            <div class="problem-header">
-                                <div class="problem-meta">
-                                    <span class="badge badge-difficulty badge-${problem.difficulty}">${problem.difficulty}</span>
-                                    ${getProgressBadge(problem.id)}
-                                </div>
-                                <div class="problem-id">${problem.id}</div>
-                            </div>
-                            ${problem.imageUrl ? `<img src="../${problem.imageUrl}" alt="Problem diagram" class="problem-image">` : ''}
-                            <div class="problem-content">${problem.question}</div>
-                            ${problem.choices && problem.choices.length > 0 ? `
-                                <div class="problem-choices">
-                                    ${problem.choices.map(choice => `<div class="choice">${choice}</div>`).join('')}
-                                </div>
-                            ` : problem.answerType === 'number' ? `
-                                <div class="answer-input-group">
-                                    <label>Your Answer:</label>
-                                    <input type="number" class="answer-input" placeholder="Enter your answer" data-correct="${problem.answer}">
-                                    <button class="check-answer-btn">Check Answer</button>
-                                    <div class="answer-feedback"></div>
-                                </div>
-                            ` : ''}
+    // Check if this is a short answer (no choices)
+    const isShortAnswer = !problem.choices || problem.choices.length === 0;
 
-                            ${problem.explanation ? `
-                                <div class="explanation-section" style="display: none;">
-                                    <div class="explanation-header">
-                                        <span class="explanation-icon">💡</span>
-                                        <strong>Explanation:</strong>
-                                    </div>
-                                    <div class="explanation-content">${problem.explanation}</div>
-                                </div>
-                            ` : ''}
-                            <div class="problem-footer">
-                                <button class="action-btn secondary show-answer">Show Answer</button>
-                                ${problem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
-                                <button class="action-btn practice-similar">Practice Similar</button>
-                                <button class="action-btn report-issue" title="Report an error or issue">🚩 Report Issue</button>
-                            </div>
-                        </div>
-                    `).join('')}
+    container.innerHTML = `
+        <div class="problem-header">
+            <div class="problem-id">${problem.id}</div>
+            <div class="problem-badges">
+                <span class="badge badge-difficulty badge-${difficultyClass}">${difficultyDisplay}</span>
+                ${problemProgress?.correct ? '<span class="badge badge-solved">✓ Solved</span>' : ''}
+            </div>
+        </div>
+
+        <div class="problem-content">${problem.question}</div>
+
+        ${problem.imageUrl ? `<img src="../${problem.imageUrl}" alt="Problem diagram" style="max-width: 100%; height: auto; margin-bottom: 2rem; border-radius: 8px;">` : ''}
+
+        ${isShortAnswer ? `
+            <!-- Short Answer Input -->
+            <div class="answer-input-group">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text);">Your Answer:</label>
+                <input type="text" 
+                       class="answer-input" 
+                       id="shortAnswerInput"
+                       placeholder="Enter your answer" 
+                       data-correct="${problem.answer}">
+                <button class="check-answer-btn" onclick="checkShortAnswer()">Check Answer</button>
+                <div class="answer-feedback" id="answerFeedback"></div>
+            </div>
+        ` : `
+            <!-- Multiple Choice -->
+            <div class="problem-choices">
+                ${problem.choices.map((choice, idx) => `
+                    <div class="choice" data-choice="${String.fromCharCode(65 + idx)}" onclick="selectChoice('${String.fromCharCode(65 + idx)}')">
+                        ${choice}
+                    </div>
+                `).join('')}
+            </div>
+        `}
+
+        ${problem.explanation ? `
+            <div class="explanation" id="explanation" style="display: none;">
+                <div class="explanation-header">💡 Explanation</div>
+                <div class="explanation-content">${problem.explanation}</div>
+            </div>
+        ` : ''}
+    `;
+
+    // Update show explanation button
+    const showExplanationBtn = document.getElementById('showExplanationBtn');
+    if (showExplanationBtn) {
+        if (problem.explanation) {
+            showExplanationBtn.style.display = 'block';
+            showExplanationBtn.textContent = 'Show Explanation';
+        } else {
+            showExplanationBtn.style.display = 'none';
+        }
+    }
+
+    // Render MathJax
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+
+    // Emit event for button state reset
+    window.dispatchEvent(new Event('problemChanged'));
+
+    updateStatsDisplay();
+}
+
+/* =========================================================
+   ANSWER SELECTION
+   ========================================================= */
+
+window.selectChoice = function(choiceLetter) {
+    const problem = filteredProblems[currentIndex];
+    if (!problem) return;
+
+    const container = document.getElementById('problemContainer');
+    const choices = container.querySelectorAll('.choice');
+
+    // Remove previous states
+    choices.forEach(c => {
+        c.classList.remove('selected', 'correct', 'incorrect');
+    });
+
+    // Add selected state
+    const selectedChoice = container.querySelector(`[data-choice="${choiceLetter}"]`);
+    if (selectedChoice) {
+        selectedChoice.classList.add('selected');
+    }
+
+    // Check if correct
+    const isCorrect = choiceLetter === problem.answer;
+
+    if (isCorrect) {
+        selectedChoice.classList.remove('selected');
+        selectedChoice.classList.add('correct');
+
+        // Save progress
+        if (storage) {
+            storage.recordAttempt(problem.id, true, 0);
+            updateStatsDisplay();
+        }
+
+        // Show explanation automatically
+        const explanation = document.getElementById('explanation');
+        if (explanation) {
+            explanation.style.display = 'block';
+            const showExplanationBtn = document.getElementById('showExplanationBtn');
+            if (showExplanationBtn) {
+                showExplanationBtn.textContent = 'Hide Explanation';
+            }
+        }
+    } else {
+        selectedChoice.classList.add('incorrect');
+
+        if (storage) {
+            storage.recordAttempt(problem.id, false, 0);
+            updateStatsDisplay();
+        }
+    }
+};
+
+// Short answer checking
+window.checkShortAnswer = function() {
+    const problem = filteredProblems[currentIndex];
+    if (!problem) return;
+
+    const input = document.getElementById('shortAnswerInput');
+    const feedback = document.getElementById('answerFeedback');
+
+    if (!input || !feedback) return;
+
+    const userAnswer = input.value.trim();
+    const correctAnswer = String(problem.answer).trim();
+
+    if (!userAnswer) {
+        feedback.textContent = 'Please enter an answer';
+        feedback.className = 'answer-feedback';
+        return;
+    }
+
+    // Show confirmation dialog
+    const confirmed = confirm(`Are you sure your answer is "${userAnswer}"?`);
+    if (!confirmed) {
+        input.focus();
+        return;
+    }
+
+    // Check if correct (handle numeric answers)
+    const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase() ||
+        parseFloat(userAnswer) === parseFloat(correctAnswer);
+
+    if (isCorrect) {
+        feedback.textContent = '✓ Correct!';
+        feedback.className = 'answer-feedback correct';
+        input.disabled = true;
+
+        // Save progress
+        if (storage) {
+            storage.recordAttempt(problem.id, true, 0);
+            updateStatsDisplay();
+        }
+
+        // Show explanation
+        const explanation = document.getElementById('explanation');
+        if (explanation) {
+            explanation.style.display = 'block';
+            const showExplanationBtn = document.getElementById('showExplanationBtn');
+            if (showExplanationBtn) {
+                showExplanationBtn.textContent = 'Hide Explanation';
+            }
+        }
+    } else {
+        feedback.textContent = `✗ Incorrect. Try again!`;
+        feedback.className = 'answer-feedback incorrect';
+
+        if (storage) {
+            storage.recordAttempt(problem.id, false, 0);
+            updateStatsDisplay();
+        }
+    }
+};
+
+// Add Enter key listener for short answer input
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const input = document.getElementById('shortAnswerInput');
+        if (input && document.activeElement === input && !input.disabled) {
+            e.preventDefault();
+            checkShortAnswer();
+        }
+    }
+});
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function goToNext() {
+    if (currentIndex < filteredProblems.length - 1) {
+        currentIndex++;
+        showCurrentProblem();
+        updateProgressIndicator();
+        updateNavigationButtons();
+        scrollToTop();
+    }
+}
+
+function goToPrevious() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showCurrentProblem();
+        updateProgressIndicator();
+        updateNavigationButtons();
+        scrollToTop();
+    }
+}
+
+function updateProgressIndicator() {
+    const indicator = document.getElementById('progressIndicator');
+    if (indicator) {
+        indicator.textContent = `${currentIndex + 1} / ${filteredProblems.length}`;
+    }
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn) {
+        prevBtn.disabled = currentIndex === 0;
+    }
+
+    if (nextBtn) {
+        nextBtn.disabled = currentIndex === filteredProblems.length - 1;
+    }
+}
+
+function scrollToTop() {
+    const problemArea = document.querySelector('.problem-area');
+    if (problemArea) {
+        problemArea.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+function updateSidebarCounts() {
+    // Update badges with ACTUAL problem counts
+    const progress = storage ? storage.getProgress() : { problems: {} };
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+        const subskill = item.dataset.subskill;
+        if (!subskill) return;
+
+        // Count available problems (not completed static ones)
+        const available = problems.filter(p => {
+            const matchesSubskill = p.subskill === subskill;
+            const isCompleted = progress.problems && progress.problems[p.id]?.correct === true;
+            const isStatic = p.type !== 'generated';
+            const shouldHide = isStatic && isCompleted;
+            return matchesSubskill && !shouldHide;
+        }).length;
+
+        const badge = item.querySelector('.nav-item-badge');
+        if (badge) {
+            badge.textContent = available;
+
+            // Highlight if no problems left
+            if (available === 0) {
+                badge.style.background = 'rgba(220, 38, 38, 0.1)';
+                badge.style.color = 'var(--error)';
+            } else {
+                badge.style.background = '';
+                badge.style.color = '';
+            }
+        }
+    });
+}
+
+function initializeSidebar() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const subskill = item.dataset.subskill;
+            if (subskill) {
+                selectSubskill(subskill);
+            }
+        });
+    });
+
+    // Mobile toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+    }
+
+    if (window.innerWidth <= 768 && menuToggle) {
+        menuToggle.style.display = 'flex';
+    }
+}
+
+function selectSubskill(subskill) {
+    selectedSubskill = subskill;
+
+    // Update active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    const selectedItem = document.querySelector(`[data-subskill="${subskill}"]`);
+    if (selectedItem) {
+        selectedItem.classList.add('active');
+    }
+
+    // Close mobile sidebar
+    if (window.innerWidth <= 768) {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.classList.remove('active');
+        }
+    }
+
+    currentIndex = 0;
+    filterProblems();
+    showCurrentProblem();
+}
+
+/* =========================================================
+   DIFFICULTY TABS
+   ========================================================= */
+
+function initializeDifficultyTabs() {
+    document.querySelectorAll('.difficulty-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const difficulty = tab.dataset.difficulty;
+            toggleDifficulty(difficulty, tab);
+        });
+    });
+}
+
+function toggleDifficulty(difficulty, tab) {
+    if (selectedDifficulties.has(difficulty)) {
+        selectedDifficulties.delete(difficulty);
+        tab.classList.remove('active');
+    } else {
+        selectedDifficulties.add(difficulty);
+        tab.classList.add('active');
+    }
+
+    currentIndex = 0;
+    filterProblems();
+    showCurrentProblem();
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+function initializeActionButtons() {
+    // Generate Practice - Create multiple new problems at once
+    const generatePracticeBtn = document.getElementById('generatePracticeBtn');
+    if (generatePracticeBtn) {
+        generatePracticeBtn.addEventListener('click', () => {
+            if (!window.problemGenerator) {
+                alert('Problem generator not available!');
+                return;
+            }
+
+            const COUNT = 10; // Generate 10 fresh problems
+            let generated = 0;
+
+            // Create template problem from current topic
+            const template = {
+                subskill: selectedSubskill,
+                topic: getTopicFromSubskill(selectedSubskill),
+                difficulty: Array.from(selectedDifficulties)[0] || 'easy'
+            };
+
+            for (let i = 0; i < COUNT; i++) {
+                const newProblem = window.problemGenerator.generate(template);
+                if (newProblem) {
+                    newProblem.type = 'generated';
+                    problems.unshift(newProblem);
+                    generated++;
+                }
+            }
+
+            if (generated > 0) {
+                filterProblems();
+                currentIndex = 0;
+                showCurrentProblem();
+
+                // Show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 80px; right: 20px; background: var(--success); color: white; padding: 1rem 1.5rem; border-radius: 8px; font-weight: 600; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.2);';
+                notification.textContent = `✨ Generated ${generated} fresh problems!`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => notification.remove(), 3000);
+            } else {
+                alert('Could not generate problems for this topic yet!');
+            }
+        });
+    }
+
+    // Show/Hide Answer
+    const showAnswerBtn = document.getElementById('showAnswerBtn');
+    let answerShown = false;
+
+    if (showAnswerBtn) {
+        showAnswerBtn.addEventListener('click', () => {
+            const problem = filteredProblems[currentIndex];
+            if (!problem) return;
+
+            const container = document.getElementById('problemContainer');
+
+            // Check if this is short answer or multiple choice
+            const isShortAnswer = !problem.choices || problem.choices.length === 0;
+
+            if (!answerShown) {
+                // SHOW ANSWER
+                if (isShortAnswer) {
+                    // Short answer: show answer in feedback
+                    const feedback = document.getElementById('answerFeedback');
+                    if (feedback) {
+                        feedback.textContent = `Answer: ${problem.answer}`;
+                        feedback.className = 'answer-feedback correct';
+                    }
+                } else {
+                    // Multiple choice: highlight correct answer
+                    const choices = container.querySelectorAll('.choice');
+                    choices.forEach(choice => {
+                        if (choice.dataset.choice === problem.answer) {
+                            choice.classList.add('correct');
+                        }
+                    });
+                }
+
+                // Show explanation
+                const explanation = document.getElementById('explanation');
+                if (explanation) {
+                    explanation.style.display = 'block';
+                    const showExplanationBtn = document.getElementById('showExplanationBtn');
+                    if (showExplanationBtn) {
+                        showExplanationBtn.textContent = 'Hide Explanation';
+                    }
+                }
+
+                showAnswerBtn.textContent = 'Hide Answer';
+                answerShown = true;
+            } else {
+                // HIDE ANSWER
+                if (isShortAnswer) {
+                    // Short answer: clear feedback (unless they got it right)
+                    const feedback = document.getElementById('answerFeedback');
+                    const input = document.getElementById('shortAnswerInput');
+                    if (feedback && !input?.disabled) {
+                        feedback.textContent = '';
+                        feedback.className = 'answer-feedback';
+                    }
+                } else {
+                    // Multiple choice: remove highlights
+                    const choices = container.querySelectorAll('.choice');
+                    choices.forEach(choice => {
+                        choice.classList.remove('correct', 'incorrect', 'selected');
+                    });
+                }
+
+                // Hide explanation
+                const explanation = document.getElementById('explanation');
+                if (explanation) {
+                    explanation.style.display = 'none';
+                    const showExplanationBtn = document.getElementById('showExplanationBtn');
+                    if (showExplanationBtn) {
+                        showExplanationBtn.textContent = 'Show Explanation';
+                    }
+                }
+
+                showAnswerBtn.textContent = 'Show Answer';
+                answerShown = false;
+            }
+        });
+    }
+
+    // Reset answer state when navigating
+    window.addEventListener('problemChanged', () => {
+        answerShown = false;
+        if (showAnswerBtn) {
+            showAnswerBtn.textContent = 'Show Answer';
+        }
+    });
+
+    // Show/Hide Explanation
+    const showExplanationBtn = document.getElementById('showExplanationBtn');
+    if (showExplanationBtn) {
+        showExplanationBtn.addEventListener('click', () => {
+            const explanation = document.getElementById('explanation');
+            if (!explanation) return;
+
+            if (explanation.style.display === 'none') {
+                explanation.style.display = 'block';
+                showExplanationBtn.textContent = 'Hide Explanation';
+            } else {
+                explanation.style.display = 'none';
+                showExplanationBtn.textContent = 'Show Explanation';
+            }
+        });
+    }
+
+    // Generate Similar
+    const generateSimilarBtn = document.getElementById('generateSimilarBtn');
+    if (generateSimilarBtn) {
+        generateSimilarBtn.addEventListener('click', () => {
+            const problem = filteredProblems[currentIndex];
+            if (!problem || !window.problemGenerator) {
+                alert('Problem generator not available!');
+                return;
+            }
+
+            const newProblem = window.problemGenerator.generate(problem);
+            if (!newProblem) {
+                alert('Could not generate a similar problem for this topic yet!');
+                return;
+            }
+
+            newProblem.type = 'generated';
+            problems.unshift(newProblem);
+            filterProblems();
+            currentIndex = 0;
+            showCurrentProblem();
+        });
+    }
+
+    // Navigation
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', goToPrevious);
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', goToNext);
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'ArrowLeft') {
+            goToPrevious();
+        } else if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            goToNext();
+        }
+    });
+}
+
+/* =========================================================
+   CALCULATOR
+   ========================================================= */
+
+function initializeCalculator() {
+    const calculatorBtn = document.getElementById('calculatorBtn');
+    const calculatorOverlay = document.getElementById('calculatorOverlay');
+    const calculatorClose = document.getElementById('calculatorClose');
+
+    if (calculatorBtn && calculatorOverlay) {
+        calculatorBtn.addEventListener('click', () => {
+            calculatorOverlay.classList.add('active');
+        });
+    }
+
+    if (calculatorClose && calculatorOverlay) {
+        calculatorClose.addEventListener('click', () => {
+            calculatorOverlay.classList.remove('active');
+        });
+    }
+
+    if (calculatorOverlay) {
+        calculatorOverlay.addEventListener('click', (e) => {
+            if (e.target === calculatorOverlay) {
+                calculatorOverlay.classList.remove('active');
+            }
+        });
+    }
+}
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function initializeTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    if (themeToggle) {
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '☾';
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '☾';
+        });
+    }
+}
+
+/* =========================================================
+   USER AUTHENTICATION
+   ========================================================= */
+
+function updateUserUI() {
+    const userAuthSection = document.getElementById('userAuthSection');
+    if (!userAuthSection) return;
+
+    if (storage && storage.isLoggedIn && storage.user) {
+        // User is logged in
+        const user = storage.user;
+        const displayName = user.displayName || user.email.split('@')[0];
+
+        userAuthSection.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                ${user.photoURL ? `<img src="${user.photoURL}" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%;">` : ''}
+                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                    <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">${displayName}</span>
+                    <button onclick="signOut()" style="font-size: 0.75rem; color: var(--text-light); background: none; border: none; cursor: pointer; padding: 0;">
+                        Sign Out
+                    </button>
                 </div>
             </div>
         `;
-    });
-
-    grid.innerHTML = html;
-
-    const visibleElem = document.getElementById('visibleProblems');
-    if (visibleElem) visibleElem.textContent = filteredProblems.length;
-
-    // Update jump button states after render
-    updateJumpButtonStates();
+    } else {
+        // User not logged in
+        userAuthSection.innerHTML = `
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="goToAuth('login')" class="action-btn" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    Login
+                </button>
+                <button onclick="goToAuth('signup')" class="action-btn primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    Sign Up
+                </button>
+            </div>
+        `;
+    }
 }
+
+window.goToAuth = function(mode) {
+    // Save current state
+    localStorage.setItem('returnToPath', window.location.pathname);
+    localStorage.setItem('authMode', mode); // Save login or signup mode
+
+    // Go to single auth page
+    window.location.href = './auth.html';
+};
+
+window.signOut = async function() {
+    if (storage) {
+        await storage.logout();
+        updateUserUI();
+        updateStatsDisplay();
+        updateAdaptiveDashboard();
+    }
+};
+
+/* =========================================================
+   STATS
+   ========================================================= */
 
 function updateStatsDisplay() {
     if (!storage) return;
 
-    const statAttempts = document.getElementById('statAttempts');
-    const statAccuracy = document.getElementById('statAccuracy');
-    const statStreak = document.getElementById('statStreak');
-    const statTime = document.getElementById('statTime');
-
-    if (!statAttempts) return;
-
     const stats = storage.getStats();
 
-    statAttempts.textContent = `${stats.correctAnswers}/${stats.uniqueProblems}`;
-    statAccuracy.textContent = stats.accuracy + '%';
-    statStreak.textContent = stats.currentStreak;
-    statTime.textContent = stats.totalTimeMinutes;
+    const statCorrect = document.getElementById('statCorrect');
+    const statTotal = document.getElementById('statTotal');
+    const statAccuracy = document.getElementById('statAccuracy');
 
-    console.log('📊 Stats updated:', stats);
+    if (statCorrect) statCorrect.textContent = stats.correctAnswers || 0;
+    if (statTotal) statTotal.textContent = stats.uniqueProblems || 0;
+    if (statAccuracy) statAccuracy.textContent = `${stats.accuracy || 0}%`;
+
+    // Update adaptive dashboard
+    updateAdaptiveDashboard();
 }
 
-function updateUserUI() {
-    const userSection = document.getElementById('userSection');
-    if (!userSection || !storage) return;
+/* =========================================================
+   ADAPTIVE LEARNING DASHBOARD
+   ========================================================= */
 
-    if (storage.isLoggedIn && storage.user) {
-        const user = storage.user;
-        userSection.innerHTML = `
-            <div class="user-info">
-                ${user.photoURL ? `<img src="${user.photoURL}" alt="Profile" class="user-avatar">` : ''}
-                <div>
-                    <div class="user-email">${user.email}</div>
-                    <div class="sync-status">☁️ Synced</div>
-                </div>
-            </div>
-            <button class="logout-btn" onclick="storage.logout()">Logout</button>
-        `;
-    } else {
-        userSection.innerHTML = `
-            <button class="auth-btn" onclick="window.location.href='auth.html'">Login / Sign Up</button>
-        `;
-    }
-}
+function updateAdaptiveDashboard() {
+    const sidebarDash = document.getElementById('sidebarAdaptiveDashboard');
 
-function updateSelectedCounts() {
-    const topicSubskills = {
-        'algebra': ['linear-equations-one-variable', 'linear-functions', 'linear-equations-two-variables', 'systems-linear-equations', 'linear-inequalities'],
-        'advanced-math': ['nonlinear-functions', 'nonlinear-equations', 'equivalent-expressions'],
-        'problem-solving': ['ratios-rates', 'percentages', 'one-variable-data', 'two-variable-data', 'probability', 'inference', 'statistical-claims'],
-        'geometry': ['area-volume', 'lines-angles-triangles', 'right-triangles', 'circles']
-    };
+    if (!sidebarDash || !window.createGamificationDisplay) return;
 
-    Object.keys(topicSubskills).forEach(topic => {
-        const subskills = topicSubskills[topic];
-        const selectedCount = subskills.filter(s => activeSubskills.has(s)).length;
-        const totalCount = subskills.length;
+    // Only show in sidebar after some progress
+    const stats = storage ? storage.getStats() : { uniqueProblems: 0 };
 
-        const countElement = document.querySelector(`[data-topic-count="${topic}"]`);
-        if (countElement) {
-            countElement.textContent = `${selectedCount}/${totalCount} selected`;
-        }
-    });
-}
-
-function updateActiveFilterTags() {
-    const tagsContainer = document.getElementById('activeFiltersTags');
-    if (!tagsContainer) return;
-
-    let tagsHTML = '';
-
-    activeSubskills.forEach(subskill => {
-        const displayName = subskillDisplayNames[subskill] || subskill;
-        tagsHTML += `
-            <div class="filter-tag">
-                <span>${displayName}</span>
-                <span class="filter-tag-remove" data-remove-subskill="${subskill}">×</span>
+    if (stats.uniqueProblems < 1) {
+        sidebarDash.innerHTML = `
+            <div style="padding: 1rem; text-align: center; color: var(--text-light); font-size: 0.8125rem;">
+                Answer a problem to see your progress
             </div>
         `;
-    });
-
-    activeDifficulties.forEach(difficulty => {
-        tagsHTML += `
-            <div class="filter-tag difficulty-${difficulty}">
-                <span>${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}</span>
-                <span class="filter-tag-remove" data-remove-difficulty="${difficulty}">×</span>
-            </div>
-        `;
-    });
-
-    if (activeProgress !== 'all') {
-        tagsHTML += `
-            <div class="filter-tag progress">
-                <span>${activeProgress === 'solved' ? 'Solved Only' : 'Unsolved Only'}</span>
-                <span class="filter-tag-remove" data-remove-progress="true">×</span>
-            </div>
-        `;
-    }
-
-    if (searchQuery) {
-        tagsHTML += `
-            <div class="filter-tag">
-                <span>Search: "${searchQuery}"</span>
-                <span class="filter-tag-remove" data-remove-search="true">×</span>
-            </div>
-        `;
-    }
-
-    if (tagsHTML === '') {
-        tagsHTML = '<span class="no-filters-message">All problems shown</span>';
-    }
-
-    tagsContainer.innerHTML = tagsHTML;
-
-    tagsContainer.querySelectorAll('.filter-tag-remove').forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (btn.dataset.removeSubskill) {
-                const subskill = btn.dataset.removeSubskill;
-                activeSubskills.delete(subskill);
-                const checkbox = document.querySelector(`[data-subskill="${subskill}"]`);
-                if (checkbox) checkbox.checked = false;
-            } else if (btn.dataset.removeDifficulty) {
-                const difficulty = btn.dataset.removeDifficulty;
-                activeDifficulties.delete(difficulty);
-                const diffBtn = document.querySelector(`[data-difficulty="${difficulty}"]`);
-                if (diffBtn) diffBtn.classList.remove('active');
-            } else if (btn.dataset.removeProgress) {
-                activeProgress = 'all';
-                document.querySelectorAll('#progressFilters .filter-btn').forEach(b => b.classList.remove('active'));
-                const allBtn = document.querySelector('[data-progress="all"]');
-                if (allBtn) allBtn.classList.add('active');
-            } else if (btn.dataset.removeSearch) {
-                searchQuery = '';
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) searchInput.value = '';
-            }
-
-            updateSelectedCounts();
-            updateActiveFilterTags();
-            renderProblems();
-            saveFiltersToStorage();
-        });
-    });
-}
-
-function getCorrectLetter(problem) {
-    return String(problem.answer ?? '').trim().toUpperCase();
-}
-
-function getChoiceLetter(choiceText) {
-    const t = (choiceText || '').trim();
-    return t ? t.charAt(0).toUpperCase() : '';
-}
-
-function setShowAnswerButtonState(card, show) {
-    const btn = card.querySelector('.show-answer');
-    if (!btn) return;
-
-    if (show) {
-        btn.textContent = 'Hide Answer';
-        btn.classList.remove('secondary');
-        btn.classList.add('answered');
-    } else {
-        btn.textContent = 'Show Answer';
-        btn.classList.add('secondary');
-        btn.classList.remove('answered');
-    }
-}
-
-// =========================================================
-// JUMP TO TOPIC BUTTONS
-// =========================================================
-
-function scrollToTopicSection(subskill) {
-    // Find topic section header that contains this subskill
-    const headers = document.querySelectorAll('.topic-header');
-
-    for (const header of headers) {
-        const headerText = header.textContent.toLowerCase();
-        const subskillName = subskillDisplayNames[subskill]?.toLowerCase() || subskill.replace(/-/g, ' ');
-
-        if (headerText.includes(subskillName)) {
-            // Scroll with offset for fixed header
-            const yOffset = -100;
-            const element = header.closest('.topic-section');
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-            window.scrollTo({
-                top: y,
-                behavior: 'smooth'
-            });
-
-            // Flash the section briefly
-            element.classList.add('flash-highlight');
-            setTimeout(() => {
-                element.classList.remove('flash-highlight');
-            }, 1000);
-
-            return;
-        }
-    }
-
-    // If not found, topic might not have problems yet
-    console.log(`No problems found for ${subskill}`);
-}
-
-function updateJumpButtonStates() {
-    document.querySelectorAll('.jump-to-topic-btn').forEach(btn => {
-        const subskill = btn.dataset.jumpTo;
-        const checkbox = btn.closest('.subskill-checkbox').querySelector('input[type="checkbox"]');
-
-        // Disable if not checked
-        btn.disabled = !checkbox.checked;
-
-        // Update title
-        if (checkbox.checked) {
-            btn.title = 'Jump to problems';
-        } else {
-            btn.title = 'Check this topic first';
-        }
-    });
-}
-
-/* =========================
-   DOM Content Loaded
-   ========================= */
-document.addEventListener('DOMContentLoaded', async () => {
-    // ========== BACK TO TOP BUTTON ==========
-    const backToTopBtn = document.getElementById('backToTop');
-
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // ========== DARK MODE TOGGLE ==========
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.querySelector('.theme-icon');
-
-    if (themeToggle && themeIcon) {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        themeIcon.textContent = savedTheme === 'dark' ? '☀' : '☾';
-
-        themeToggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-            themeIcon.textContent = next === 'dark' ? '☀' : '☾';
-        });
-    }
-
-    // ========== ACTIVE FILTERS TOGGLE ==========
-    const activeFiltersToggle = document.getElementById('activeFiltersToggle');
-    const activeFiltersSection = document.querySelector('.active-filters-section');
-    const activeFiltersContent = document.getElementById('activeFiltersContent');
-
-    if (activeFiltersToggle) {
-        activeFiltersToggle.addEventListener('click', (e) => {
-            if (e.target.id === 'clearAllFilters' || e.target.closest('#clearAllFilters')) {
-                return;
-            }
-            if (e.target.id === 'selectAllFilters' || e.target.closest('#selectAllFilters')) {
-                return;
-            }
-            activeFiltersSection.classList.toggle('collapsed');
-            activeFiltersContent.classList.toggle('active');
-        });
-    }
-
-    if (activeFiltersSection) {
-        activeFiltersSection.classList.remove('collapsed');
-    }
-    if (activeFiltersContent) {
-        activeFiltersContent.classList.add('active');
-    }
-
-    // ✅ NEW: SELECT ALL FILTERS BUTTON
-    const clearAllBtn = document.getElementById('clearAllFilters');
-    if (clearAllBtn) {
-        const selectAllBtn = document.createElement('button');
-        selectAllBtn.id = 'selectAllFilters';
-        selectAllBtn.className = 'select-all-btn';
-        selectAllBtn.innerHTML = '✓ Select All';
-        selectAllBtn.title = 'Select all problem types and difficulties';
-
-        clearAllBtn.parentNode.insertBefore(selectAllBtn, clearAllBtn);
-
-        selectAllBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            // Select all subskills
-            document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-                checkbox.checked = true;
-                activeSubskills.add(checkbox.dataset.subskill);
-            });
-
-            // Select all difficulties
-            document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
-                btn.classList.add('active');
-                activeDifficulties.add(btn.dataset.difficulty);
-            });
-
-            // Reset progress filter to "all"
-            document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const allProgressBtn = document.querySelector('[data-progress="all"]');
-            if (allProgressBtn) {
-                allProgressBtn.classList.add('active');
-                activeProgress = 'all';
-            }
-
-            // Clear search
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) searchInput.value = '';
-            searchQuery = '';
-
-            updateSelectedCounts();
-            updateActiveFilterTags();
-            renderProblems();
-            saveFiltersToStorage();
-        });
-    }
-
-    // Accordion functionality
-    document.querySelectorAll('.accordion-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const accordionItem = header.closest('.accordion-item');
-            accordionItem.classList.toggle('active');
-        });
-    });
-
-    const firstAccordion = document.querySelector('.accordion-item');
-    if (firstAccordion) {
-        firstAccordion.classList.add('active');
-    }
-
-    // Subskill checkbox handling
-    document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => {
-            const subskill = e.target.dataset.subskill;
-
-            if (e.target.checked) {
-                activeSubskills.add(subskill);
-            } else {
-                activeSubskills.delete(subskill);
-            }
-
-            updateSelectedCounts();
-            updateActiveFilterTags();
-            renderProblems();
-            saveFiltersToStorage();
-            updateJumpButtonStates(); // ✅ Update jump button states
-        });
-    });
-
-    // ✅ MODIFIED: Auto-select Easy only on first load
-    const loadedFilters = loadFiltersFromStorage();
-    if (!loadedFilters) {
-        // Select all subskills
-        document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-            checkbox.checked = true;
-            activeSubskills.add(checkbox.dataset.subskill);
-        });
-
-        // ✅ NEW: Only select Easy difficulty by default
-        activeDifficulties.clear();
-        activeDifficulties.add('easy');
-
-        document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
-            if (btn.dataset.difficulty === 'easy') {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-    }
-
-    // Difficulty filters
-    const difficultyFilters = document.getElementById('difficultyFilters');
-    if (difficultyFilters) {
-        difficultyFilters.addEventListener('click', (e) => {
-            if (e.target.classList.contains('filter-btn')) {
-                const difficulty = e.target.dataset.difficulty;
-
-                if (activeDifficulties.has(difficulty)) {
-                    activeDifficulties.delete(difficulty);
-                    e.target.classList.remove('active');
-                } else {
-                    activeDifficulties.add(difficulty);
-                    e.target.classList.add('active');
-                }
-
-                updateActiveFilterTags();
-                renderProblems();
-                saveFiltersToStorage();
-            }
-        });
-    }
-
-    // Progress filters
-    const progressFilters = document.getElementById('progressFilters');
-    if (progressFilters) {
-        progressFilters.addEventListener('click', (e) => {
-            if (e.target.classList.contains('filter-btn')) {
-                const progress = e.target.dataset.progress;
-
-                if (progress === 'all') {
-                    document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    e.target.classList.add('active');
-                    activeProgress = 'all';
-                } else {
-                    if (e.target.classList.contains('active')) {
-                        e.target.classList.remove('active');
-                        const allBtn = document.querySelector('[data-progress="all"]');
-                        if (allBtn) allBtn.classList.add('active');
-                        activeProgress = 'all';
-                    } else {
-                        document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
-                            btn.classList.remove('active');
-                        });
-                        e.target.classList.add('active');
-                        activeProgress = progress;
-                    }
-                }
-
-                updateActiveFilterTags();
-                renderProblems();
-                saveFiltersToStorage();
-            }
-        });
-    }
-
-    // Search
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            updateActiveFilterTags();
-            renderProblems();
-            saveFiltersToStorage();
-        });
-    }
-
-    // Clear all filters
-    if (clearAllBtn) {
-        clearAllBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            document.querySelectorAll('[data-subskill]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            activeSubskills.clear();
-
-            document.querySelectorAll('#difficultyFilters .filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            activeDifficulties.clear();
-
-            document.querySelectorAll('#progressFilters .filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const allProgressBtn = document.querySelector('[data-progress="all"]');
-            if (allProgressBtn) allProgressBtn.classList.add('active');
-            activeProgress = 'all';
-
-            if (searchInput) searchInput.value = '';
-            searchQuery = '';
-
-            updateSelectedCounts();
-            updateActiveFilterTags();
-            renderProblems();
-            saveFiltersToStorage();
-        });
-    }
-
-    // =========================================================
-    // ✅ JUMP TO TOPIC BUTTONS EVENT LISTENERS
-    // =========================================================
-
-    document.querySelectorAll('.jump-to-topic-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const subskill = btn.dataset.jumpTo;
-            const checkbox = btn.closest('.subskill-checkbox').querySelector('input[type="checkbox"]');
-
-            // If topic not checked, check it first
-            if (!checkbox.checked) {
-                checkbox.checked = true;
-                activeSubskills.add(subskill);
-                updateSelectedCounts();
-                updateActiveFilterTags();
-                renderProblems();
-                saveFiltersToStorage();
-
-                // Wait for render, then scroll
-                setTimeout(() => scrollToTopicSection(subskill), 300);
-            } else {
-                // Already checked, just scroll
-                scrollToTopicSection(subskill);
-            }
-        });
-    });
-
-    // Initialize jump button states
-    updateJumpButtonStates();
-
-    // Initialize
-    updateSelectedCounts();
-    updateActiveFilterTags();
-});
-
-// Show/hide answer
-document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('show-answer')) return;
-
-    const card = e.target.closest('.problem-card');
-    if (!card) return;
-
-    const problemId = card.dataset.id;
-    const problem = problems.find(p => p.id === problemId);
-    if (!problem) return;
-
-    const currentlyShown = card.dataset.answerShown === 'true';
-    const nextShown = !currentlyShown;
-
-    card.dataset.answerShown = nextShown ? 'true' : 'false';
-    card.dataset.answerSource = nextShown ? 'button' : '';
-
-    if (problem.choices && problem.choices.length > 0) {
-        const choices = card.querySelectorAll('.choice');
-        const correctLetter = getCorrectLetter(problem);
-
-        if (nextShown) {
-            choices.forEach(c => c.classList.remove('incorrect', 'selected'));
-
-            choices.forEach(choice => {
-                if (getChoiceLetter(choice.textContent) === correctLetter) {
-                    choice.classList.add('correct');
-                    choice.dataset.fromShowAnswer = 'true';
-                }
-            });
-
-            setShowAnswerButtonState(card, true);
-        } else {
-            choices.forEach(choice => {
-                if (choice.dataset.fromShowAnswer === 'true') {
-                    choice.classList.remove('correct');
-                    delete choice.dataset.fromShowAnswer;
-                }
-            });
-
-            setShowAnswerButtonState(card, false);
-        }
-
         return;
     }
 
-    const inputGroup = card.querySelector('.answer-input-group');
-    if (!inputGroup) return;
+    // Create compact version for sidebar
+    const engine = new AdaptiveLearningEngine();
+    const level = engine.getStudentLevel();
+    const streak = engine.getCurrentStreak();
+    const analysis = engine.analyzePerformance();
 
-    const input = inputGroup.querySelector('.answer-input');
-    const feedback = inputGroup.querySelector('.answer-feedback');
+    let html = '<div style="padding: 1rem; border-top: 1px solid var(--border);">';
 
-    const correctAnswer = input?.dataset.correct ?? problem.answer;
-
-    if (nextShown) {
-        feedback.textContent = `Answer: ${correctAnswer}`;
-        feedback.className = 'answer-feedback correct';
-        feedback.dataset.fromShowAnswer = "true";
-
-        setShowAnswerButtonState(card, true);
-    } else {
-        if (feedback.dataset.fromShowAnswer === "true") {
-            feedback.textContent = '';
-            feedback.className = 'answer-feedback';
-            delete feedback.dataset.fromShowAnswer;
-        }
-
-        setShowAnswerButtonState(card, false);
-    }
-});
-
-// Show/hide explanation
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('show-explanation')) {
-        const card = e.target.closest('.problem-card');
-        const explanationSection = card.querySelector('.explanation-section');
-
-        if (e.target.textContent === 'Show Explanation') {
-            explanationSection.style.display = 'block';
-            e.target.textContent = 'Hide Explanation';
-            e.target.classList.add('answered');
-        } else {
-            explanationSection.style.display = 'none';
-            e.target.textContent = 'Show Explanation';
-            e.target.classList.remove('answered');
-        }
-    }
-});
-
-// Click to select answer (MC)
-document.addEventListener('click', async (e) => {
-    if (!e.target.classList.contains('choice')) return;
-
-    const card = e.target.closest('.problem-card');
-    const problemId = card.dataset.id;
-    const problem = problems.find(p => p.id === problemId);
-
-    if (!problemTimers[problemId]) {
-        problemTimers[problemId] = Date.now();
-    }
-
-    const progress = storage.getProgress();
-    const problemData = progress?.problems?.[problemId];
-    const alreadySolved = problemData && problemData.correct === true;
-
-    const clicked = e.target;
-
-    const answerShown = card.dataset.answerShown === 'true';
-    const answerSource = card.dataset.answerSource || '';
-
-    if (answerSource === 'button') {
-        card.querySelectorAll('.choice').forEach(c => c.classList.remove('selected', 'incorrect'));
-        clicked.classList.add('selected');
-        return;
-    }
-
-    card.querySelectorAll('.choice').forEach(c => {
-        c.classList.remove('selected', 'incorrect', 'correct');
-        delete c.dataset.fromShowAnswer;
-    });
-
-    clicked.classList.add('selected');
-
-    const selectedLetter = getChoiceLetter(clicked.textContent);
-    const correctLetter = getCorrectLetter(problem);
-    const isCorrect = selectedLetter === correctLetter;
-    const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
-
-    if (isCorrect) {
-        clicked.classList.add('correct');
-        clicked.classList.remove('selected');
-
-        card.dataset.answerShown = 'true';
-        card.dataset.answerSource = 'correctClick';
-
-        clicked.dataset.fromShowAnswer = 'true';
-
-        setShowAnswerButtonState(card, true);
-
-        if (!alreadySolved) {
-            const counted = await storage.recordAttempt(problemId, true, timeSpent);
-            updateStatsDisplay();
-
-            const metaSection = card.querySelector('.problem-meta');
-            const oldBadge = metaSection.querySelector('.badge-solved, .badge-attempted');
-            if (oldBadge) oldBadge.remove();
-
-            if (counted) {
-                metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>');
-                console.log(`✅ ${problemId} - Correct and COUNTED`);
-            } else {
-                metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-attempted" title="Got it right but was wrong before">Attempted</span>');
-                console.log(`⚠️ ${problemId} - Correct but doesn't count (was wrong before)`);
-            }
-        }
-
-        delete problemTimers[problemId];
-    } else {
-        card.dataset.answerShown = 'false';
-        card.dataset.answerSource = '';
-        setShowAnswerButtonState(card, false);
-
-        clicked.classList.add('incorrect');
-        clicked.classList.remove('selected');
-
-        if (!alreadySolved) {
-            await storage.recordAttempt(problemId, false, timeSpent);
-            updateStatsDisplay();
-
-            if (!problemData) {
-                const metaSection = card.querySelector('.problem-meta');
-                const oldBadge = metaSection.querySelector('.badge-solved, .badge-attempted');
-                if (!oldBadge) {
-                    metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-attempted" title="Attempted but not solved">Attempted</span>');
-                }
-            }
-        }
-
-        console.log(`❌ ${problemId} - Incorrect`);
-    }
-});
-
-// Check answer for input fields
-document.addEventListener('click', async (e) => {
-    if (e.target.classList.contains('check-answer-btn')) {
-        const inputGroup = e.target.closest('.answer-input-group');
-        const input = inputGroup.querySelector('.answer-input');
-        const feedback = inputGroup.querySelector('.answer-feedback');
-        const correctAnswer = input.dataset.correct;
-        const userAnswer = input.value.trim();
-
-        if (!userAnswer) {
-            feedback.textContent = 'Please enter an answer';
-            feedback.className = 'answer-feedback';
-            return;
-        }
-
-        const card = e.target.closest('.problem-card');
-        const problemId = card.dataset.id;
-
-        if (!problemTimers[problemId]) {
-            problemTimers[problemId] = Date.now();
-        }
-
-        const timeSpent = Math.round((Date.now() - problemTimers[problemId]) / 1000);
-
-        if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
-            feedback.textContent = '✓ Correct!';
-            feedback.className = 'answer-feedback correct';
-            input.disabled = true;
-            e.target.disabled = true;
-
-            await storage.recordAttempt(problemId, true, timeSpent);
-            updateStatsDisplay();
-
-            const metaSection = card.querySelector('.problem-meta');
-            const oldBadge = metaSection.querySelector('.badge-solved, .badge-attempted');
-            if (oldBadge) oldBadge.remove();
-            metaSection.insertAdjacentHTML('beforeend', '<span class="badge badge-solved" title="Solved correctly">✓ Solved</span>');
-
-            card.dataset.answerShown = 'true';
-            card.dataset.answerSource = 'correctClick';
-            setShowAnswerButtonState(card, true);
-
-            console.log(`✅ Correct answer for ${problemId}`);
-            delete problemTimers[problemId];
-        } else {
-            feedback.textContent = `✗ Incorrect. Try again!`;
-            feedback.className = 'answer-feedback incorrect';
-
-            await storage.recordAttempt(problemId, false, timeSpent);
-            updateStatsDisplay();
-
-            console.log(`❌ Incorrect answer for ${problemId}`);
-        }
-    }
-});
-
-// ✅ UPDATED: Practice Similar with better ID generation and report button
-document.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('practice-similar')) return;
-
-    const card = e.target.closest('.problem-card');
-    const problemId = card.dataset.id;
-    const originalProblem = problems.find(p => p.id === problemId);
-
-    if (!originalProblem) {
-        console.error('Original problem not found');
-        return;
-    }
-
-    if (!window.problemGenerator) {
-        alert('Problem generator not loaded');
-        return;
-    }
-
-    const newProblem = problemGenerator.generate(originalProblem);
-
-    if (!newProblem) {
-        alert('Problem generation not yet available for this topic. Coming soon!');
-        return;
-    }
-
-    // ✅ Generate proper formatted ID
-    newProblem.id = generateProblemId(newProblem.subskill, newProblem.difficulty);
-
-    problems.push(newProblem);
-
-    generatedUIQueue.unshift(newProblem.id);
-
-    if (generatedUIQueue.length > MAX_GENERATED_UI) {
-        const oldestId = generatedUIQueue.pop();
-
-        const idx = problems.findIndex(p => p.id === oldestId);
-        if (idx > -1) problems.splice(idx, 1);
-
-        const oldCard = document.querySelector(`.problem-card[data-id="${oldestId}"]`);
-        if (oldCard) oldCard.remove();
-    }
-
-    // ✅ UPDATED: Added report button to generated problems
-    const newCardHTML = `
-        <div class="problem-card generated-problem" data-id="${newProblem.id}" data-answer-shown="false" data-answer-source="">
-            <div class="problem-header">
-                <div class="problem-meta">
-                    <span class="badge badge-generated">Generated</span>
-                    <span class="badge badge-difficulty badge-${newProblem.difficulty}">${newProblem.difficulty}</span>
-                </div>
-                <div class="problem-id">${newProblem.id}</div>
-            </div>
-            <div class="problem-content">${newProblem.question}</div>
-            <div class="problem-choices">
-                ${newProblem.choices.map(choice => `<div class="choice">${choice}</div>`).join('')}
-            </div>
-            ${newProblem.explanation ? `
-                <div class="explanation-section" style="display: none;">
-                    <div class="explanation-header">
-                        <span class="explanation-icon">💡</span>
-                        <strong>Explanation:</strong>
-                    </div>
-                    <div class="explanation-content">${newProblem.explanation}</div>
-                </div>
-            ` : ''}
-            <div class="problem-footer">
-                <button class="action-btn secondary show-answer">Show Answer</button>
-                ${newProblem.explanation ? `<button class="action-btn show-explanation">Show Explanation</button>` : ''}
-                <button class="action-btn practice-similar">Practice Similar</button>
-                <button class="action-btn report-issue" title="Report an error or issue">🚩 Report Issue</button>
-                <button class="action-btn remove-generated">Remove</button>
+    // Compact Stats
+    html += `
+        <div style="margin-bottom: 0.75rem;">
+            <div style="font-size: 0.6875rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">Level</div>
+            <div style="font-size: 1rem; font-weight: 700; color: var(--primary);">${level.level}</div>
+            <div style="height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 0.25rem;">
+                <div style="height: 100%; background: var(--primary); border-radius: 2px; width: ${(level.xp % 25) / 25 * 100}%;"></div>
             </div>
         </div>
     `;
 
-    card.insertAdjacentHTML('afterend', newCardHTML);
-    const newCard = card.nextElementSibling;
-    newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-
-// Remove generated problem
-document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('remove-generated')) {
-        const card = e.target.closest('.problem-card');
-        const problemId = card.dataset.id;
-
-        generatedUIQueue = generatedUIQueue.filter(id => id !== problemId);
-
-        const index = problems.findIndex(p => p.id === problemId);
-        if (index > -1) {
-            problems.splice(index, 1);
-        }
-
-        card.remove();
+    if (streak > 0) {
+        html += `
+            <div style="margin-bottom: 0.75rem;">
+                <div style="font-size: 0.6875rem; text-transform: uppercase; color: var(--text-muted);">Streak</div>
+                <div style="font-size: 1.25rem; font-weight: 700; color: #f59e0b;">${streak} 🔥</div>
+            </div>
+        `;
     }
-});
 
-// Reset progress
-document.addEventListener('click', async (e) => {
-    if (e.target.id === 'resetProgress' || e.target.closest('#resetProgress')) {
-        if (storage) {
+    // Show immediate feedback for strengths/weaknesses
+    if (analysis && analysis.weaknesses && analysis.weaknesses.length > 0) {
+        const weakness = analysis.weaknesses[0];
+        const subskillNames = {
+            'linear-equations-one-variable': 'Linear Eq',
+            'linear-functions': 'Functions',
+            'systems-linear-equations': 'Systems'
+        };
+        const name = subskillNames[weakness.subskill] || weakness.subskill;
+
+        html += `
+            <div style="padding: 0.5rem; background: rgba(220, 38, 38, 0.1); border-radius: 4px; margin-top: 0.75rem;">
+                <div style="font-size: 0.6875rem; color: var(--error); font-weight: 600;">⚠ Focus Area</div>
+                <div style="font-size: 0.8125rem; font-weight: 600; color: var(--text);">${name} (${Math.round(weakness.accuracy * 100)}%)</div>
+            </div>
+        `;
+    } else if (analysis && analysis.strengths && analysis.strengths.length > 0) {
+        const strength = analysis.strengths[0];
+        const subskillNames = {
+            'linear-equations-one-variable': 'Linear Eq',
+            'linear-functions': 'Functions',
+            'systems-linear-equations': 'Systems'
+        };
+        const name = subskillNames[strength.subskill] || strength.subskill;
+
+        html += `
+            <div style="padding: 0.5rem; background: rgba(5, 150, 105, 0.1); border-radius: 4px; margin-top: 0.75rem;">
+                <div style="font-size: 0.6875rem; color: var(--success); font-weight: 600;">⭐ Strength</div>
+                <div style="font-size: 0.8125rem; font-weight: 600; color: var(--text);">${name} (${Math.round(strength.accuracy * 100)}%)</div>
+            </div>
+        `;
+    }
+
+    html += `
+        <a href="dashboard.html" style="display: block; margin-top: 0.75rem; text-align: center; color: var(--primary); font-size: 0.8125rem; text-decoration: none; font-weight: 600;">
+            View Full Dashboard →
+        </a>
+    `;
+
+    html += '</div>';
+
+    sidebarDash.innerHTML = html;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function initializeReset() {
+    const resetBtn = document.getElementById('resetProgress');
+    if (resetBtn && storage) {
+        resetBtn.addEventListener('click', async () => {
+            if (!confirm('Reset all progress? This cannot be undone.')) return;
+
             await storage.resetProgress();
-        }
+            updateStatsDisplay();
+            showCurrentProblem();
+        });
     }
-});
+}
 
-// =========================================================
-// REPORT ISSUE MODAL
-// =========================================================
+/* =========================================================
+   INIT
+   ========================================================= */
 
-(function() {
-    const modalOverlay = document.getElementById('reportModalOverlay');
-    const closeModalBtn = document.getElementById('closeReportModal');
-    const cancelBtn = document.getElementById('cancelReport');
-    const submitBtn = document.getElementById('submitReport');
-
-    const problemIdSpan = document.getElementById('reportProblemId');
-    const topicSpan = document.getElementById('reportTopic');
-    const difficultySpan = document.getElementById('reportDifficulty');
-
-    const issueTypeSelect = document.getElementById('issueType');
-    const issueDescriptionTextarea = document.getElementById('issueDescription');
-    const emailInput = document.getElementById('reporterEmail');
-
-    let currentProblemData = null;
-
-    // Open modal when report button clicked
-    document.addEventListener('click', (e) => {
-        if (e.target.classList.contains('report-issue') || e.target.closest('.report-issue')) {
-            const card = e.target.closest('.problem-card');
-            const problemId = card.dataset.id;
-            const problem = problems.find(p => p.id === problemId);
-
-            if (!problem) return;
-
-            currentProblemData = {
-                id: problem.id,
-                topic: problem.topic,
-                subskill: problem.subskill,
-                difficulty: problem.difficulty,
-                question: problem.question
-            };
-
-            // Populate modal
-            problemIdSpan.textContent = problem.id;
-            topicSpan.textContent = `${topicDisplayNames[problem.topic] || problem.topic} › ${subskillDisplayNames[problem.subskill] || problem.subskill}`;
-            difficultySpan.textContent = problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1);
-
-            // Reset form
-            issueTypeSelect.value = '';
-            issueDescriptionTextarea.value = '';
-            emailInput.value = storage?.user?.email || '';
-
-            // Show modal
-            modalOverlay.classList.add('active');
-        }
-    });
-
-    // Close modal
-    function closeModal() {
-        modalOverlay.classList.remove('active');
-        currentProblemData = null;
-    }
-
-    closeModalBtn?.addEventListener('click', closeModal);
-    cancelBtn?.addEventListener('click', closeModal);
-
-    // Close on overlay click
-    modalOverlay?.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-            closeModal();
-        }
-    });
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalOverlay?.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    // Submit report
-    submitBtn?.addEventListener('click', async () => {
-        if (!currentProblemData) return;
-
-        const issueType = issueTypeSelect.value;
-        const description = issueDescriptionTextarea.value.trim();
-        const email = emailInput.value.trim();
-
-        // Validation
-        if (!issueType) {
-            alert('Please select an issue type');
-            return;
-        }
-
-        if (!description) {
-            alert('Please describe the issue');
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-
-        try {
-            const report = {
-                problemId: currentProblemData.id,
-                topic: currentProblemData.topic,
-                subskill: currentProblemData.subskill,
-                difficulty: currentProblemData.difficulty,
-                issueType: issueType,
-                description: description,
-                reporterEmail: email || 'anonymous',
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
-            };
-
-            // Save to Firebase if available
-            if (window.firebase && firebase.firestore) {
-                await firebase.firestore()
-                    .collection('problem_reports')
-                    .add(report);
-
-                alert('✅ Report submitted successfully! Thank you for helping improve the problem bank.');
-            } else {
-                // Fallback: log to console and show message
-                console.log('Problem Report:', report);
-                alert('✅ Report logged! (Note: Firebase not configured, report saved locally)');
-            }
-
-            closeModal();
-        } catch (error) {
-            console.error('Error submitting report:', error);
-            alert('❌ Error submitting report. Please try again or contact support.');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit Report';
-        }
-    });
-})();
-
-// Initialize
 async function init() {
     console.log('Initializing app...');
 
     if (window.storage) {
         await storage.init();
         console.log('Storage initialized');
+        updateUserUI();
+        updateStatsDisplay();
+        updateAdaptiveDashboard();
+
+        // Listen for auth state changes
+        if (window.firebase && firebase.auth) {
+            firebase.auth().onAuthStateChanged((user) => {
+                console.log('Auth state changed:', user ? 'logged in' : 'logged out');
+                updateUserUI();
+                if (user) {
+                    // Reload progress for new user
+                    updateStatsDisplay();
+                    updateAdaptiveDashboard();
+                }
+            });
+        }
     }
 
+    initializeTheme();
+    initializeSidebar();
+    initializeDifficultyTabs();
+    initializeActionButtons();
+    initializeCalculator();
+    initializeReset();
+
     await loadProblems();
-    updateUserUI();
-    updateStatsDisplay();
+    updateSidebarCounts(); // Update accurate problem counts
+
+    // Check if coming from recommendation
+    checkRecommendation();
 
     console.log('App ready!');
+}
+
+function checkRecommendation() {
+    const recommendedSubskill = localStorage.getItem('recommendedSubskill');
+    const recommendedDifficulty = localStorage.getItem('recommendedDifficulty');
+    const viewProblemId = localStorage.getItem('viewProblemId');
+
+    if (viewProblemId) {
+        // Clear the flag
+        localStorage.removeItem('viewProblemId');
+
+        // Find and show the specific problem
+        const problemIndex = problems.findIndex(p => p.id === viewProblemId);
+        if (problemIndex !== -1) {
+            const problem = problems[problemIndex];
+
+            // Set filters to match this problem
+            selectedSubskill = problem.subskill;
+            selectedDifficulties.clear();
+            selectedDifficulties.add(problem.difficulty.toLowerCase());
+
+            // Update UI
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.subskill === problem.subskill);
+            });
+
+            document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                const diff = tab.dataset.difficulty;
+                tab.classList.toggle('active', diff === problem.difficulty.toLowerCase());
+            });
+
+            // Filter and find index
+            filterProblems();
+            const newIndex = filteredProblems.findIndex(p => p.id === viewProblemId);
+            currentIndex = newIndex >= 0 ? newIndex : 0;
+            showCurrentProblem();
+
+            // Show notification
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position: fixed; top: 80px; right: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 1rem 1.5rem; border-radius: 12px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);';
+            notification.textContent = `✓ Viewing completed problem: ${viewProblemId}`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+        }
+        return;
+    }
+
+    if (recommendedSubskill && recommendedDifficulty) {
+        // Clear the recommendation
+        localStorage.removeItem('recommendedSubskill');
+        localStorage.removeItem('recommendedDifficulty');
+
+        // Set the subskill and difficulty
+        selectedSubskill = recommendedSubskill;
+        selectedDifficulties.clear();
+        selectedDifficulties.add(recommendedDifficulty);
+
+        // Update UI
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.subskill === recommendedSubskill);
+        });
+
+        document.querySelectorAll('.difficulty-tab').forEach(tab => {
+            const diff = tab.dataset.difficulty;
+            tab.classList.toggle('active', diff === recommendedDifficulty);
+        });
+
+        // Filter and show
+        filterProblems();
+        showCurrentProblem();
+
+        // Show notification
+        const notification = document.createElement('div');
+        notification.style.cssText = 'position: fixed; top: 80px; right: 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 1rem 1.5rem; border-radius: 12px; font-weight: 700; z-index: 1000; box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);';
+        notification.textContent = '🎯 Starting your recommended practice!';
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.remove(), 3000);
+    }
 }
 
 if (document.readyState === 'loading') {
@@ -1477,264 +1055,47 @@ if (document.readyState === 'loading') {
     init();
 }
 
-
 /* =========================================================
-   ✅ CALCULATOR - Inline Panel OR Actual Popup Window
+   RESPONSIVE
    ========================================================= */
 
-(function () {
-    const calculatorToggle = document.getElementById('calculatorToggle');
-    const calculatorPanel = document.getElementById('calculatorPanel');
-    const calculatorClose = document.getElementById('calculatorClose');
-    const calculatorTabs = document.querySelectorAll('.calculator-tab');
-    const calculatorFrames = document.querySelectorAll('.calculator-frame');
-    const resizeHandle = document.getElementById('calculatorResizeHandle');
-    const widthDisplay = document.getElementById('calculatorWidthDisplay');
-    const calcModeToggle = document.getElementById('calcModeToggle');
-    const calcModeIcon = document.querySelector('.calc-mode-icon');
+window.addEventListener('resize', () => {
+    const menuToggle = document.getElementById('menuToggle');
 
-    if (!calculatorToggle || !calculatorPanel) return;
-
-    const DEFAULT_WIDTH = 500;
-    const MIN_WIDTH = 350;
-    const MAX_WIDTH = 800;
-
-    let calculatorWidth = parseInt(localStorage.getItem('calculatorWidth'), 10) || DEFAULT_WIDTH;
-    let isResizing = false;
-    let isPopupMode = localStorage.getItem('calculatorPopupMode') === 'true';
-    let popupWindow = null;
-
-    setCalculatorWidth(calculatorWidth);
-
-    // Apply saved mode icon
-    updateModeIcon();
-
-    // ✅ Helper functions
-    function updateModeIcon() {
-        if (!calcModeIcon || !calcModeToggle) return;
-
-        if (isPopupMode) {
-            calcModeIcon.textContent = '⧉'; // external window icon
-            calcModeToggle.classList.add('popup-mode');
-            calcModeToggle.title = 'Switch to inline mode';
-        } else {
-            calcModeIcon.textContent = '⊟'; // sidebar icon
-            calcModeToggle.classList.remove('popup-mode');
-            calcModeToggle.title = 'Switch to popup window';
-        }
+    if (window.innerWidth <= 768) {
+        if (menuToggle) menuToggle.style.display = 'flex';
+    } else {
+        if (menuToggle) menuToggle.style.display = 'none';
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) sidebar.classList.remove('active');
     }
+});
 
-    function isInlineOpen() {
-        return calculatorPanel.classList.contains('open');
-    }
+/* =========================================================
+   HELPER FUNCTIONS
+   ========================================================= */
 
-    function openInlineCalculator() {
-        calculatorPanel.classList.add('open');
-        document.body.classList.add('calculator-open');
-        calculatorToggle.classList.add('active');
-        calculatorToggle.title = 'Close Calculator';
-    }
-
-    function closeInlineCalculator() {
-        calculatorPanel.classList.remove('open');
-        document.body.classList.remove('calculator-open');
-        calculatorToggle.classList.remove('active');
-        calculatorToggle.title = 'Open Calculator';
-    }
-
-    function openPopupCalculator() {
-        // Close popup if already open
-        if (popupWindow && !popupWindow.closed) {
-            popupWindow.focus();
-            return;
-        }
-
-        const savedTab = localStorage.getItem('calculatorTab') || 'graphing';
-
-        // Determine which calculator URL to open
-        let calcUrl = 'https://www.desmos.com/calculator'; // default graphing
-        if (savedTab === 'scientific') {
-            calcUrl = 'https://www.desmos.com/scientific';
-        } else if (savedTab === 'basic') {
-            calcUrl = 'https://www.desmos.com/fourfunction';
-        }
-
-        // Open popup window
-        const width = 800;
-        const height = 700;
-        const left = (screen.width - width) / 2;
-        const top = (screen.height - height) / 2;
-
-        popupWindow = window.open(
-            calcUrl,
-            'CalculatorPopup',
-            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`
-        );
-
-        if (popupWindow) {
-            calculatorToggle.classList.add('active');
-            calculatorToggle.title = 'Calculator opened in new window';
-
-            // Monitor popup close
-            const checkPopup = setInterval(() => {
-                if (!popupWindow || popupWindow.closed) {
-                    clearInterval(checkPopup);
-                    calculatorToggle.classList.remove('active');
-                    calculatorToggle.title = 'Open Calculator';
-                    popupWindow = null;
-                }
-            }, 500);
-        }
-    }
-
-    function setCalculatorWidth(width) {
-        calculatorWidth = width;
-        document.documentElement.style.setProperty('--calculator-width', `${width}px`);
-        if (widthDisplay) widthDisplay.textContent = `${width}px`;
-    }
-
-    function toggleCalcMode() {
-        // Close whatever is currently open
-        if (isPopupMode) {
-            if (popupWindow && !popupWindow.closed) {
-                popupWindow.close();
-                popupWindow = null;
-            }
-        } else {
-            closeInlineCalculator();
-        }
-
-        // Switch mode
-        isPopupMode = !isPopupMode;
-        localStorage.setItem('calculatorPopupMode', isPopupMode);
-
-        updateModeIcon();
-
-        // Reset toggle button
-        calculatorToggle.classList.remove('active');
-        calculatorToggle.title = 'Open Calculator';
-    }
-
-    // ✅ Main toggle click - opens inline OR popup based on mode
-    calculatorToggle.addEventListener('click', () => {
-        if (isPopupMode) {
-            openPopupCalculator();
-        } else {
-            if (isInlineOpen()) {
-                closeInlineCalculator();
-            } else {
-                openInlineCalculator();
-            }
-        }
-    });
-
-    // ✅ Mode toggle click
-    if (calcModeToggle) {
-        calcModeToggle.addEventListener('click', toggleCalcMode);
-    }
-
-    // ✅ Close button (only for inline)
-    if (calculatorClose) {
-        calculatorClose.addEventListener('click', closeInlineCalculator);
-    }
-
-    // ✅ Escape key (only closes inline)
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isInlineOpen()) {
-            closeInlineCalculator();
-        }
-    });
-
-    // ✅ Tabs (only for inline)
-    calculatorTabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-            const calcType = tab.dataset.calc;
-
-            calculatorTabs.forEach((t) => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            calculatorFrames.forEach((frame) => {
-                frame.classList.remove('active');
-
-                const frameType = frame.id.replace('calc', '').toLowerCase();
-                if (frameType === calcType) {
-                    frame.classList.add('active');
-
-                    if (frame.src === 'about:blank' && frame.dataset.src) {
-                        frame.src = frame.dataset.src;
-                    }
-                }
-            });
-
-            localStorage.setItem('calculatorTab', calcType);
-        });
-    });
-
-    const savedTab = localStorage.getItem('calculatorTab');
-    if (savedTab) {
-        const tabToActivate = document.querySelector(`.calculator-tab[data-calc="${savedTab}"]`);
-        if (tabToActivate) tabToActivate.click();
-    }
-
-    // ✅ Resizing (only for inline)
-    if (resizeHandle) {
-        resizeHandle.addEventListener('mousedown', startResize);
-        resizeHandle.addEventListener('touchstart', startResize, { passive: false });
-    }
-
-    function startResize(e) {
-        e.preventDefault();
-        isResizing = true;
-
-        document.body.classList.add('calculator-resizing');
-        resizeHandle.classList.add('dragging');
-
-        document.addEventListener('mousemove', doResize);
-        document.addEventListener('mouseup', stopResize);
-        document.addEventListener('touchmove', doResize, { passive: false });
-        document.addEventListener('touchend', stopResize);
-    }
-
-    function doResize(e) {
-        if (!isResizing) return;
-        e.preventDefault();
-
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const windowWidth = window.innerWidth;
-        let newWidth = windowWidth - clientX;
-
-        newWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, newWidth));
-        setCalculatorWidth(newWidth);
-    }
-
-    function stopResize() {
-        if (!isResizing) return;
-
-        isResizing = false;
-        document.body.classList.remove('calculator-resizing');
-        resizeHandle.classList.remove('dragging');
-
-        document.removeEventListener('mousemove', doResize);
-        document.removeEventListener('mouseup', stopResize);
-        document.removeEventListener('touchmove', doResize);
-        document.removeEventListener('touchend', stopResize);
-
-        localStorage.setItem('calculatorWidth', calculatorWidth);
-    }
-
-    // ✅ Window resize behavior (only affects inline)
-    window.addEventListener('resize', () => {
-        if (window.innerWidth <= 768) {
-            document.documentElement.style.setProperty('--calculator-width', '100%');
-        } else {
-            setCalculatorWidth(calculatorWidth);
-        }
-    });
-
-    // ✅ Cleanup popup on page unload
-    window.addEventListener('beforeunload', () => {
-        if (popupWindow && !popupWindow.closed) {
-            popupWindow.close();
-        }
-    });
-})();
+function getTopicFromSubskill(subskill) {
+    const mapping = {
+        'linear-equations-one-variable': 'algebra',
+        'linear-functions': 'algebra',
+        'linear-equations-two-variables': 'algebra',
+        'systems-linear-equations': 'algebra',
+        'linear-inequalities': 'algebra',
+        'nonlinear-functions': 'advanced-math',
+        'nonlinear-equations': 'advanced-math',
+        'equivalent-expressions': 'advanced-math',
+        'ratios-rates': 'problem-solving',
+        'percentages': 'problem-solving',
+        'one-variable-data': 'problem-solving',
+        'two-variable-data': 'problem-solving',
+        'probability': 'problem-solving',
+        'inference': 'problem-solving',
+        'statistical-claims': 'problem-solving',
+        'area-volume': 'geometry',
+        'lines-angles-triangles': 'geometry',
+        'right-triangles': 'geometry',
+        'circles': 'geometry'
+    };
+    return mapping[subskill] || 'algebra';
+}

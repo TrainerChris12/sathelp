@@ -1,0 +1,380 @@
+/* =========================================================
+   ADAPTIVE LEARNING UI STYLES - FUN VERSION
+   ========================================================= */
+
+/* ========== GAMIFICATION PANEL (FUN) ========== */
+
+.gamification-panel-fun {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.game-stat-fun {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 3px solid;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.game-stat-fun:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.game-stat-fun.level-stat {
+    border-color: #3b82f6;
+}
+
+.game-stat-fun.streak-stat {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.game-stat-fun.accuracy-stat {
+    border-color: #10b981;
+}
+
+.game-emoji {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.streak-emoji {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.game-stat-label-fun {
+    font-size: 0.875rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.game-stat-value-big {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1e293b;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.game-stat-value-huge {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.game-stat-subtitle-fun {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.level-progress-fun {
+    margin-top: 1.5rem;
+}
+
+.progress-bar-fun {
+    width: 100%;
+    height: 32px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill-fun {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+    border-radius: 16px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-label {
+    color: white;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.progress-text-fun {
+    font-size: 0.9375rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* ========== WEAKNESS RADAR (FUN) ========== */
+
+.weakness-radar-fun {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 3px solid #f59e0b;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.radar-title-fun {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.radar-empty-fun {
+    color: #64748b;
+    font-size: 1.125rem;
+    text-align: center;
+    padding: 2rem;
+    font-weight: 600;
+}
+
+.radar-row-fun {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.radar-emoji {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.radar-content {
+    flex: 1;
+}
+
+.radar-label-fun {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.radar-bar-container-fun {
+    height: 36px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.radar-bar-fun {
+    height: 100%;
+    border-radius: 18px;
+    transition: width 0.6s ease;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.radar-bar-fun.strength {
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+}
+
+.radar-bar-fun.okay {
+    background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+}
+
+.radar-bar-fun.weakness {
+    background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+}
+
+.radar-bar-label {
+    color: white;
+    font-weight: 800;
+    font-size: 1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.radar-message {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.radar-insight-fun {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-left: 6px solid #3b82f6;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.insight-icon {
+    font-size: 3rem;
+}
+
+.insight-text {
+    flex: 1;
+    font-size: 1.125rem;
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.insight-subtext {
+    font-size: 0.9375rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+/* ========== RECOMMENDATIONS (FUN) ========== */
+
+.adaptive-recommendation-fun {
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 3px solid #3b82f6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.adaptive-recommendation-fun.empty {
+    flex-direction: column;
+    text-align: center;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}
+
+.rec-emoji-big {
+    font-size: 5rem;
+    flex-shrink: 0;
+}
+
+.rec-content-fun {
+    flex: 1;
+}
+
+.rec-title-fun {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.rec-topic-fun {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #3b82f6;
+    margin-bottom: 0.75rem;
+}
+
+.rec-reason-fun {
+    font-size: 1.125rem;
+    color: #475569;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.rec-difficulty-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 24px;
+    font-weight: 800;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+.rec-difficulty-badge.easy {
+    background: #10b981;
+    color: white;
+}
+
+.rec-difficulty-badge.medium {
+    background: #f59e0b;
+    color: white;
+}
+
+.rec-difficulty-badge.hard {
+    background: #ef4444;
+    color: white;
+}
+
+.rec-start-btn {
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.125rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s;
+}
+
+.rec-start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.6);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.rec-start-btn:active {
+    transform: translateY(0);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 968px) {
+    .gamification-panel-fun {
+        grid-template-columns: 1fr;
+    }
+
+    .game-emoji {
+        font-size: 3rem;
+    }
+
+    .game-stat-value-huge {
+        font-size: 3rem;
+    }
+
+    .rec-emoji-big {
+        font-size: 3rem;
+    }
+
+    .radar-row-fun {
+        grid-template-columns: 50px 1fr;
+    }
+
+    .radar-emoji {
+        font-size: 2rem;
+    }
+}

@@ -1,11 +1,7 @@
 /* =========================================================
-   SAT Math Practice Hub - Delta Math Inspired Redesign
-   Professional, Clean, Minimalist
+   SAT Math Practice Hub - Delta Math Single Problem View
+   Clean, Professional, Focused
    ========================================================= */
-
-/* =========================
-   THEME TOKENS
-   ========================= */
 
 :root {
     /* College Board Blues */
@@ -21,8 +17,7 @@
     /* Backgrounds */
     --bg: #F7F9FC;
     --bg-sidebar: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-hover: #F0F4F8;
+    --bg-problem: #FFFFFF;
 
     /* Text */
     --text: #1A202C;
@@ -31,47 +26,25 @@
 
     /* Borders */
     --border: #E2E8F0;
-    --border-light: #F1F5F9;
 
     /* Status Colors */
     --success: #059669;
     --error: #DC2626;
     --warning: #F59E0B;
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
-    --cb-blue: #3D7BC4;
-    --cb-blue-dark: #1B4F9C;
-    --cb-blue-light: #5A9AD5;
-
     --primary: #3D7BC4;
-    --primary-dark: #1B4F9C;
-    --primary-light: #5A9AD5;
-
     --bg: #0F172A;
     --bg-sidebar: #1E293B;
-    --bg-card: #1E293B;
-    --bg-hover: #334155;
-
+    --bg-problem: #1E293B;
     --text: #F1F5F9;
     --text-light: #94A3B8;
-    --text-muted: #64748B;
-
     --border: #334155;
-    --border-light: #475569;
-
-    --success: #10B981;
-    --error: #EF4444;
-    --warning: #FBBF24;
 }
 
 /* =========================
-   RESET & BASE
+   RESET
    ========================= */
 
 * {
@@ -81,63 +54,87 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
+    overflow: hidden;
+    height: 100vh;
 }
 
 /* =========================
-   LAYOUT STRUCTURE
+   LAYOUT
    ========================= */
 
 .app-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    grid-template-rows: 60px 1fr 70px;
     height: 100vh;
     overflow: hidden;
 }
 
 /* =========================
-   SIDEBAR NAVIGATION
+   SIDEBAR (No Scroll)
    ========================= */
 
 .sidebar {
-    width: 280px;
+    grid-column: 1;
+    grid-row: 1 / -1;
     background: var(--bg-sidebar);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    flex-shrink: 0;
+    overflow: hidden;
 }
 
 .sidebar-header {
-    padding: 1.5rem 1.25rem;
+    padding: 1.25rem;
     border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
 .sidebar-logo {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
 }
 
 .sidebar-content {
     flex: 1;
-    padding: 1.25rem 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Hide scrollbar but keep functionality */
+.sidebar-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+    background: var(--text-light);
+}
+
+.sidebar-adaptive {
+    border-top: 1px solid var(--border);
+    margin-top: auto;
 }
 
 .nav-section {
-    margin-bottom: 1.5rem;
+    padding: 0.75rem 0;
 }
 
 .nav-section-title {
-    padding: 0 1.25rem 0.5rem;
-    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -145,7 +142,7 @@ body {
 }
 
 .nav-item {
-    padding: 0.625rem 1.25rem;
+    padding: 0.625rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -157,7 +154,7 @@ body {
 }
 
 .nav-item:hover {
-    background: var(--bg-hover);
+    background: rgba(0, 0, 0, 0.03);
 }
 
 .nav-item.active {
@@ -167,205 +164,150 @@ body {
     font-weight: 600;
 }
 
-.nav-item-content {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
 .nav-item-badge {
     font-size: 0.75rem;
     padding: 0.125rem 0.5rem;
-    background: var(--border-light);
+    background: var(--bg);
     border-radius: 10px;
     color: var(--text-light);
     font-weight: 500;
 }
 
-.sidebar-footer {
-    padding: 1rem 1.25rem;
-    border-top: 1px solid var(--border);
-}
-
-/* Difficulty Filters in Sidebar */
-.difficulty-filters {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-}
-
-.difficulty-btn {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    text-align: center;
-}
-
-.difficulty-btn.easy {
-    color: var(--success);
-    border-color: var(--success);
-}
-
-.difficulty-btn.medium {
-    color: var(--warning);
-    border-color: var(--warning);
-}
-
-.difficulty-btn.hard {
-    color: var(--error);
-    border-color: var(--error);
-}
-
-.difficulty-btn.active.easy {
-    background: var(--success);
-    color: white;
-}
-
-.difficulty-btn.active.medium {
-    background: var(--warning);
-    color: white;
-}
-
-.difficulty-btn.active.hard {
-    background: var(--error);
-    color: white;
-}
-
 /* =========================
-   MAIN CONTENT AREA
+   TOP BAR
    ========================= */
 
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-/* =========================
-   TOP HEADER
-   ========================= */
-
-.top-header {
-    background: var(--bg-card);
+.top-bar {
+    grid-column: 2;
+    grid-row: 1;
+    background: var(--bg-problem);
     border-bottom: 1px solid var(--border);
-    padding: 0.875rem 1.5rem;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-shrink: 0;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.header-stats {
+.top-bar-left {
     display: flex;
     align-items: center;
     gap: 1.5rem;
 }
 
-.header-stat {
+.difficulty-tabs {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
 }
 
-.header-stat-value {
-    font-weight: 700;
+.difficulty-tab {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
     color: var(--text);
 }
 
-.header-stat-label {
-    color: var(--text-light);
+.difficulty-tab.easy {
+    border-color: var(--success);
+    color: var(--success);
 }
 
-.header-right {
+.difficulty-tab.medium {
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.difficulty-tab.hard {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+.difficulty-tab.active.easy {
+    background: var(--success);
+    color: white;
+}
+
+.difficulty-tab.active.medium {
+    background: var(--warning);
+    color: white;
+}
+
+.difficulty-tab.active.hard {
+    background: var(--error);
+    color: white;
+}
+
+.top-bar-right {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-.header-btn {
-    padding: 0.5rem 0.875rem;
-    background: var(--bg-hover);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
+.top-bar-stat {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.stat-value {
+    font-weight: 700;
     color: var(--text);
 }
 
-.header-btn:hover {
+.stat-label {
+    color: var(--text-light);
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 1.125rem;
+}
+
+.icon-btn:hover {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
 }
 
-.header-btn.icon-only {
-    padding: 0.5rem;
-    width: 36px;
-    height: 36px;
+/* =========================
+   PROBLEM AREA
+   ========================= */
+
+.problem-area {
+    grid-column: 2;
+    grid-row: 2;
+    background: var(--bg-problem);
+    overflow-y: auto;
+    padding: 2rem;
+    display: flex;
+    align-items: flex-start;
     justify-content: center;
 }
 
-/* =========================
-   PROBLEMS AREA
-   ========================= */
-
-.problems-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-}
-
-.problems-list {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-/* Individual Problem Card */
-.problem-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    transition: box-shadow 0.15s;
-}
-
-.problem-card:hover {
-    box-shadow: var(--shadow-lg);
+.problem-container {
+    width: 100%;
+    max-width: 800px;
 }
 
 .problem-header {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
-}
-
-.problem-meta {
-    display: flex;
     align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 2rem;
 }
 
 .problem-id {
@@ -374,74 +316,68 @@ body {
     font-weight: 500;
 }
 
-.difficulty-badge {
-    padding: 0.25rem 0.625rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.difficulty-badge.easy {
-    background: rgba(5, 150, 105, 0.1);
-    color: var(--success);
-}
-
-.difficulty-badge.medium {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning);
-}
-
-.difficulty-badge.hard {
-    background: rgba(220, 38, 38, 0.1);
-    color: var(--error);
-}
-
-.problem-actions {
+.problem-badges {
     display: flex;
     gap: 0.5rem;
 }
 
-.problem-action-btn {
-    padding: 0.375rem 0.75rem;
-    background: transparent;
-    border: 1px solid var(--border);
+.badge {
+    padding: 0.25rem 0.625rem;
     border-radius: 4px;
-    font-size: 0.8125rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    color: var(--text-light);
+    font-size: 0.75rem;
+    font-weight: 600;
 }
 
-.problem-action-btn:hover {
-    background: var(--bg-hover);
-    color: var(--text);
+.badge-difficulty {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.badge-difficulty.badge-easy {
+    background: rgba(5, 150, 105, 0.15);
+    color: var(--success);
+    border: 1px solid var(--success);
+}
+
+.badge-difficulty.badge-medium {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning);
+    border: 1px solid var(--warning);
+}
+
+.badge-difficulty.badge-hard {
+    background: rgba(220, 38, 38, 0.15);
+    color: var(--error);
+    border: 1px solid var(--error);
+}
+
+.badge-solved {
+    background: rgba(5, 150, 105, 0.1);
+    color: var(--success);
 }
 
 .problem-content {
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     line-height: 1.7;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     color: var(--text);
-    white-space: pre-wrap;
 }
 
-/* Answer Choices */
 .problem-choices {
     display: grid;
     gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .choice {
-    padding: 0.875rem 1rem;
-    background: var(--bg-hover);
-    border: 2px solid transparent;
-    border-radius: 6px;
-    font-size: 0.9375rem;
+    padding: 1rem 1.25rem;
+    background: rgba(0, 0, 0, 0.02);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.15s;
-    color: var(--text);
 }
 
 .choice:hover {
@@ -452,7 +388,6 @@ body {
 .choice.selected {
     border-color: var(--primary);
     background: rgba(27, 79, 156, 0.1);
-    font-weight: 500;
 }
 
 .choice.correct {
@@ -468,50 +403,78 @@ body {
     color: var(--error);
 }
 
-/* Problem Footer */
-.problem-footer {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
+/* Answer Input Group (for short answer questions) */
+.answer-input-group {
+    margin-top: 1.5rem;
 }
 
-.problem-btn {
+.answer-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-problem);
+    color: var(--text);
+    transition: border-color 0.15s;
+}
+
+.answer-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.answer-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.check-answer-btn {
+    margin-top: 0.75rem;
     padding: 0.75rem 1.5rem;
+    background: var(--primary);
+    color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.9375rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s;
 }
 
-.problem-btn.primary {
-    background: var(--primary);
-    color: white;
-}
-
-.problem-btn.primary:hover {
+.check-answer-btn:hover {
     background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow);
 }
 
-.problem-btn.secondary {
-    background: var(--bg-hover);
-    color: var(--text);
-    border: 1px solid var(--border);
+.check-answer-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.problem-btn.secondary:hover {
-    background: var(--border);
+.answer-feedback {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9375rem;
 }
 
-/* Explanation */
+.answer-feedback.correct {
+    background: rgba(5, 150, 105, 0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+}
+
+.answer-feedback.incorrect {
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+
 .explanation {
-    margin-top: 1.5rem;
-    padding: 1rem;
+    margin-top: 2rem;
+    padding: 1.25rem;
     background: rgba(27, 79, 156, 0.05);
     border-left: 3px solid var(--primary);
     border-radius: 4px;
@@ -520,14 +483,93 @@ body {
 .explanation-header {
     font-weight: 600;
     color: var(--primary);
-    margin-bottom: 0.5rem;
-    font-size: 0.9375rem;
+    margin-bottom: 0.75rem;
 }
 
 .explanation-content {
-    color: var(--text);
     line-height: 1.6;
-    font-size: 0.9375rem;
+    color: var(--text);
+}
+
+/* =========================
+   BOTTOM BAR
+   ========================= */
+
+.bottom-bar {
+    grid-column: 2;
+    grid-row: 3;
+    background: var(--bg-problem);
+    border-top: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bottom-bar-left {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    padding: 0.625rem 1.25rem;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text);
+}
+
+.action-btn:hover {
+    background: var(--bg);
+}
+
+.action-btn.primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.action-btn.primary:hover {
+    background: var(--primary-dark);
+}
+
+.bottom-bar-right {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.progress-indicator {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.nav-btn {
+    padding: 0.625rem 1.25rem;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-btn:hover {
+    background: var(--primary-dark);
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* =========================
@@ -552,7 +594,7 @@ body {
 }
 
 .calculator-modal {
-    background: var(--bg-card);
+    background: var(--bg-problem);
     border-radius: 8px;
     width: 90%;
     max-width: 600px;
@@ -572,7 +614,6 @@ body {
 
 .calculator-title {
     font-weight: 600;
-    color: var(--text);
 }
 
 .calculator-close {
@@ -587,67 +628,37 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    transition: all 0.15s;
 }
 
 .calculator-close:hover {
-    background: var(--bg-hover);
-    color: var(--text);
-}
-
-.calculator-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-}
-
-.calculator-tab {
-    flex: 1;
-    padding: 0.75rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-light);
-    transition: all 0.15s;
-    border-bottom: 2px solid transparent;
-}
-
-.calculator-tab:hover {
-    background: var(--bg-hover);
-}
-
-.calculator-tab.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .calculator-content {
     flex: 1;
-    overflow: hidden;
 }
 
 .calculator-frame {
     width: 100%;
     height: 100%;
     border: none;
-    display: none;
-}
-
-.calculator-frame.active {
-    display: block;
 }
 
 /* =========================
-   RESPONSIVE
+   MOBILE RESPONSIVE
    ========================= */
 
 @media (max-width: 768px) {
+    .app-container {
+        grid-template-columns: 1fr;
+    }
+
     .sidebar {
         position: fixed;
-        left: -280px;
+        left: -260px;
         top: 0;
         bottom: 0;
+        width: 260px;
         z-index: 100;
         transition: left 0.3s;
     }
@@ -656,63 +667,15 @@ body {
         left: 0;
     }
 
-    .problems-area {
-        padding: 1rem;
+    .top-bar-left {
+        gap: 0.75rem;
     }
 
-    .problem-card {
-        padding: 1.25rem;
-    }
-
-    .header-stats {
+    .top-bar-stat {
         display: none;
     }
-}
 
-/* =========================
-   UTILITY CLASSES
-   ========================= */
-
-.loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem;
-    color: var(--text-light);
-    font-size: 1rem;
-}
-
-.no-results {
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--text-light);
-}
-
-.back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 48px;
-    height: 48px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.25rem;
-    cursor: pointer;
-    box-shadow: var(--shadow-lg);
-    transition: all 0.2s;
-    opacity: 0;
-    visibility: hidden;
-    z-index: 50;
-}
-
-.back-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.back-to-top:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    .problem-area {
+        padding: 1rem;
+    }
 }
