@@ -1099,3 +1099,626 @@ function getTopicFromSubskill(subskill) {
     };
     return mapping[subskill] || 'algebra';
 }
+// Append this to your existing apps.js or replace the relevant functions
+
+/* =========================================================
+   MOBILE-ENHANCED FUNCTIONS
+   ========================================================= */
+
+// Override checkShortAnswer with modal confirmation
+window.checkShortAnswer = async function() {
+    const problem = filteredProblems[currentIndex];
+    if (!problem) return;
+
+    const input = document.getElementById('shortAnswerInput');
+    const feedback = document.getElementById('answerFeedback');
+
+    if (!input || !feedback) return;
+
+    const userAnswer = input.value.trim();
+    const correctAnswer = String(problem.answer).trim();
+
+    if (!userAnswer) {
+        feedback.textContent = 'Please enter an answer';
+        feedback.className = 'answer-feedback';
+        return;
+    }
+
+    // Use styled modal instead of browser confirm
+    const confirmed = await ModalSystem.confirm(
+        `Submit your answer: "${userAnswer}"?`,
+        'Check Answer'
+    );
+
+    if (!confirmed) {
+        input.focus();
+        return;
+    }
+
+    const isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase() ||
+        parseFloat(userAnswer) === parseFloat(correctAnswer);
+
+    if (isCorrect) {
+        feedback.textContent = '✓ Correct!';
+        feedback.className = 'answer-feedback correct';
+        input.disabled = true;
+
+        if (storage) {
+            storage.recordAttempt(problem.id, true, 0);
+            updateStatsDisplay();
+        }
+
+        const explanation = document.getElementById('explanation');
+        if (explanation) {
+            explanation.style.display = 'block';
+            const showExplanationBtn = document.getElementById('showExplanationBtn');
+            if (showExplanationBtn) {
+                showExplanationBtn.textContent = 'Hide Explanation';
+            }
+        }
+    } else {
+        feedback.textContent = `✗ Incorrect. Try again!`;
+        feedback.className = 'answer-feedback incorrect';
+
+        if (storage) {
+            storage.recordAttempt(problem.id, false, 0);
+            updateStatsDisplay();
+        }
+    }
+};
+
+// Enhanced initializeReset with modal
+function initializeReset() {
+    const resetBtn = document.getElementById('resetProgress');
+    if (resetBtn && storage) {
+        resetBtn.addEventListener('click', async () => {
+            const confirmed = await ModalSystem.confirm(
+                'This will permanently delete all your progress, stats, and achievements. This action cannot be undone.',
+                'Reset All Progress?',
+                true // danger mode
+            );
+
+            if (!confirmed) return;
+
+            await storage.resetProgress();
+            updateStatsDisplay();
+            showCurrentProblem();
+            Toast.success('✅ Progress reset successfully!');
+        });
+    }
+}
+
+// Enhanced action buttons with modals/toasts
+function initializeActionButtons() {
+    // Generate Similar - with toast
+    const generateSimilarBtn = document.getElementById('generateSimilarBtn');
+    if (generateSimilarBtn) {
+        generateSimilarBtn.addEventListener('click', () => {
+            const problem = filteredProblems[currentIndex];
+            if (!problem || !window.problemGenerator) {
+                Toast.error('❌ Problem generator not available!');
+                return;
+            }
+
+            const newProblem = window.problemGenerator.generate(problem);
+            if (!newProblem) {
+                Toast.error('❌ Could not generate a similar problem for this topic yet!');
+                return;
+            }
+
+            newProblem.type = 'generated';
+            problems.unshift(newProblem);
+            filterProblems();
+            currentIndex = 0;
+            showCurrentProblem();
+            Toast.success('✨ Generated similar problem!');
+        });
+    }
+
+    // Show/Hide Answer
+    const showAnswerBtn = document.getElementById('showAnswerBtn');
+    let answerShown = false;
+
+    if (showAnswerBtn) {
+        showAnswerBtn.addEventListener('click', () => {
+            const problem = filteredProblems[currentIndex];
+            if (!problem) return;
+
+            const container = document.getElementById('problemContainer');
+            const isShortAnswer = !problem.choices || problem.choices.length === 0;
+
+            if (!answerShown) {
+                // SHOW ANSWER
+                if (isShortAnswer) {
+                    const feedback = document.getElementById('answerFeedback');
+                    if (feedback) {
+                        feedback.textContent = `Answer: ${problem.answer}`;
+                        feedback.className = 'answer-feedback correct';
+                    }
+                } else {
+                    const choices = container.querySelectorAll('.choice');
+                    choices.forEach(choice => {
+                        if (choice.dataset.choice === problem.answer) {
+                            choice.classList.add('correct');
+                        }
+                    });
+                }
+
+                const explanation = document.getElementById('explanation');
+                if (explanation) {
+                    explanation.style.display = 'block';
+                    const showExplanationBtn = document.getElementById('showExplanationBtn');
+                    if (showExplanationBtn) {
+                        showExplanationBtn.textContent = 'Hide Explanation';
+                    }
+                }
+
+                showAnswerBtn.textContent = 'Hide Answer';
+                answerShown = true;
+            } else {
+                // HIDE ANSWER
+                if (isShortAnswer) {
+                    const feedback = document.getElementById('answerFeedback');
+                    const input = document.getElementById('shortAnswerInput');
+                    if (feedback && !input?.disabled) {
+                        feedback.textContent = '';
+                        feedback.className = 'answer-feedback';
+                    }
+                } else {
+                    const choices = container.querySelectorAll('.choice');
+                    choices.forEach(choice => {
+                        choice.classList.remove('correct', 'incorrect', 'selected');
+                    });
+                }
+
+                const explanation = document.getElementById('explanation');
+                if (explanation) {
+                    explanation.style.display = 'none';
+                    const showExplanationBtn = document.getElementById('showExplanationBtn');
+                    if (showExplanationBtn) {
+                        showExplanationBtn.textContent = 'Show Explanation';
+                    }
+                }
+
+                showAnswerBtn.textContent = 'Show Answer';
+                answerShown = false;
+            }
+        });
+    }
+
+    // Reset answer state when navigating
+    window.addEventListener('problemChanged', () => {
+        answerShown = false;
+        if (showAnswerBtn) {
+            showAnswerBtn.textContent = 'Show Answer';
+        }
+    });
+
+    // Show/Hide Explanation
+    const showExplanationBtn = document.getElementById('showExplanationBtn');
+    if (showExplanationBtn) {
+        showExplanationBtn.addEventListener('click', () => {
+            const explanation = document.getElementById('explanation');
+            if (!explanation) return;
+
+            if (explanation.style.display === 'none') {
+                explanation.style.display = 'block';
+                showExplanationBtn.textContent = 'Hide Explanation';
+            } else {
+                explanation.style.display = 'none';
+                showExplanationBtn.textContent = 'Show Explanation';
+            }
+        });
+    }
+
+    // Navigation
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', goToPrevious);
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', goToNext);
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        if (e.key === 'ArrowLeft') {
+            goToPrevious();
+        } else if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            goToNext();
+        }
+    });
+}
+
+// Enhanced checkRecommendation with toast
+function checkRecommendation() {
+    const recommendedSubskill = localStorage.getItem('recommendedSubskill');
+    const recommendedDifficulty = localStorage.getItem('recommendedDifficulty');
+    const viewProblemId = localStorage.getItem('viewProblemId');
+
+    if (viewProblemId) {
+        localStorage.removeItem('viewProblemId');
+
+        const problemIndex = problems.findIndex(p => p.id === viewProblemId);
+        if (problemIndex !== -1) {
+            const problem = problems[problemIndex];
+
+            selectedSubskill = problem.subskill;
+            selectedDifficulties.clear();
+            selectedDifficulties.add(problem.difficulty.toLowerCase());
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.subskill === problem.subskill);
+            });
+
+            document.querySelectorAll('.difficulty-tab').forEach(tab => {
+                const diff = tab.dataset.difficulty;
+                tab.classList.toggle('active', diff === problem.difficulty.toLowerCase());
+            });
+
+            filterProblems();
+            const newIndex = filteredProblems.findIndex(p => p.id === viewProblemId);
+            currentIndex = newIndex >= 0 ? newIndex : 0;
+            showCurrentProblem();
+
+            Toast.info(`✓ Viewing completed problem: ${viewProblemId}`);
+        }
+        return;
+    }
+
+    if (recommendedSubskill && recommendedDifficulty) {
+        localStorage.removeItem('recommendedSubskill');
+        localStorage.removeItem('recommendedDifficulty');
+
+        selectedSubskill = recommendedSubskill;
+        selectedDifficulties.clear();
+        selectedDifficulties.add(recommendedDifficulty);
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.subskill === recommendedSubskill);
+        });
+
+        document.querySelectorAll('.difficulty-tab').forEach(tab => {
+            const diff = tab.dataset.difficulty;
+            tab.classList.toggle('active', diff === recommendedDifficulty);
+        });
+
+        filterProblems();
+        showCurrentProblem();
+
+        Toast.success('🎯 Starting your recommended practice!');
+    }
+}
+// Cross-Out and Bookmark Feature
+// Add this to your apps.js or include as separate file
+
+/* =========================================================
+   BOOKMARK SYSTEM
+   ========================================================= */
+
+const BookmarkSystem = {
+    bookmarks: new Set(),
+
+    init() {
+        // Load bookmarks from localStorage
+        const saved = localStorage.getItem('bookmarkedProblems');
+        if (saved) {
+            this.bookmarks = new Set(JSON.parse(saved));
+        }
+    },
+
+    toggle(problemId) {
+        if (this.bookmarks.has(problemId)) {
+            this.bookmarks.delete(problemId);
+            Toast.info('📑 Bookmark removed');
+        } else {
+            this.bookmarks.add(problemId);
+            Toast.success('⭐ Problem bookmarked!');
+        }
+        this.save();
+        return this.bookmarks.has(problemId);
+    },
+
+    isBookmarked(problemId) {
+        return this.bookmarks.has(problemId);
+    },
+
+    getAll() {
+        return Array.from(this.bookmarks);
+    },
+
+    save() {
+        localStorage.setItem('bookmarkedProblems', JSON.stringify(Array.from(this.bookmarks)));
+    },
+
+    clear() {
+        this.bookmarks.clear();
+        this.save();
+    }
+};
+
+/* =========================================================
+   CROSS-OUT SYSTEM
+   ========================================================= */
+
+const CrossOutSystem = {
+    crossedOut: new Map(), // problemId -> Set of choice letters
+
+    toggle(problemId, choiceLetter) {
+        if (!this.crossedOut.has(problemId)) {
+            this.crossedOut.set(problemId, new Set());
+        }
+
+        const crossed = this.crossedOut.get(problemId);
+        if (crossed.has(choiceLetter)) {
+            crossed.delete(choiceLetter);
+        } else {
+            crossed.add(choiceLetter);
+        }
+    },
+
+    isCrossedOut(problemId, choiceLetter) {
+        return this.crossedOut.has(problemId) && this.crossedOut.get(problemId).has(choiceLetter);
+    },
+
+    clear(problemId) {
+        this.crossedOut.delete(problemId);
+    },
+
+    clearAll() {
+        this.crossedOut.clear();
+    }
+};
+
+/* =========================================================
+   ENHANCED showCurrentProblem WITH BOOKMARKS + CROSS-OUT
+   ========================================================= */
+
+function showCurrentProblem() {
+    const container = document.getElementById('problemContainer');
+    if (!container) return;
+
+    if (filteredProblems.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 4rem;">
+                <p style="color: var(--text-light);">No problems available.</p>
+                <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.875rem;">
+                    Try selecting different difficulty levels.
+                </p>
+            </div>
+        `;
+        return;
+    }
+
+    const problem = filteredProblems[currentIndex];
+    const progress = storage ? storage.getProgress() : { problems: {} };
+    const problemProgress = progress.problems ? progress.problems[problem.id] : null;
+
+    const difficultyClass = problem.difficulty.toLowerCase();
+    const difficultyDisplay = problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1);
+    const isShortAnswer = !problem.choices || problem.choices.length === 0;
+    const isBookmarked = BookmarkSystem.isBookmarked(problem.id);
+
+    container.innerHTML = `
+        <div class="problem-header">
+            <div class="problem-id">${problem.id}</div>
+            <div class="problem-badges">
+                <span class="badge badge-difficulty badge-${difficultyClass}">${difficultyDisplay}</span>
+                ${problemProgress?.correct ? '<span class="badge badge-solved">✓ Solved</span>' : ''}
+                ${isBookmarked ? '<span class="bookmarked-badge">⭐ Bookmarked</span>' : ''}
+            </div>
+        </div>
+
+        <!-- Bookmark Button -->
+        <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
+                onclick="toggleBookmark('${problem.id}')"
+                title="${isBookmarked ? 'Remove bookmark' : 'Bookmark this problem'}">
+            ${isBookmarked ? '⭐' : '☆'}
+        </button>
+
+        <div class="problem-content">${problem.question}</div>
+
+        ${problem.imageUrl ? `<img src="../${problem.imageUrl}" alt="Problem diagram" style="max-width: 100%; height: auto; margin-bottom: 2rem; border-radius: 8px;">` : ''}
+
+        ${isShortAnswer ? `
+            <!-- Short Answer Input -->
+            <div class="answer-input-group">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text);">Your Answer:</label>
+                <input type="text" 
+                       class="answer-input" 
+                       id="shortAnswerInput"
+                       placeholder="Enter your answer" 
+                       data-correct="${problem.answer}">
+                <button class="check-answer-btn" onclick="checkShortAnswer()">Check Answer</button>
+                <div class="answer-feedback" id="answerFeedback"></div>
+            </div>
+        ` : `
+            <!-- Multiple Choice with Cross-Out -->
+            <div class="problem-choices">
+                ${problem.choices.map((choice, idx) => {
+        const letter = String.fromCharCode(65 + idx);
+        const isCrossed = CrossOutSystem.isCrossedOut(problem.id, letter);
+        return `
+                        <div class="choice-wrapper">
+                            <div class="choice ${isCrossed ? 'crossed-out' : ''}" 
+                                 data-choice="${letter}" 
+                                 onclick="selectChoice('${letter}')">
+                                ${choice}
+                            </div>
+                            <div class="choice-actions">
+                                <button class="choice-action-btn" 
+                                        onclick="toggleCrossOut('${problem.id}', '${letter}')"
+                                        title="Cross out this answer">
+                                    ${isCrossed ? '↺' : '✕'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+    }).join('')}
+            </div>
+        `}
+
+        ${problem.explanation ? `
+            <div class="explanation" id="explanation" style="display: none;">
+                <div class="explanation-header">💡 Explanation</div>
+                <div class="explanation-content">${problem.explanation}</div>
+            </div>
+        ` : ''}
+    `;
+
+    const showExplanationBtn = document.getElementById('showExplanationBtn');
+    if (showExplanationBtn) {
+        if (problem.explanation) {
+            showExplanationBtn.style.display = 'block';
+            showExplanationBtn.textContent = 'Show Explanation';
+        } else {
+            showExplanationBtn.style.display = 'none';
+        }
+    }
+
+    if (window.MathJax) {
+        MathJax.typesetPromise();
+    }
+
+    window.dispatchEvent(new Event('problemChanged'));
+    updateStatsDisplay();
+}
+
+/* =========================================================
+   BOOKMARK FUNCTIONS
+   ========================================================= */
+
+window.toggleBookmark = function(problemId) {
+    const isBookmarked = BookmarkSystem.toggle(problemId);
+
+    // Update button
+    const btn = document.querySelector('.bookmark-btn');
+    if (btn) {
+        btn.classList.toggle('bookmarked', isBookmarked);
+        btn.textContent = isBookmarked ? '⭐' : '☆';
+        btn.title = isBookmarked ? 'Remove bookmark' : 'Bookmark this problem';
+    }
+
+    // Update badge
+    const badges = document.querySelector('.problem-badges');
+    if (badges) {
+        const existingBadge = badges.querySelector('.bookmarked-badge');
+        if (isBookmarked && !existingBadge) {
+            badges.insertAdjacentHTML('beforeend', '<span class="bookmarked-badge">⭐ Bookmarked</span>');
+        } else if (!isBookmarked && existingBadge) {
+            existingBadge.remove();
+        }
+    }
+};
+
+window.goToBookmarkedProblems = function() {
+    const bookmarked = BookmarkSystem.getAll();
+
+    if (bookmarked.length === 0) {
+        Toast.info('📑 No bookmarked problems yet!');
+        return;
+    }
+
+    // Filter to show only bookmarked problems
+    filteredProblems = problems.filter(p => bookmarked.includes(p.id));
+
+    if (filteredProblems.length === 0) {
+        Toast.error('Bookmarked problems not found in current filters');
+        return;
+    }
+
+    currentIndex = 0;
+    showCurrentProblem();
+    Toast.success(`📚 Viewing ${filteredProblems.length} bookmarked problem(s)`);
+};
+
+/* =========================================================
+   CROSS-OUT FUNCTIONS
+   ========================================================= */
+
+window.toggleCrossOut = function(problemId, choiceLetter) {
+    CrossOutSystem.toggle(problemId, choiceLetter);
+
+    // Update the choice element
+    const choice = document.querySelector(`[data-choice="${choiceLetter}"]`);
+    const btn = choice?.parentElement.querySelector('.choice-action-btn');
+
+    if (choice) {
+        choice.classList.toggle('crossed-out');
+    }
+
+    if (btn) {
+        const isCrossed = CrossOutSystem.isCrossedOut(problemId, choiceLetter);
+        btn.textContent = isCrossed ? '↺' : '✕';
+        btn.title = isCrossed ? 'Undo cross-out' : 'Cross out this answer';
+    }
+};
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+// Call this in your init() function
+function initializeBookmarkSystem() {
+    BookmarkSystem.init();
+
+    // Add bookmarks link to sidebar if needed
+    const sidebarAdaptive = document.getElementById('sidebarAdaptiveDashboard');
+    if (sidebarAdaptive) {
+        // Add bookmark counter to adaptive section
+        const updateBookmarkCount = () => {
+            const count = BookmarkSystem.getAll().length;
+            let bookmarkSection = document.getElementById('bookmarkSection');
+
+            if (count > 0) {
+                if (!bookmarkSection) {
+                    const html = `
+                        <div id="bookmarkSection" style="padding: 1rem; border-top: 1px solid var(--border); cursor: pointer;" onclick="goToBookmarkedProblems()">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="font-size: 0.875rem; font-weight: 600; color: var(--text);">
+                                    ⭐ Bookmarks
+                                </span>
+                                <span style="font-size: 0.875rem; font-weight: 700; color: #F59E0B;">
+                                    ${count}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    sidebarAdaptive.insertAdjacentHTML('afterbegin', html);
+                } else {
+                    const countSpan = bookmarkSection.querySelector('span:last-child');
+                    if (countSpan) countSpan.textContent = count;
+                }
+            } else if (bookmarkSection) {
+                bookmarkSection.remove();
+            }
+        };
+
+        // Update on init and when bookmarks change
+        updateBookmarkCount();
+
+        // Override toggle to update count
+        const originalToggle = BookmarkSystem.toggle;
+        BookmarkSystem.toggle = function(problemId) {
+            const result = originalToggle.call(this, problemId);
+            updateBookmarkCount();
+            return result;
+        };
+    }
+}
+
+// Add to your existing init() function:
+// initializeBookmarkSystem();
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+window.BookmarkSystem = BookmarkSystem;
+window.CrossOutSystem = CrossOutSystem;

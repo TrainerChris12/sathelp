@@ -12,7 +12,12 @@
 
 <div class="app-container">
     <!-- ========================================
-         SIDEBAR (No Scroll Wheel)
+         MOBILE SIDEBAR OVERLAY
+         ======================================== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ========================================
+         SIDEBAR
          ======================================== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -143,7 +148,7 @@
     </aside>
 
     <!-- ========================================
-         TOP BAR (Difficulty Tabs + Stats)
+         TOP BAR
          ======================================== -->
     <div class="top-bar">
         <div class="top-bar-left">
@@ -189,7 +194,7 @@
     </div>
 
     <!-- ========================================
-         PROBLEM AREA (One Problem at a Time)
+         PROBLEM AREA
          ======================================== -->
     <div class="problem-area">
         <div class="problem-container" id="problemContainer">
@@ -201,7 +206,7 @@
     </div>
 
     <!-- ========================================
-         BOTTOM BAR (Actions + Navigation)
+         BOTTOM BAR
          ======================================== -->
     <div class="bottom-bar">
         <div class="bottom-bar-left">
@@ -280,6 +285,9 @@
 <script defer src="../shared/firebase-config.js"></script>
 <script defer src="../shared/storage-manager.js"></script>
 <script defer src="./apps.js"></script>
+
+<!-- MOBILE ENHANCEMENTS - Add this! -->
+<script defer src="./mobile-enhancements.js"></script>
 
 </body>
 </html>
