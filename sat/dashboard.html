@@ -3,593 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progress Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <title>Dashboard - SAT Math Practice</title>
   <style>
-    /* Smooth transitions for all elements */
     * {
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    body {
-      background: linear-gradient(135deg, #1B4F9C 0%, #2563EB 100%);
       margin: 0;
       padding: 0;
-      min-height: 100vh;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .dashboard-wrapper {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem;
-      animation: fadeIn 0.6s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Header */
-    .dash-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 3rem;
-      animation: slideDown 0.5s ease;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .dash-title {
-      color: white;
-      font-size: 2.5rem;
-      font-weight: 900;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .back-link {
-      padding: 0.75rem 1.5rem;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .back-link:hover {
-      background: rgba(255,255,255,0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    /* Grid Layout - Completely Rebuilt */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 2rem;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    /* Stats Cards - Full width on top */
-    .stats-row {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      width: 100%;
-    }
-
-    /* Chart - Right side */
-    .chart-card {
-      grid-column: 8 / -1;
-      grid-row: 2;
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      animation: cardFadeIn 0.6s ease 0.4s backwards;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    /* Radar - Left side, same row as chart */
-    .radar-card {
-      grid-column: 1 / 8;
-      grid-row: 2;
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      animation: cardFadeIn 0.6s ease 0.5s backwards;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    /* Recommendation - Right side, row 3 */
-    .recommend-card {
-      grid-column: 8 / -1;
-      grid-row: 3;
-      background: linear-gradient(135deg, #1B4F9C 0%, #2563EB 100%);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      color: white;
-      animation: cardFadeIn 0.6s ease 0.6s backwards;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    /* Breakdown - Full width at bottom */
-    .breakdown-card {
-      grid-column: 1 / -1;
-      grid-row: 4;
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      animation: cardFadeIn 0.6s ease 0.7s backwards;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    /* Medium screens - stack chart below radar */
-    @media (max-width: 1200px) {
-      .dashboard-grid {
-        grid-template-columns: repeat(8, 1fr);
-      }
-
-      .stats-row {
-        grid-column: 1 / -1;
-      }
-
-      .radar-card {
-        grid-column: 1 / -1;
-        grid-row: 2;
-      }
-
-      .chart-card {
-        grid-column: 1 / -1;
-        grid-row: 3;
-      }
-
-      .recommend-card {
-        grid-column: 1 / -1;
-        grid-row: 4;
-      }
-
-      .breakdown-card {
-        grid-column: 1 / -1;
-        grid-row: 5;
-      }
-    }
-
-    /* Tablet - 2 stats cards per row */
-    @media (max-width: 900px) {
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* Mobile - everything stacks */
-    @media (max-width: 768px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .stats-row {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-
-      .dash-title {
-        font-size: 1.75rem;
-      }
-
-      .breakdown-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Very small screens */
-    @media (max-width: 480px) {
-      .dashboard-wrapper {
-        padding: 1rem;
-      }
-
-      .dashboard-grid {
-        gap: 1rem;
-      }
-
-      .stat-card, .chart-card, .radar-card, .recommend-card, .breakdown-card {
-        padding: 1.5rem;
-      }
-
-      .dash-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-      }
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      position: relative;
-      overflow: hidden;
-      min-height: 240px;
-      display: flex;
-      flex-direction: column;
-      animation: cardFadeIn 0.6s ease backwards;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
       box-sizing: border-box;
     }
 
-    .stat-card:nth-child(1) { animation-delay: 0.1s; }
-    .stat-card:nth-child(2) { animation-delay: 0.2s; }
-    .stat-card:nth-child(3) { animation-delay: 0.3s; }
-
-    @keyframes cardFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    :root {
+      --primary: #3B82F6;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --text-muted: #94a3b8;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
     }
 
-    .stat-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    [data-theme="dark"] {
+      --text: #e2e8f0;
+      --text-light: #cbd5e1;
+      --text-muted: #94a3b8;
+      --bg: #0f172a;
+      --bg-card: #1e293b;
+      --border: #334155;
     }
 
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 6px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-light));
-      border-radius: 20px 20px 0 0;
-      transition: height 0.3s ease;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    .stat-card:hover::before {
-      height: 8px;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
     }
 
-    .stat-card.level { --accent: #1B4F9C; --accent-light: #3B82F6; }
-    .stat-card.streak { --accent: #F59E0B; --accent-light: #FBBF24; }
-    .stat-card.accuracy { --accent: #059669; --accent-light: #10B981; }
-
-    .stat-icon {
-      font-size: 3.5rem;
-      margin-bottom: 0.75rem;
-      line-height: 1;
-      animation: iconBounce 0.6s ease;
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
     }
 
-    @keyframes iconBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
     }
 
-    .stat-label {
-      font-size: 0.875rem;
-      color: #64748b;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    h1 {
+      font-size: 2rem;
       margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
     }
 
     .stat-value {
-      font-size: 2.25rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--accent-light));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.3;
-      margin-bottom: 0.5rem;
-      min-height: 3rem;
-      display: flex;
-      align-items: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary);
     }
 
-    .stat-subtitle {
-      font-size: 1rem;
-      color: #64748b;
-      margin-top: 0.5rem;
-      font-weight: 600;
-    }
-
-    .progress-bar-stat {
-      margin-top: auto;
-      padding-top: 1rem;
-      height: 12px;
-      background: #e2e8f0;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .progress-fill-stat {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-light));
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 6px;
-      animation: progressFill 1.5s ease;
-    }
-
-    @keyframes progressFill {
-      from { width: 0 !important; }
-    }
-
-    .progress-text {
+    .stat-label {
+      color: var(--text-light);
       font-size: 0.875rem;
-      color: #64748b;
       margin-top: 0.5rem;
-      font-weight: 600;
-    }
-
-    .chart-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    }
-
-    .chart-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #1e293b;
-      margin-bottom: 1.5rem;
-    }
-
-    .radar-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
 
     .topic-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .topic-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: itemSlideIn 0.5s ease forwards;
-    }
-
-    .topic-item:nth-child(1) { animation-delay: 0.6s; }
-    .topic-item:nth-child(2) { animation-delay: 0.7s; }
-    .topic-item:nth-child(3) { animation-delay: 0.8s; }
-    .topic-item:nth-child(4) { animation-delay: 0.9s; }
-    .topic-item:nth-child(5) { animation-delay: 1s; }
-
-    @keyframes itemSlideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .topic-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      font-weight: 900;
-      transition: transform 0.3s ease;
-    }
-
-    .topic-item:hover .topic-icon {
-      transform: scale(1.1) rotate(5deg);
-    }
-
-    .topic-info {
-      flex: 1;
+      margin-bottom: 0.5rem;
     }
 
     .topic-name {
-      font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 0.25rem;
+      font-weight: 600;
     }
 
-    .topic-bar {
+    .topic-percentage {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .progress-bar {
       height: 8px;
-      background: #e2e8f0;
+      background: var(--border);
       border-radius: 4px;
       overflow: hidden;
     }
 
-    .topic-bar-fill {
+    .progress-fill {
       height: 100%;
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--primary);
       border-radius: 4px;
-      animation: barFill 1.5s ease;
+      transition: width 0.3s ease;
     }
 
-    @keyframes barFill {
-      from { width: 0 !important; }
+    /* Mastery Cards */
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
     }
 
-    .topic-percent {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #1e293b;
-      min-width: 60px;
-      text-align: right;
+    .mastery-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
     }
 
-    .recommend-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    }
-
-    .rec-icon-big {
-      font-size: 4rem;
+    .mastery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1rem;
-      animation: iconPulse 2s ease infinite;
     }
 
-    @keyframes iconPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+    .mastery-title {
+      font-weight: 700;
+      font-size: 1rem;
     }
 
-    .rec-title-new {
+    .mastery-badge {
       font-size: 1.5rem;
-      font-weight: 900;
+    }
+
+    .difficulty-pills {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      flex: 1;
+      text-align: center;
+      padding: 0.75rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+    }
+
+    .pill-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .pill-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    .pill-count {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      display: block;
+      margin-top: 0.25rem;
+    }
+
+    /* Achievement Grid */
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .achievement {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .achievement.unlocked {
+      border-color: var(--primary);
+      background: var(--bg-card);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+      transform: scale(1);
+    }
+
+    .achievement.locked {
+      opacity: 0.4;
+      filter: grayscale(100%);
+      border-color: var(--border);
+    }
+
+    .achievement.unlocked:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .achievement.locked:hover {
+      opacity: 0.6;
+    }
+
+    .achievement-icon {
+      font-size: 3rem;
       margin-bottom: 0.5rem;
     }
 
-    .rec-topic-new {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
+    .achievement-name {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
     }
 
-    .rec-btn {
-      margin-top: 1.5rem;
-      padding: 1rem 2rem;
-      background: white;
-      color: #1B4F9C;
-      border: none;
+    .achievement-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .unlocked-badge {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      background: var(--primary);
+      color: white;
       border-radius: 12px;
-      font-size: 1.125rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 100%;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
-    .rec-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mastery-grid,
+      .achievement-grid {
+        grid-template-columns: 1fr;
+      }
     }
-
-    .rec-btn:active {
-      transform: translateY(-1px);
-    }
-
-    .breakdown-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-    }
-
-    .breakdown-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .breakdown-item {
-      padding: 1.5rem;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border-left: 4px solid;
-      opacity: 0;
-      animation: itemSlideIn 0.5s ease forwards;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .breakdown-item:nth-child(1) { animation-delay: 0.8s; }
-    .breakdown-item:nth-child(2) { animation-delay: 0.9s; }
-    .breakdown-item:nth-child(3) { animation-delay: 1s; }
-    .breakdown-item:nth-child(4) { animation-delay: 1.1s; }
-
-    .breakdown-item:hover {
-      transform: translateX(8px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .breakdown-item.master { border-color: #10b981; }
-    .breakdown-item.proficient { border-color: #3b82f6; }
-    .breakdown-item.developing { border-color: #f59e0b; }
-    .breakdown-item.struggling { border-color: #ef4444; }
   </style>
 </head>
 <body>
 
-<div class="dashboard-wrapper">
+<div class="container">
   <!-- Header -->
-  <div class="dash-header">
-    <h1 class="dash-title">Your Progress</h1>
-    <a href="index.html" class="back-link">← Back to Practice</a>
+  <div class="header">
+    <div>
+      <a href="index.html" class="back-link">← Back to Practice</a>
+      <h1>📊 Your Progress Dashboard</h1>
+      <p class="subtitle">Track your performance and mastery</p>
+    </div>
   </div>
 
-  <!-- Dashboard Grid -->
-  <div class="dashboard-grid">
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-card level" id="levelCard"></div>
-      <div class="stat-card streak" id="streakCard"></div>
-      <div class="stat-card accuracy" id="accuracyCard"></div>
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-value" id="statCorrect">0</div>
+      <div class="stat-label">Problems Solved</div>
     </div>
-
-    <!-- Chart -->
-    <div class="chart-card">
-      <h3 class="chart-title">Topic Performance</h3>
-      <canvas id="performanceChart" style="max-height: 300px;"></canvas>
+    <div class="stat-box">
+      <div class="stat-value" id="statAccuracy">0%</div>
+      <div class="stat-label">Accuracy</div>
     </div>
-
-    <!-- Topics Radar -->
-    <div class="radar-card">
-      <h3 class="chart-title">Your Topics</h3>
-      <div id="topicsContainer"></div>
+    <div class="stat-box">
+      <div class="stat-value" id="statStreak">0</div>
+      <div class="stat-label">Current Streak</div>
     </div>
+  </div>
 
-    <!-- Recommendation -->
-    <div class="recommend-card" id="recommendCard"></div>
+  <!-- Topic Performance -->
+  <div class="card">
+    <h2 class="card-title">Topic Performance</h2>
+    <div style="max-width: 400px; margin: 0 auto;">
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div id="topicList" style="margin-top: 1.5rem;">
+      <p style="color: var(--text-light);">Loading...</p>
+    </div>
+  </div>
 
-    <!-- Detailed Breakdown -->
-    <div class="breakdown-card">
-      <h3 class="chart-title">All Topics</h3>
-      <div class="breakdown-grid" id="breakdownGrid"></div>
+  <!-- Mastery Section -->
+  <div class="card">
+    <h2 class="card-title">🏆 Topic Mastery</h2>
+    <div class="mastery-grid" id="masteryGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  <div class="card">
+    <h2 class="card-title">🎖️ Achievements</h2>
+    <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 1rem;">
+      Unlock achievements by solving problems! <span id="unlockedCount">0</span> / <span id="totalCount">0</span> unlocked
+    </p>
+    <div class="achievement-grid" id="achievementGrid">
+      <!-- Populated by JS -->
     </div>
   </div>
 </div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <!-- Firebase -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -599,270 +370,244 @@
 <!-- Scripts -->
 <script defer src="../shared/firebase-config.js"></script>
 <script defer src="../shared/storage-manager.js"></script>
-<script defer src="./adaptive-learning.js"></script>
+<script defer src="./mastery-achievement-system.js"></script>
 
 <script>
   async function init() {
     console.log('Dashboard loading...');
+
     if (window.storage) {
       await storage.init();
     }
-    displayDashboard();
+
+    updateStats();
+    updateTopics();
+
+    // Wait for mastery system
+    if (window.MasterySystem && window.AchievementSystem) {
+      updateMastery();
+      updateAchievements();
+    } else {
+      setTimeout(() => {
+        if (window.MasterySystem && window.AchievementSystem) {
+          updateMastery();
+          updateAchievements();
+        }
+      }, 500);
+    }
   }
 
-  function displayDashboard() {
-    if (!window.AdaptiveLearningEngine) {
-      setTimeout(displayDashboard, 100);
-      return;
-    }
+  function updateStats() {
+    if (!storage) return;
 
-    const engine = new AdaptiveLearningEngine();
-    const level = engine.getStudentLevel();
-    const streak = engine.getCurrentStreak();
-    const stats = storage ? storage.getStats() : { accuracy: 0, correctAnswers: 0, uniqueProblems: 0 };
-    const masteryLevels = engine.getMasteryLevels();
-    const analysis = engine.analyzePerformance();
+    const stats = storage.getStats();
 
-    // Level Card
-    document.getElementById('levelCard').innerHTML = `
-      <div class="stat-icon">🎓</div>
-      <div class="stat-label">Level</div>
-      <div class="stat-value">${level.level}</div>
-      <div class="stat-subtitle">${level.xp} / ${level.totalNeeded} XP</div>
-      <div class="progress-bar-stat">
-        <div class="progress-fill-stat" style="width: ${level.progress}%"></div>
-      </div>
-      <div class="progress-text">${level.xpToNext} correct to ${level.nextLevel}</div>
-    `;
-
-    // Streak Card
-    const streakIcon = streak >= 10 ? '🔥' : streak >= 5 ? '⚡' : '⭐';
-    document.getElementById('streakCard').innerHTML = `
-      <div class="stat-icon">${streakIcon}</div>
-      <div class="stat-label">Current Streak</div>
-      <div class="stat-value">${streak}</div>
-      <div class="stat-subtitle">${streak === 1 ? 'problem' : 'problems'} in a row</div>
-    `;
-
-    // Accuracy Card
-    const accIcon = stats.accuracy >= 80 ? '🎯' : stats.accuracy >= 60 ? '📈' : '💪';
-    document.getElementById('accuracyCard').innerHTML = `
-      <div class="stat-icon">${accIcon}</div>
-      <div class="stat-label">Accuracy</div>
-      <div class="stat-value">${stats.accuracy}%</div>
-      <div class="stat-subtitle">${stats.correctAnswers} / ${stats.uniqueProblems} correct</div>
-    `;
-
-    createPerformanceChart(masteryLevels);
-    createTopicsList(masteryLevels);
-    createRecommendation(analysis);
-    createBreakdown(masteryLevels);
+    document.getElementById('statCorrect').textContent = stats.correctAnswers || 0;
+    document.getElementById('statAccuracy').textContent = (stats.accuracy || 0) + '%';
+    document.getElementById('statStreak').textContent = stats.currentStreak || 0;
   }
 
-  function createPerformanceChart(masteryLevels) {
-    const entries = Object.entries(masteryLevels);
-    if (entries.length === 0) {
-      document.getElementById('performanceChart').parentElement.innerHTML = `
-        <h3 class="chart-title">Topic Performance</h3>
-        <p style="text-align: center; color: #94a3b8; padding: 3rem;">Answer some problems to see your breakdown!</p>
-      `;
-      return;
-    }
+  function updateTopics() {
+    if (!storage) return;
 
-    const topicColors = {
-      'linear-equations-one-variable': '#3B82F6',
-      'linear-functions': '#8B5CF6',
-      'systems-linear-equations': '#EC4899'
+    const progress = storage.getProgress();
+
+    // Topic name mapping - extract from problem IDs
+    const topicNames = {
+      'LEQ1V': 'Linear Equations (1 Var)',
+      'LEQFN': 'Linear Functions',
+      'LEQ2V': 'Linear Equations (2 Vars)',
+      'SYSLE': 'Systems of Equations',
+      'LINIQ': 'Linear Inequalities',
+      'NLFN': 'Nonlinear Functions',
+      'NLEQ': 'Nonlinear Equations',
+      'EQEXP': 'Equivalent Expressions'
     };
 
-    const names = {
-      'linear-equations-one-variable': 'Linear Equations',
-      'linear-functions': 'Functions',
-      'systems-linear-equations': 'Systems'
-    };
+    const topics = {};
 
-    const labels = [];
-    const data = [];
-    const colors = [];
+    // Extract topic from problem ID (e.g., "ALG-LEQ1V-E-001" -> "LEQ1V")
+    Object.values(progress.problems || {}).forEach(p => {
+      if (!p || !p.id) return;
 
-    entries.forEach(([subskill, info]) => {
-      labels.push(names[subskill] || subskill);
-      data.push(info.attempts);
-      colors.push(topicColors[subskill] || '#64748B');
+      const parts = p.id.split('-');
+      if (parts.length < 2) return;
+
+      const topicCode = parts[1]; // Gets "LEQ1V", "LEQFN", etc.
+      const topicName = topicNames[topicCode] || topicCode;
+
+      if (!topics[topicName]) {
+        topics[topicName] = { correct: 0, total: 0 };
+      }
+
+      topics[topicName].total++;
+      if (p.correct) topics[topicName].correct++;
     });
 
-    new Chart(document.getElementById('performanceChart'), {
-      type: 'doughnut',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: colors,
-          borderWidth: 3,
-          borderColor: '#ffffff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              padding: 15,
-              font: { size: 12, weight: 'bold' },
-              generateLabels: function(chart) {
-                const data = chart.data;
-                return data.labels.map((label, i) => {
-                  const percentage = entries[i][1].percentage;
-                  return {
-                    text: `${label}: ${percentage}%`,
-                    fillStyle: data.datasets[0].backgroundColor[i],
-                    hidden: false,
-                    index: i
-                  };
-                });
+    const container = document.getElementById('topicList');
+
+    if (Object.keys(topics).length === 0) {
+      container.innerHTML = '<p style="color: var(--text-light);">No data yet. Start practicing!</p>';
+      const chartCanvas = document.getElementById('pieChart');
+      if (chartCanvas) chartCanvas.parentElement.style.display = 'none';
+      return;
+    }
+
+    // Create pie chart
+    const canvas = document.getElementById('pieChart');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+
+      const colors = ['#3B82F6', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#EF4444', '#06B6D4', '#F43F5E'];
+
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(topics),
+          datasets: [{
+            data: Object.values(topics).map(t => t.total),
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 15,
+                font: { size: 12, weight: 'bold' }
               }
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const topicInfo = entries[context.dataIndex][1];
-                return [
-                  `Accuracy: ${topicInfo.percentage}%`,
-                  `Correct: ${topicInfo.correct}/${topicInfo.attempts}`
-                ];
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const topic = Object.entries(topics)[context.dataIndex];
+                  const percentage = Math.round((topic[1].correct / topic[1].total) * 100);
+                  return [
+                    `${context.label}`,
+                    `Accuracy: ${percentage}%`,
+                    `${topic[1].correct}/${topic[1].total} correct`
+                  ];
+                }
               }
             }
           }
         }
-      }
-    });
-  }
-
-  function createTopicsList(masteryLevels) {
-    const container = document.getElementById('topicsContainer');
-    const entries = Object.entries(masteryLevels)
-            .sort((a, b) => b[1].percentage - a[1].percentage)
-            .slice(0, 5);
-
-    if (entries.length === 0) {
-      container.innerHTML = '<p style="color: #94a3b8;">No data yet!</p>';
-      return;
+      });
     }
 
-    const topicColors = {
-      'linear-equations-one-variable': '#3B82F6',
-      'linear-functions': '#8B5CF6',
-      'systems-linear-equations': '#EC4899'
-    };
-
-    const names = {
-      'linear-equations-one-variable': 'Linear Equations',
-      'linear-functions': 'Functions',
-      'systems-linear-equations': 'Systems'
-    };
-
-    container.innerHTML = entries.map(([subskill, info]) => {
-      const isGood = info.percentage >= 80;
-      const isOkay = info.percentage >= 60;
-      const iconBg = topicColors[subskill] || '#64748B';
-      const icon = isGood ? '✓' : isOkay ? '~' : '!';
-      const statusText = isGood ? 'Strong' : isOkay ? 'Good' : 'Needs Work';
-      const statusColor = isGood ? '#10B981' : isOkay ? '#F59E0B' : '#EF4444';
-
+    // Create list
+    container.innerHTML = Object.entries(topics).map(([name, data]) => {
+      const percentage = Math.round((data.correct / data.total) * 100);
       return `
-        <div class="topic-item">
-          <div class="topic-icon" style="background: ${iconBg}; color: white;">${icon}</div>
-          <div class="topic-info">
-            <div class="topic-name">
-              ${names[subskill] || subskill}
-              <span style="margin-left: 0.5rem; font-size: 0.75rem; color: ${statusColor}; font-weight: 700;">${statusText}</span>
+            <div class="topic-item">
+                <div class="topic-header">
+                    <span class="topic-name">${name}</span>
+                    <span class="topic-percentage">${percentage}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${percentage}%"></div>
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-light); margin-top: 0.25rem;">
+                    ${data.correct} / ${data.total} correct
+                </div>
             </div>
-            <div class="topic-bar">
-              <div class="topic-bar-fill" style="width: ${info.percentage}%; background: ${iconBg};"></div>
-            </div>
-          </div>
-          <div class="topic-percent">${info.percentage}%</div>
-        </div>
-      `;
+        `;
     }).join('');
   }
 
-  function createRecommendation(analysis) {
-    const card = document.getElementById('recommendCard');
+  function updateMastery() {
+    if (!window.MasterySystem) return;
 
-    if (!analysis || !analysis.recommendedNext) {
-      card.innerHTML = `
-        <div class="rec-icon-big">🎮</div>
-        <div class="rec-title-new">Keep Going!</div>
-        <p>Answer more problems to unlock recommendations</p>
-      `;
-      return;
-    }
+    const topics = [
+      { id: 'linear-equations-one-variable', name: 'Linear Equations (1 Var)' },
+      { id: 'linear-functions', name: 'Linear Functions' },
+      { id: 'systems-linear-equations', name: 'Systems of Equations' }
+    ];
 
-    const rec = analysis.recommendedNext;
-    const names = {
-      'linear-equations-one-variable': 'Linear Equations',
-      'linear-functions': 'Functions',
-      'systems-linear-equations': 'Systems'
-    };
+    const grid = document.getElementById('masteryGrid');
 
-    const icon = rec.type === 'weakness' ? '🎯' : rec.type === 'challenge' ? '🚀' : '⭐';
-    const title = rec.type === 'weakness' ? 'Focus Here' : rec.type === 'challenge' ? 'Level Up' : 'Explore';
+    grid.innerHTML = topics.map(topic => {
+      const mastery = MasterySystem.getTopicMastery(topic.id);
+      const badge = MasterySystem.getBadge(mastery.level);
+      const color = MasterySystem.getColor(mastery.level);
+      const levelName = MasterySystem.getLevelName(mastery.level);
 
-    card.innerHTML = `
-      <div class="rec-icon-big">${icon}</div>
-      <div class="rec-title-new">${title}</div>
-      <div class="rec-topic-new">${names[rec.subskill] || rec.subskill}</div>
-      <p>${rec.reason}</p>
-      <button class="rec-btn" id="startPracticeBtn">Start Practice</button>
-    `;
-
-    // FIXED: Add event listener properly
-    const btn = document.getElementById('startPracticeBtn');
-    if (btn) {
-      btn.addEventListener('click', function() {
-        console.log('🎯 Button clicked!');
-        console.log('Subskill:', rec.subskill);
-        console.log('Difficulty:', rec.difficulty);
-
-        // Save to localStorage
-        localStorage.setItem('recommendedSubskill', rec.subskill);
-        localStorage.setItem('recommendedDifficulty', rec.difficulty);
-
-        console.log('✅ Saved to localStorage');
-        console.log('Navigating to: index.html');
-
-        // Navigate
-        window.location.href = 'index.html';
-      });
-    }
+      return `
+            <div class="mastery-card">
+                <div class="mastery-header">
+                    <span class="mastery-title">${topic.name}</span>
+                    <span class="mastery-badge" style="color: ${color}">${badge}</span>
+                </div>
+                <div style="color: ${color}; font-weight: 600; margin-bottom: 0.5rem;">
+                    ${levelName}
+                </div>
+                <div style="font-size: 0.875rem; color: var(--text-light);">
+                    ${mastery.count} mastered
+                </div>
+                <div class="difficulty-pills">
+                    <div class="pill">
+                        <span class="pill-label">Easy</span>
+                        <span class="pill-value" style="color: ${MasterySystem.getColor(mastery.easy.level)}">
+                            ${MasterySystem.getBadge(mastery.easy.level)}
+                        </span>
+                        <span class="pill-count">${mastery.easy.count}</span>
+                    </div>
+                    <div class="pill">
+                        <span class="pill-label">Medium</span>
+                        <span class="pill-value" style="color: ${MasterySystem.getColor(mastery.medium.level)}">
+                            ${MasterySystem.getBadge(mastery.medium.level)}
+                        </span>
+                        <span class="pill-count">${mastery.medium.count}</span>
+                    </div>
+                    <div class="pill">
+                        <span class="pill-label">Hard</span>
+                        <span class="pill-value" style="color: ${MasterySystem.getColor(mastery.hard.level)}">
+                            ${MasterySystem.getBadge(mastery.hard.level)}
+                        </span>
+                        <span class="pill-count">${mastery.hard.count}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
   }
 
-  function createBreakdown(masteryLevels) {
-    const grid = document.getElementById('breakdownGrid');
-    const entries = Object.entries(masteryLevels);
+  function updateAchievements() {
+    if (!window.AchievementSystem) return;
 
-    if (entries.length === 0) {
-      grid.innerHTML = '<p style="color: #94a3b8;">No data yet!</p>';
-      return;
-    }
+    // Get ALL achievements
+    const allAchievements = AchievementSystem.achievements;
+    const unlocked = AchievementSystem.getUnlocked();
+    const unlockedIds = new Set(unlocked.map(a => a.id));
 
-    const names = {
-      'linear-equations-one-variable': 'Linear Equations',
-      'linear-functions': 'Functions',
-      'systems-linear-equations': 'Systems'
-    };
+    document.getElementById('unlockedCount').textContent = unlocked.length;
+    document.getElementById('totalCount').textContent = allAchievements.length;
 
-    grid.innerHTML = entries.map(([subskill, info]) => `
-      <div class="breakdown-item ${info.level}">
-        <div style="font-weight: 700; font-size: 1.125rem; margin-bottom: 0.5rem;">${names[subskill] || subskill}</div>
-        <div style="font-size: 2rem; font-weight: 900; color: #1e293b;">${info.percentage}%</div>
-        <div style="color: #64748b; text-transform: capitalize;">${info.level} • ${info.correct}/${info.attempts} correct</div>
-      </div>
-    `).join('');
+    const grid = document.getElementById('achievementGrid');
+
+    // Show ALL achievements - unlocked first, then locked
+    const sortedAchievements = [
+      ...allAchievements.filter(a => unlockedIds.has(a.id)),
+      ...allAchievements.filter(a => !unlockedIds.has(a.id))
+    ];
+
+    grid.innerHTML = sortedAchievements.map(a => {
+      const isUnlocked = unlockedIds.has(a.id);
+
+      return `
+            <div class="achievement ${isUnlocked ? 'unlocked' : 'locked'}">
+                <div class="achievement-icon">${a.icon}</div>
+                <div class="achievement-name">${a.name}</div>
+                <div class="achievement-desc">${a.description}</div>
+                ${isUnlocked ? '<div class="unlocked-badge">Unlocked!</div>' : ''}
+            </div>
+        `;
+    }).join('');
   }
 
   if (document.readyState === 'loading') {

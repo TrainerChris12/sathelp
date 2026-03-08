@@ -369,48 +369,209 @@ if (!window.ProblemGenerator) {
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
-
+    
     // =========================================================
-    // TEMPLATE 11: Graph Interpretation with Actual Graph
-    // =========================================================
+// TEMPLATE 11: Graph Interpretation - GUARANTEED CORRECT
+// =========================================================
 
     P.graphInterpretation = function(original) {
-        const xSol = this.randomChoice([2, 3, 4]);
-        const ySol = this.randomChoice([2, 3, 4]);
+        // Choose a clean integer solution point on the grid
+        const xSol = this.randomChoice([2, 3, 4, 5]);
+        const ySol = this.randomChoice([2, 3, 4, 5]);
 
-        // Create two lines that intersect at (xSol, ySol)
-        const m1 = this.randomChoice([1, 2, -1]);
-        const b1 = ySol - m1 * xSol;
+        // STRATEGY: Use standard form equations that GUARANTEE integer intersection
+        // Line 1: x + y = xSol + ySol  (always passes through solution)
+        // Line 2: ax + by = c  (constructed to pass through solution)
 
-        const m2 = this.randomChoice([1, -1, -2]);
-        const b2 = ySol - m2 * xSol;
+        const sumXY = xSol + ySol;
 
-        // Generate the graph WITHOUT highlighting solution (since question asks for it)
-        const graphSVG = this.makeLinearGraph(m1, b1, {
-            width: 400,
-            height: 300,
-            xMin: -1,
-            xMax: 6,
-            yMin: -1,
-            yMax: 7,
-            showGrid: true,
-            showAxes: true,
-            showAxisLabels: true,
-            xLabel: 'x',
-            yLabel: 'y',
-            highlightPoints: [] // Don't show solution since question asks for it
-        });
+        // Line 2: Create using different coefficients
+        const a = this.randomChoice([1, 2, -1, -2]);
+        const b = this.randomChoice([1, 2, -1, -2].filter(val => val !== a));
+        const c = a * xSol + b * ySol;
 
-        // Draw second line on top
-        const y1_line2 = m2 * (-1) + b2;
-        const y2_line2 = m2 * 6 + b2;
+        // Convert to slope-intercept form for drawing
+        // Line 1: x + y = sumXY  →  y = -x + sumXY
+        const m1 = -1;
+        const b1 = sumXY;
 
-        const graphWithBothLines = graphSVG.replace('</svg>',
-            `<line x1="40" y1="${300 - 40 - ((y1_line2 - (-1)) / 8) * 220}" x2="${400 - 40}" y2="${300 - 40 - ((y2_line2 - (-1)) / 8) * 220}" stroke="#e74c3c" stroke-width="3"/></svg>`);
+        // Line 2: ax + by = c  →  y = (-a/b)x + (c/b)
+        const m2 = -a / b;
+        const b2 = c / b;
 
-        const question = `The graph shows a system of two linear equations. What is the solution (x, y) to the system?\n\n${graphWithBothLines}`;
+        // DOUBLE CHECK the intersection
+        // Solve: -x + sumXY = (-a/b)x + (c/b)
+        const calcX = (c - b * sumXY) / (a + b);
+        const calcY = -calcX + sumXY;
 
-        // Generate wrong answers - points NOT on both lines
+        // Verify it matches our intended solution
+        if (Math.abs(calcX - xSol) > 0.1 || Math.abs(calcY - ySol) > 0.1) {
+            // Fallback to simple case
+            return this.graphInterpretationSimple(original, xSol, ySol);
+        }
+
+        // Create graph
+        const width = 500;
+        const height = 400;
+        const padding = 60;
+        const graphWidth = width - 2 * padding;
+        const graphHeight = height - 2 * padding;
+
+        const xMin = 0;
+        const xMax = 8;
+        const yMin = 0;
+        const yMax = 8;
+
+        const xRange = xMax - xMin;
+        const yRange = yMax - yMin;
+
+        // Helper to convert coordinates
+        const toSVGX = (x) => padding + ((x - xMin) / xRange) * graphWidth;
+        const toSVGY = (y) => height - padding - ((y - yMin) / yRange) * graphHeight;
+
+        // Clamp to keep lines on screen
+        const clampY = (y) => Math.max(yMin, Math.min(yMax, y));
+
+        let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" style="background: white; border: 1px solid #ddd;">`;
+
+        // Draw grid lines
+        svg += '<g stroke="#e0e0e0" stroke-width="1">';
+        for (let x = xMin; x <= xMax; x++) {
+            const svgX = toSVGX(x);
+            svg += `<line x1="${svgX}" y1="${padding}" x2="${svgX}" y2="${height - padding}"/>`;
+        }
+        for (let y = yMin; y <= yMax; y++) {
+            const svgY = toSVGY(y);
+            svg += `<line x1="${padding}" y1="${svgY}" x2="${width - padding}" y2="${svgY}"/>`;
+        }
+        svg += '</g>';
+
+        // Draw axes
+        svg += `<line x1="${toSVGX(0)}" y1="${padding}" x2="${toSVGX(0)}" y2="${height - padding}" stroke="#333" stroke-width="2"/>`;
+        svg += `<line x1="${padding}" y1="${toSVGY(0)}" x2="${width - padding}" y2="${toSVGY(0)}" stroke="#333" stroke-width="2"/>`;
+
+        // Draw axis labels
+        svg += '<g font-family="Arial" font-size="14" fill="#333">';
+
+        for (let x = xMin; x <= xMax; x++) {
+            const svgX = toSVGX(x);
+            const svgY = toSVGY(0);
+            svg += `<line x1="${svgX}" y1="${svgY - 5}" x2="${svgX}" y2="${svgY + 5}" stroke="#333" stroke-width="2"/>`;
+            svg += `<text x="${svgX}" y="${svgY + 20}" text-anchor="middle">${x}</text>`;
+        }
+
+        for (let y = yMin; y <= yMax; y++) {
+            const svgX = toSVGX(0);
+            const svgY = toSVGY(y);
+            svg += `<line x1="${svgX - 5}" y1="${svgY}" x2="${svgX + 5}" y2="${svgY}" stroke="#333" stroke-width="2"/>`;
+            svg += `<text x="${svgX - 15}" y="${svgY + 5}" text-anchor="middle">${y}</text>`;
+        }
+
+        svg += `<text x="${width - 20}" y="${toSVGY(0) + 20}" font-weight="bold">x</text>`;
+        svg += `<text x="${toSVGX(0) - 25}" y="30" font-weight="bold">y</text>`;
+        svg += '</g>';
+
+        // Draw lines
+        const y1_start = clampY(m1 * xMin + b1);
+        const y1_end = clampY(m1 * xMax + b1);
+        svg += `<line x1="${toSVGX(xMin)}" y1="${toSVGY(y1_start)}" x2="${toSVGX(xMax)}" y2="${toSVGY(y1_end)}" stroke="#3498db" stroke-width="3"/>`;
+
+        const y2_start = clampY(m2 * xMin + b2);
+        const y2_end = clampY(m2 * xMax + b2);
+        svg += `<line x1="${toSVGX(xMin)}" y1="${toSVGY(y2_start)}" x2="${toSVGX(xMax)}" y2="${toSVGY(y2_end)}" stroke="#e74c3c" stroke-width="3"/>`;
+
+        svg += '</svg>';
+
+        const question = `The graph shows a system of two linear equations. What is the solution (x, y) to the system?\n\n${svg}`;
+
+        const wrong = [
+            `(${xSol + 1}, ${ySol})`,
+            `(${xSol, ySol + 1})`,
+            `(${xSol - 1}, ${ySol})`
+        ].filter(coord => !coord.includes('-1') && !coord.includes('9'));
+
+        const correct = `(${xSol}, ${ySol})`;
+        const allChoices = this.shuffle([correct, ...wrong]);
+        const { choices, answer } = this.labelChoices(allChoices, correct);
+
+        const explanation = `The solution is the point where the two lines intersect. The lines cross at the grid point (${xSol}, ${ySol}).`;
+
+        return this.buildProblem(original, question, choices, answer, explanation);
+    };
+
+// SIMPLE FALLBACK VERSION
+    P.graphInterpretationSimple = function(original, xSol, ySol) {
+        // Ultra-simple: x + y = sum  and  x - y = diff
+        const sum = xSol + ySol;
+        const diff = xSol - ySol;
+
+        const m1 = -1;
+        const b1 = sum;
+        const m2 = 1;
+        const b2 = -diff;
+
+        // Same graph code as above...
+        const width = 500;
+        const height = 400;
+        const padding = 60;
+        const graphWidth = width - 2 * padding;
+        const graphHeight = height - 2 * padding;
+
+        const xMin = 0;
+        const xMax = 8;
+        const yMin = 0;
+        const yMax = 8;
+
+        const xRange = xMax - xMin;
+        const yRange = yMax - yMin;
+
+        const toSVGX = (x) => padding + ((x - xMin) / xRange) * graphWidth;
+        const toSVGY = (y) => height - padding - ((y - yMin) / yRange) * graphHeight;
+        const clampY = (y) => Math.max(yMin, Math.min(yMax, y));
+
+        let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg" style="background: white; border: 1px solid #ddd;">`;
+
+        svg += '<g stroke="#e0e0e0" stroke-width="1">';
+        for (let x = xMin; x <= xMax; x++) {
+            svg += `<line x1="${toSVGX(x)}" y1="${padding}" x2="${toSVGX(x)}" y2="${height - padding}"/>`;
+        }
+        for (let y = yMin; y <= yMax; y++) {
+            svg += `<line x1="${padding}" y1="${toSVGY(y)}" x2="${width - padding}" y2="${toSVGY(y)}"/>`;
+        }
+        svg += '</g>';
+
+        svg += `<line x1="${toSVGX(0)}" y1="${padding}" x2="${toSVGX(0)}" y2="${height - padding}" stroke="#333" stroke-width="2"/>`;
+        svg += `<line x1="${padding}" y1="${toSVGY(0)}" x2="${width - padding}" y2="${toSVGY(0)}" stroke="#333" stroke-width="2"/>`;
+
+        svg += '<g font-family="Arial" font-size="14" fill="#333">';
+        for (let x = xMin; x <= xMax; x++) {
+            const svgX = toSVGX(x);
+            const svgY = toSVGY(0);
+            svg += `<line x1="${svgX}" y1="${svgY - 5}" x2="${svgX}" y2="${svgY + 5}" stroke="#333" stroke-width="2"/>`;
+            svg += `<text x="${svgX}" y="${svgY + 20}" text-anchor="middle">${x}</text>`;
+        }
+        for (let y = yMin; y <= yMax; y++) {
+            const svgX = toSVGX(0);
+            const svgY = toSVGY(y);
+            svg += `<line x1="${svgX - 5}" y1="${svgY}" x2="${svgX + 5}" y2="${svgY}" stroke="#333" stroke-width="2"/>`;
+            svg += `<text x="${svgX - 15}" y="${svgY + 5}" text-anchor="middle">${y}</text>`;
+        }
+        svg += `<text x="${width - 20}" y="${toSVGY(0) + 20}" font-weight="bold">x</text>`;
+        svg += `<text x="${toSVGX(0) - 25}" y="30" font-weight="bold">y</text>`;
+        svg += '</g>';
+
+        const y1_start = clampY(m1 * xMin + b1);
+        const y1_end = clampY(m1 * xMax + b1);
+        svg += `<line x1="${toSVGX(xMin)}" y1="${toSVGY(y1_start)}" x2="${toSVGX(xMax)}" y2="${toSVGY(y1_end)}" stroke="#3498db" stroke-width="3"/>`;
+
+        const y2_start = clampY(m2 * xMin + b2);
+        const y2_end = clampY(m2 * xMax + b2);
+        svg += `<line x1="${toSVGX(xMin)}" y1="${toSVGY(y2_start)}" x2="${toSVGX(xMax)}" y2="${toSVGY(y2_end)}" stroke="#e74c3c" stroke-width="3"/>`;
+
+        svg += '</svg>';
+
+        const question = `The graph shows a system of two linear equations. What is the solution (x, y) to the system?\n\n${svg}`;
+
         const wrong = [
             `(${xSol + 1}, ${ySol})`,
             `(${xSol}, ${ySol + 1})`,
@@ -421,11 +582,10 @@ if (!window.ProblemGenerator) {
         const allChoices = this.shuffle([correct, ...wrong]);
         const { choices, answer } = this.labelChoices(allChoices, correct);
 
-        const explanation = `The solution to a system of linear equations is the point where the two lines intersect. The lines intersect at (${xSol}, ${ySol}).`;
+        const explanation = `The lines intersect at (${xSol}, ${ySol}).`;
 
         return this.buildProblem(original, question, choices, answer, explanation);
     };
-
     // =========================================================
     // TEMPLATE 12: Solve for Combined Expression
     // =========================================================

@@ -4,21 +4,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAT Math Practice Hub</title>
+    <link rel="stylesheet" href="modal-system.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="adaptive-styles.css">
+    <style>
+        /* Achievement Toast Notification */
+        .achievement-toast {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            z-index: 10000;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease-out;
+            max-width: 350px;
+        }
+
+        .achievement-toast.show {
+            right: 2rem;
+        }
+
+        .achievement-toast-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .achievement-toast-icon {
+            font-size: 3rem;
+            animation: achievement-bounce 0.6s ease-out;
+        }
+
+        @keyframes achievement-bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .achievement-toast-text {
+            flex: 1;
+        }
+
+        .achievement-toast-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-toast-name {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .achievement-toast {
+                right: -350px;
+                max-width: 300px;
+            }
+
+            .achievement-toast.show {
+                right: 1rem;
+            }
+        }
+    </style>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
 <body>
 
 <div class="app-container">
-    <!-- ========================================
-         MOBILE SIDEBAR OVERLAY
-         ======================================== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ========================================
-         SIDEBAR
-         ======================================== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">📐 SAT Math</div>
@@ -141,20 +200,12 @@
             </div>
         </div>
 
-        <!-- Adaptive Dashboard in Sidebar -->
-        <div class="sidebar-adaptive" id="sidebarAdaptiveDashboard">
-            <!-- Will be populated by JavaScript -->
-        </div>
+        <div class="sidebar-adaptive" id="sidebarAdaptiveDashboard"></div>
     </aside>
 
-    <!-- ========================================
-         TOP BAR
-         ======================================== -->
     <div class="top-bar">
         <div class="top-bar-left">
-            <button class="icon-btn" id="menuToggle" style="display: none;">
-                ☰
-            </button>
+            <button class="icon-btn" id="menuToggle">☰</button>
 
             <div class="difficulty-tabs">
                 <button class="difficulty-tab easy active" data-difficulty="easy">Easy</button>
@@ -174,40 +225,22 @@
                 <span class="stat-label">Accuracy</span>
             </div>
 
-            <!-- User Auth Section -->
-            <div id="userAuthSection">
-                <!-- Will be populated by JavaScript -->
-            </div>
+            <div id="userAuthSection"></div>
 
-            <button class="icon-btn" id="themeToggle" title="Toggle theme">
-                ☾
-            </button>
-
-            <button class="icon-btn" id="calculatorBtn" title="Open calculator">
-                🖩
-            </button>
-
-            <button class="icon-btn" id="resetProgress" title="Reset progress">
-                ↻
-            </button>
+            <button class="icon-btn" id="themeToggle" title="Toggle theme">☾</button>
+            <button class="icon-btn" id="calculatorBtn" title="Open calculator">🖩</button>
+            <button class="icon-btn" id="resetProgress" title="Reset progress">↻</button>
         </div>
     </div>
 
-    <!-- ========================================
-         PROBLEM AREA
-         ======================================== -->
     <div class="problem-area">
         <div class="problem-container" id="problemContainer">
-            <!-- Problem will be rendered here -->
             <div style="text-align: center; padding: 4rem; color: var(--text-light);">
                 Loading problems...
             </div>
         </div>
     </div>
 
-    <!-- ========================================
-         BOTTOM BAR
-         ======================================== -->
     <div class="bottom-bar">
         <div class="bottom-bar-left">
             <button class="action-btn" id="showAnswerBtn">Show Answer</button>
@@ -217,19 +250,12 @@
 
         <div class="bottom-bar-right">
             <span class="progress-indicator" id="progressIndicator">1 / 45</span>
-            <button class="nav-btn" id="prevBtn">
-                ← Previous
-            </button>
-            <button class="nav-btn" id="nextBtn">
-                Next →
-            </button>
+            <button class="nav-btn" id="prevBtn">← Previous</button>
+            <button class="nav-btn" id="nextBtn">Next →</button>
         </div>
     </div>
 </div>
 
-<!-- ========================================
-     CALCULATOR OVERLAY
-     ======================================== -->
 <div class="calculator-overlay" id="calculatorOverlay">
     <div class="calculator-modal">
         <div class="calculator-header">
@@ -238,28 +264,21 @@
         </div>
 
         <div class="calculator-content">
-            <iframe
-                    id="calculatorFrame"
-                    class="calculator-frame"
-                    src="https://www.desmos.com/calculator"
-                    title="Desmos Calculator">
+            <iframe id="calculatorFrame" class="calculator-frame"
+                    src="https://www.desmos.com/calculator" title="Desmos Calculator">
             </iframe>
         </div>
     </div>
 </div>
 
-<!-- Firebase SDK -->
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-<!-- Problem Generator -->
 <script defer src="./problem-generator.js"></script>
-
-<!-- Adaptive Learning Engine -->
 <script defer src="./adaptive-learning.js"></script>
+<script defer src="./mastery-achievement-system.js"></script>
 
-<!-- All generator files -->
 <script defer src="./generators/algebra/linearEqOneVar/easy.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/medium.js"></script>
 <script defer src="./generators/algebra/linearEqOneVar/hard.js"></script>
@@ -278,15 +297,13 @@
 <script defer src="./generators/algebra/systemsOfTwoLinEq/hard.js"></script>
 <script defer src="./generators/algebra/systemsOfTwoLinEq/register.js"></script>
 
-<!-- Bootstrap -->
 <script defer src="./problem-generator-bootstrap.js"></script>
 
-<!-- App scripts -->
 <script defer src="../shared/firebase-config.js"></script>
 <script defer src="../shared/storage-manager.js"></script>
+<script src="./modal-system.js"></script>
 <script defer src="./apps.js"></script>
 
-<!-- MOBILE ENHANCEMENTS - Add this! -->
 <script defer src="./mobile-enhancements.js"></script>
 
 </body>

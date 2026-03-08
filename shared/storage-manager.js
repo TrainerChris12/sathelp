@@ -1,4 +1,4 @@
-// sat/storage-manager.js - VERIFIED
+// sat/storage-manager.js - WITH MASTERY TRACKING
 
 class StorageManager {
     constructor() {
@@ -7,6 +7,7 @@ class StorageManager {
         this.userId = null;
         this.user = null;
         this.cachedProgress = null;
+        this.hintsViewed = new Set(); // Track when hints are viewed
     }
 
     async init() {
@@ -109,27 +110,39 @@ class StorageManager {
         }
     }
 
+    // Mark when user views hints (answer/explanation)
+    markHintViewed(problemId) {
+        if (!this.hintsViewed) {
+            this.hintsViewed = new Set();
+        }
+        this.hintsViewed.add(problemId);
+        console.log(`💡 Hint viewed for ${problemId} - won't count toward mastery`);
+    }
+
     async recordAttempt(problemId, wasCorrect, timeSpent = 0) {
         const progress = this.cachedProgress || this.loadFromLocalStorage();
 
-        // ✅ Use LET because we may create it
         let problemData = progress.problems[problemId];
 
         if (!problemData) {
             // NEW PROBLEM
+            const noHints = !this.hintsViewed || !this.hintsViewed.has(problemId);
+
             progress.problems[problemId] = {
                 id: problemId,
                 attempts: 1,
                 correct: wasCorrect,
+                firstTry: wasCorrect,   // Track if correct on first attempt
+                noHints: noHints,       // Track if no hints were used
                 everIncorrect: !wasCorrect,
                 firstAttempted: Date.now(),
                 lastAttempted: Date.now(),
                 totalTimeSpent: timeSpent
             };
 
-            problemData = progress.problems[problemId]; // ✅ IMPORTANT
+            problemData = progress.problems[problemId];
 
-            console.log(`🆕 ${problemId} | First try: ${wasCorrect ? '✅ CORRECT' : '❌ WRONG'}`);
+            console.log(`🆕 ${problemId} | First try: ${wasCorrect ? '✅ CORRECT' : '❌ WRONG'} | No hints: ${noHints} | Mastery: ${wasCorrect && noHints ? '✅' : '❌'}`);
 
         } else {
             // EXISTING PROBLEM
@@ -140,6 +153,7 @@ class StorageManager {
             if (!wasCorrect) {
                 problemData.everIncorrect = true;
                 problemData.correct = false;
+                problemData.firstTry = false;
                 console.log(`❌ ${problemId} | Wrong (attempt #${problemData.attempts})`);
             } else {
                 if (!problemData.everIncorrect) {
@@ -147,29 +161,27 @@ class StorageManager {
                     console.log(`✅ ${problemId} | Right (attempt #${problemData.attempts}) - COUNTS!`);
                 } else {
                     problemData.correct = false;
+                    problemData.firstTry = false;
                     console.log(`⚠️ ${problemId} | Right but doesn't count (was wrong before)`);
                 }
             }
         }
 
-        // ✅ 1) Update stats first
+        // Update stats
         this.calculateStats(progress);
 
-        // ✅ 2) Prune generated attempts so storage never grows forever
-        // (only deletes old GEN-* problems, keeps official SAT problems forever)
+        // Prune old generated problems
         if (typeof this.pruneGeneratedProgress === "function") {
             this.pruneGeneratedProgress(progress, 500);
         }
 
-        // ✅ 3) Save AFTER pruning
+        // Save
         this.cachedProgress = progress;
         this.saveToLocalStorage(progress);
         await this.saveToCloud();
 
-        return progress.problems[problemId].correct; // ✅ always valid now
+        return progress.problems[problemId].correct;
     }
-
-
 
     calculateStats(progress) {
         const allProblems = Object.values(progress.problems);
@@ -219,6 +231,7 @@ class StorageManager {
         }
 
         this.cachedProgress = this.getEmptyProgress();
+        this.hintsViewed = new Set(); // Reset hints
         this.saveToLocalStorage(this.cachedProgress);
 
         if (this.isLoggedIn) {
@@ -234,6 +247,7 @@ class StorageManager {
         try {
             await firebase.auth().signOut();
             this.cachedProgress = null;
+            this.hintsViewed = new Set();
             localStorage.removeItem(this.STORAGE_KEY);
             console.log('👋 Logged out');
             window.location.href = 'auth.html';
@@ -241,6 +255,7 @@ class StorageManager {
             console.error('Logout error:', error);
         }
     }
+
     pruneGeneratedProgress(progress, maxGenerated = 500) {
         if (!progress || !progress.problems) return;
 
@@ -248,7 +263,7 @@ class StorageManager {
 
         const generatedOnly = all
             .filter(p => p && typeof p.id === "string" && p.id.startsWith("GEN-"))
-            .sort((a, b) => (a.lastAttempted || 0) - (b.lastAttempted || 0)); // oldest first
+            .sort((a, b) => (a.lastAttempted || 0) - (b.lastAttempted || 0));
 
         if (generatedOnly.length <= maxGenerated) return;
 
@@ -259,8 +274,6 @@ class StorageManager {
         }
     }
 }
-
-
 
 const storage = new StorageManager();
 window.storage = storage;
